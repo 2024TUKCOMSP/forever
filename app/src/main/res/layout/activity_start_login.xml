@@ -12,32 +12,65 @@
 !-->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/startLoginAct"
+    android:id="@+id/startLoginActivity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".StartLoginActivity">
-
+    tools:context=".StartLoginActivity"
+    android:padding="30dp">
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src = "@drawable/patt3"
+        android:layout_gravity="center"
+        android:padding="30dp"
+         />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="메인 이름"
+        android:textColor="@color/black"
+        android:textSize="36dp"
+        android:layout_gravity="center"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="할 일과 일정을 카드로 한눈에"
+        android:textColor="@color/black"
+        android:textSize="18dp"
+        android:layout_gravity="center"
+        />
     <LinearLayout
+        android:layout_marginTop="50dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center"
         android:padding="30dp">
         <Button
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:id="@+id/kakaoLoginBtn">
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:id="@+id/kakaoLoginBtn"
+            android:layout_marginHorizontal="20dp">
         </Button>
         <Button
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:id = "@+id/googleLoginBtn">
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:id = "@+id/googleLoginBtn"
+            android:layout_marginHorizontal="20dp">
         </Button>
         <Button
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:id = "@+id/appleLoginBtn">
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:id = "@+id/appleLoginBtn"
+            android:layout_marginHorizontal="20dp">
         </Button>
     </LinearLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="소셜 계정으로 로그인"
+        android:layout_gravity="center"
+         />
 </LinearLayout>

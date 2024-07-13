@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "654933826130",
+    "project_id": "forever-planet-cloning",
+    "storage_bucket": "forever-planet-cloning.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:654933826130:android:29a6612c19c2b999ec9d8b",
+        "android_client_info": {
+          "package_name": "com.planetcopapplication.forever"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCltL1B2cpQD7Z5pSMGogCQ-lrF9BC1WXE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
