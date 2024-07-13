@@ -34,41 +34,14 @@ class StartLoginActivity : AppCompatActivity() {
     companion object {
         private val TAG = StartLoginActivity::class.java.getSimpleName();
     }
-
     private lateinit var binding:ActivityStartLoginBinding
-
-    //private lateinit var client: GoogleSignInClient
-    private val REQ_ONE_TAP = 2  // Can be any integer unique to the Activity
-    private var showOneTapUI = true
-    //구글 로그인 위해 추가한 코드
-    //https://jamie-dev.tistory.com/128
-
-    // See: https://developer.android.com/training/basics/intents/result
     private lateinit var auth: FirebaseAuth
-    private lateinit var mGoogleSignInClient: GoogleSignInClient
+    private lateinit var googleSignInClient: GoogleSignInClient
     private lateinit var startGoogleLoginForResult : ActivityResultLauncher<Intent>
-    private lateinit var mGoogleSignInOptions: GoogleSignInOptions
+    private lateinit var googleSignInOptions: GoogleSignInOptions
     //출처: https://faith-developer.tistory.com/183 [개발 이야기:티스토리]
 
-    /*
-    private val googleAuthLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
-        val task = GoogleSignIn.getSignedInAccountFromIntent(data)
 
-        try{
-            val account = task.getResult(ApiException::class.java)
-            account.idToken?.let{
-                // 클라단에서 바로 이름, 이메일 등이 필요하다면 아래와 같이 account를 통해 각 메소드를 불러올 수 있다.
-                val userName = account.givenName
-                val serverAuth = account.serverAuthCode
-
-                moveSignUpActivity()
-            } //서버에서 idToken 보내기
-        }catch (e: ApiException) {
-            Log.e(StartLoginActivity::class.java.simpleName, e.stackTraceToString())
-        }
-
-    }*/
-    //https://velog.io/@akimcse/Android-Google-Login-%EA%B5%AC%ED%98%84%ED%95%98%EA%B8%B0-with-Kotlin
 
     //Google 로그인을 위해 GoogleSignInClient 객체 제작, GoogleSignInOptions 넘겨줌
     private fun getGoogleClient(): GoogleSignInClient {
@@ -105,19 +78,6 @@ class StartLoginActivity : AppCompatActivity() {
     //출처: https://faith-developer.tistory.com/183 [개발 이야기:티스토리]
 
 
-/*
-    private fun requestGoogleLogin() {
-        mGoogleSignInClient.signOut()
-        val signInIntent = mGoogleSignInClient.signInIntent
-        googleAuthLauncher.launch(signInIntent)
-    }
-*/
-    private fun moveSignUpActivity() {
-        this.run {
-            startActivity(Intent(this, StartLoginActivity::class.java))
-            finish()
-        }
-    }
 
 
     /**
@@ -151,37 +111,7 @@ class StartLoginActivity : AppCompatActivity() {
         enableEdgeToEdge()
         binding = ActivityStartLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        //setContentView(R.layout.activity_start_login)
 
-        // Initialize Firebase Auth
-        auth = Firebase.auth
-
-        val googleSignInOption = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-
-        var user = Firebase.auth.currentUser
-        user?.let{
-            //Name, email address, and profile photo Url
-            val name = it.displayName
-            val email = it. email
-            val photoUrl = it.photoUrl
-
-            //check if User's email is verified
-            val emailVerified = it.isEmailVerified
-
-            // The user's ID, unique to the Firebase project. Do NOT use this value to
-            // authenticate with your backend server, if you have one. Use
-            // FirebaseUser.getIdToken() instead.
-            val uid = it.uid
-        }
-        //구글
-        mGoogleSignInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            //.requestIdToken(getString(R.string.google_default_web_client_id))
-            .requestEmail()
-            .build()
-        mGoogleSignInClient = GoogleSignIn.getClient(this, mGoogleSignInOptions)
-        auth = FirebaseAuth.getInstance()
-
-        //initOnClickListener()
 
 
 
@@ -194,7 +124,7 @@ class StartLoginActivity : AppCompatActivity() {
 
         var googleLoginBtn = findViewById<Button>(R.id.googleLoginBtn)
         googleLoginBtn.setOnClickListener {
-            requestGoogleLogin()
+
         }
 
         var mainActivityBtn = findViewById<Button>(R.id.appleLoginBtn)
@@ -205,11 +135,7 @@ class StartLoginActivity : AppCompatActivity() {
 
     }
 
-    private fun signIn() {
-        mGoogleSignInClient.signOut()
-        val signInIntent = mGoogleSignInClient.signInIntent
-        startActivityForResult(signInIntent, RC_SIGN_IN)
-    }
+
 
     fun successLogin(){
         startActivity(Intent(this, MainActivity::class.java))
@@ -220,19 +146,7 @@ class StartLoginActivity : AppCompatActivity() {
     public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
-        if (requestCode == RC_SIGN_IN) {
-            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
-            try {
-                // Google Sign In was successful, authenticate with Firebase
-                val account = task.getResult(ApiException::class.java)
-                firebaseAuthWithGoogle(account!!)
-            } catch (e: ApiException) {
-                // Google Sign In failed, update UI appropriately
-                Log.w(TAG, "Google sign in failed", e)
-                // ...
-            }
-        }
+
     }
 
 
