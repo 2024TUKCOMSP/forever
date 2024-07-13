@@ -38,6 +38,9 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+    buildFeatures{
+        viewBinding = true
+    }
 }
 
 dependencies {
@@ -72,4 +75,12 @@ dependencies {
     // https://firebase.google.com/docs/android/setup#available-libraries
     implementation("com.google.firebase:firebase-auth-ktx")
     implementation("com.google.firebase:firebase-firestore-ktx")
+    implementation("androidx.credentials:credentials:1.5.0-alpha02")
+    // optional - needed for credentials support from play services, for devices running
+    // Android 13 and below.
+    implementation("androidx.credentials:credentials-play-services-auth:1.5.0-alpha02")
+
+    //Google Play Services
+    implementation("com.google.gms:google-services:4.4.2")
+    implementation("com.google.android.gms:play-services-auth:21.2.0")
 }

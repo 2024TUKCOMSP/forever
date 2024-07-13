@@ -12,7 +12,20 @@
           "package_name": "com.planetcopapplication.forever"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "654933826130-t1fciunscl4801tji249o79ddveodikl.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.planetcopapplication.forever",
+            "certificate_hash": "ffa3a5d7ced81daf0be9ed942dafc557bd88cb86"
+          }
+        },
+        {
+          "client_id": "654933826130-p0ogapfei3kmhlhieopkv4s1kgva5c1q.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyCltL1B2cpQD7Z5pSMGogCQ-lrF9BC1WXE"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "654933826130-p0ogapfei3kmhlhieopkv4s1kgva5c1q.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }
