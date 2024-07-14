@@ -35,12 +35,15 @@ class StartLoginActivity : AppCompatActivity() {
         private val TAG = StartLoginActivity::class.java.getSimpleName();
     }
     private lateinit var binding:ActivityStartLoginBinding
-    private lateinit var auth: FirebaseAuth
+    private lateinit var googleAuth: FirebaseAuth
     private lateinit var googleSignInClient: GoogleSignInClient
     private lateinit var startGoogleLoginForResult : ActivityResultLauncher<Intent>
     private lateinit var googleSignInOptions: GoogleSignInOptions
     //출처: https://faith-developer.tistory.com/183 [개발 이야기:티스토리]
 
+    private lateinit var yourToken:String
+    //이게 안 좋은 방식인줄은 아는데 이 토큰을 어찌 처리해야 할지 감이 잡히지 않음
+    //후에 새 토큰.,만들어볼 예정 아오
 
 
     //Google 로그인을 위해 GoogleSignInClient 객체 제작, GoogleSignInOptions 넘겨줌
@@ -54,37 +57,49 @@ class StartLoginActivity : AppCompatActivity() {
         return GoogleSignIn.getClient(StartLoginActivity(), googleSignInOption)
     }
 
-    private fun firebaseAuthWithGoogle(acct: GoogleSignInAccount) {
-        Log.d(TAG, "firebaseAuthWithGoogle:" + acct.id!!)
 
-        val credential = GoogleAuthProvider.getCredential(acct.idToken, null)
-        auth.signInWithCredential(credential)
-            .addOnCompleteListener(this) { task ->
-                if (task.isSuccessful) {
-                    // Sign in success, update UI with the signed-in user's information
-                    Log.d(TAG, "signInWithCredential:success")
-                    val user = auth.currentUser
-                    //updateUI(user)
-                } else {
-                    // If sign in fails, display a message to the user.
-                    Log.w(TAG, "signInWithCredential:failure", task.exception)
-                    //Snackbar.make(main_layout, "Authentication Failed.", Snackbar.LENGTH_SHORT).show()
-                    //updateUI(null)
-                }
 
-                // ...
-            }
+    fun successLogin(){
+        startActivity(Intent(this, MainActivity::class.java))
+        finish()
     }
     //출처: https://faith-developer.tistory.com/183 [개발 이야기:티스토리]
 
-
-
-
     /**
-     * GoogleSignInAccount 객체에서 ID 토큰을 가져와서 Firebase 사용자 인증 정보로 교환하고 Firebase 사용자 인증 정보를 사용해 인증.
+     * =============================
+     *  구글 로그인
+     *  =============================
      */
+    private fun googleSignIn(){
+        googleSignInClient.signOut()
+        val signInIntent = googleSignInClient.signInIntent
+        startActivityForResult(signInIntent, RC_SIGN_IN)
+    }
 
 
+     // GoogleSignInAccount 객체에서 ID 토큰을 가져와서 Firebase 사용자 인증 정보로 교환하고 Firebase 사용자 인증 정보를 사용해 인증.
+     private fun firebaseAuthWithGoogle(acct: GoogleSignInAccount) {
+         Log.d(TAG, "firebaseAuthWithGoogle:" + acct.id!!)
+
+         val credential = GoogleAuthProvider.getCredential(acct.idToken, null)
+         googleAuth.signInWithCredential(credential)
+             .addOnCompleteListener(this) { task ->
+                 if (task.isSuccessful) {
+                     // Sign in success, update UI with the signed-in user's information
+                     Log.d(TAG, "signInWithCredential:success")
+                     val user = googleAuth.currentUser
+                     //updateUI(user)
+                 } else {
+                     // If sign in fails, display a message to the user.
+                     Log.w(TAG, "signInWithCredential:failure", task.exception)
+                     //Snackbar.make(main_layout, "Authentication Failed.", Snackbar.LENGTH_SHORT).show()
+                     //updateUI(null)
+                 }
+
+                 // ...
+             }
+     }
+    //출처: https://faith-developer.tistory.com/183 [개발 이야기:티스토리]
 
 
     /**
@@ -96,14 +111,9 @@ class StartLoginActivity : AppCompatActivity() {
     //활동을 초기화할 때 사용자가 현재 로그인되어 있는지 확인합니다
     public override fun onStart() {
         super.onStart()
-        // Check if user is signed in (non-null) and update UI accordingly.
-        val currentUser = auth.currentUser
-        if (currentUser != null) {
-            //reload()
-            currentUser.reload()
-            //로그인 되어있을 시 리로드?
-        }
-        //Check if user is signed in (non-null) and update UI accordingly.
+
+        val currentUser = googleAuth.currentUser
+        //현재 로그인 되어있는지 확인
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -115,7 +125,7 @@ class StartLoginActivity : AppCompatActivity() {
 
 
 
-
+        //initOnClickListener()
 
 
         /*
@@ -124,7 +134,14 @@ class StartLoginActivity : AppCompatActivity() {
 
         var googleLoginBtn = findViewById<Button>(R.id.googleLoginBtn)
         googleLoginBtn.setOnClickListener {
-
+            //구글 로그인을 앱에 통합, GoogleSignInOptions 객체 구성시
+            //requestIdToken 호출
+            googleSignInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(yourToken)
+                .requestEmail()
+                .build()
+            googleSignInClient = GoogleSignIn.getClient(this, googleSignInOptions)
+            googleAuth = FirebaseAuth.getInstance()
         }
 
         var mainActivityBtn = findViewById<Button>(R.id.appleLoginBtn)
@@ -135,22 +152,19 @@ class StartLoginActivity : AppCompatActivity() {
 
     }
 
-
-
-    fun successLogin(){
-        startActivity(Intent(this, MainActivity::class.java))
-        finish()
-    }
-    //출처: https://faith-developer.tistory.com/183 [개발 이야기:티스토리]
-
     public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-
+        if (requestCode == RC_SIGN_IN){
+            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+            try {
+                //Google Sign In was successful, authenticate with Firebase
+                val account = task.getResult(ApiException::class.java)
+                firebaseAuthWithGoogle(account!!)
+            }catch (e: ApiException){
+                Log.w(TAG, "Google sign in failed", e)
+            }
+        }
     }
-
-
-
-
 
 }
