@@ -1,0 +1,29 @@
+html {
+  margin: 0px;
+  padding: 0px;
+  overflow-x: hidden;
+}
+
+body {
+  margin: 0px;
+  padding: 0px;
+  min-width: 375px;
+  max-width: 500px;
+  height: auto;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+@media (min-width: 500px) {
+  html {
+    display: flex;
+    justify-content: center;
+  }
+
+  body {
+    min-width: 500px;
+    width: 500px;
+    max-width: 500px;
+    box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+  }
+}
