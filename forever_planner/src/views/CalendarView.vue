@@ -1,10 +1,12 @@
 <template>
-  <div>
-    <h1 class="bg-black text-white">Calendar View</h1>
+  <div class="w-full h-screen bg-[#f5f7fd] p-2 flex flex-col justify-end">
+    <div class="text-2xl font-semibold p-3">7월</div>
+    <CalendarVue class="w-full h-full"/>
   </div>
 </template>
 
-<script>
+<script setup>
+import CalendarVue from '@/components/Calendar/CalendarVue.vue'
 </script>
 
 <style scoped>
