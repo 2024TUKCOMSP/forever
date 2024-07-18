@@ -57,8 +57,7 @@ export default {
     },
     todaysTodoDateClick() {
     
-      },
-    };
+    },
   },
 };
 </script>
