@@ -56,8 +56,9 @@ export default {
       this.$router.push({ name: 'setting' });
     },
     todaysTodoDateClick() {
-
-    },
+    
+      },
+    };
   },
 };
 </script>
