@@ -29,39 +29,34 @@
 
 <script>
 import FooterVue from '@/components/FooterVue.vue';
-import { onMounted } from 'vue';
-import { storeToRefs } from 'pinia';
-import { useStore } from '@/stores/store.js';
 
 export default {
   name: 'Home-View',
   components: {
     FooterVue,
   },
-  setup() {
-    const store = useStore();
-    const { isClicked } = storeToRefs(store);
+  data() {
+    return {};
+  },
+  mounted() {
+    this.isClicked = 'home';
+  },
+  methods: {
+    userIconClick() {
+      alert("dkdkkd");
+      // 프로필 편집으로 이동하기 위한 버튼
+    },
+    remainingTodoClick() {
+      alert("");
+    },
+    planetBtnClick() {
 
-    onMounted(() => {
-      isClicked.value = 'home';
-    });
-
-    return {
-      userIconClick() {
-        alert("dkdkkd");
-        // 프로필 편집으로 이동하기 위한 버튼
-      },
-      remainingTodoClick() {
-        alert("");
-      },
-      planetBtnClick() {
-
-      },
-      goSettingBtnClick() {
-
-      },
-      todaysTodoDateClick() {
-
+    },
+    goSettingBtnClick() {
+      this.$router.push({ name: 'setting' });
+    },
+    todaysTodoDateClick() {
+    
       },
     };
   },
