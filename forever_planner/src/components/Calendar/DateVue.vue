@@ -12,7 +12,7 @@
 
 <script setup>
 import PostVue from './PostVue.vue';
-import FinishedPostVue from './FinishiedPostVue.vue';
+import FinishedPostVue from '@/components/FinishiedPostVue.vue'
 </script>
 
 <style scoped>
