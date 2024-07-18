@@ -1,0 +1,13 @@
+
+# Python
+# 파이썬과 관련된 파일 및 디렉토리를 무시합니다.
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.sqlite3
+
+# Django
+# 장고 프레임워크와 관련된 파일을 무시합니다.
+*.pyc
+*.pyo

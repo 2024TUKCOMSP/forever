@@ -16,7 +16,12 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from .views import create_category
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('category/', create_category, name='create_category'),
+    
 ]
+
+
