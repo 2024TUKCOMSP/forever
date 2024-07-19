@@ -51,24 +51,29 @@
 
 <script>
 import FooterVue from '@/components/FooterVue.vue';
+
 import { onMounted, ref } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useStore } from '@/stores/store.js';
+
 
 export default {
   name: 'Home-View',
   components: {
     FooterVue,
   },
+   data() {
+    return {};
+  },
   setup() {
     const store = useStore();
     const { isClicked } = storeToRefs(store);
     const isModalVisible = ref(false);
 
-    onMounted(() => {
-      isClicked.value = 'home';
-    });
-
+    mounted() {
+    this.isClicked = 'home';
+  },
+    
     return {
       isModalVisible,
       checkTodoTagClick(){
@@ -87,9 +92,13 @@ export default {
 
       },
       todaysTodoDateClick() {
-
-      },
-    };
+    },
+    goSettingBtnClick() {
+      this.$router.push({ name: 'setting' });
+    },
+    todaysTodoDateClick() {
+    
+    },
   },
 };
 </script>
