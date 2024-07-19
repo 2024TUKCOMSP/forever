@@ -51,10 +51,10 @@
 
 <script>
 import FooterVue from '@/components/FooterVue.vue';
-
-import { onMounted, ref } from 'vue';
+import {onMounted, ref} from 'vue';
 import { storeToRefs } from 'pinia';
 import { useStore } from '@/stores/store.js';
+import { useRouter } from 'vue-router';
 
 
 export default {
@@ -68,14 +68,16 @@ export default {
   setup() {
     const store = useStore();
     const { isClicked } = storeToRefs(store);
-    const isModalVisible = ref(false);
-
-    mounted() {
-    this.isClicked = 'home';
-  },
+    const isModalVisible = ref(false); 
+    const router = useRouter(); //useRouter로 Vue Router 주입
     
+    onMounted(() => {
+    isClicked.value = 'home';
+    });
+
     return {
       isModalVisible,
+      onMounted,
       checkTodoTagClick(){
       },
       userIconClick() {
@@ -88,19 +90,14 @@ export default {
       planetBtnClick() {
         isModalVisible.value = !isModalVisible.value // Toggle modal visibility
       },
-      goSettingBtnClick() {
-
-      },
       todaysTodoDateClick() {
-    },
-    goSettingBtnClick() {
-      this.$router.push({ name: 'setting' });
-    },
-    todaysTodoDateClick() {
-    
-    },
-  },
-};
+      },
+      goSettingBtnClick() {
+        router.push({ name: 'setting' });
+      },
+    }
+  }
+}
 </script>
 
 <style scoped>
