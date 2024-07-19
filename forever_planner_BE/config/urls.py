@@ -16,12 +16,12 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from .views import create_category
+from .views import create_category, edit_category, delete_category
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('category/', create_category, name='create_category'),
+    path('category/create', create_category, name='create_category'),
+    path('category/edit', edit_category, name='edit_category'),
+    path('category/<uuid:categoryId>/', delete_category, name='delete_category'),
     
 ]
-
-
