@@ -1,9 +1,28 @@
 <template>
-  <div class="h-screen flex flex-col">
+  <!--홈 화면-->
+
+  <div class="h-screen flex flex-col background-color #ECEDF2">
     <div class="planetTxtBar">
       <button type="button" @click="planetBtnClick" class="planetTxtBtn">Planet v</button>
       <button type="button" @click="goSettingBtnClick" class="goSettingBtn">설정</button>
+
+          <!--모달 팝업-->
+      <div class="checkTodoTagModal" v-show="isModalVisible" >
+        <button type="button" class="checkTodoTagBtn">
+          <!--컬러 추가-->
+          태그명1
+        </button><br />
+        <button type="button" class="checkTodoTagBtn">
+          <!--컬러 추가-->
+          태그명2
+        </button><br />
+        <button type="button" class="checkTodoTagBtn">
+          <!--컬러 추가-->
+          태그명3
+        </button><br />
+      </div>
     </div>
+
     <div class="flex-grow w-full bg-[#f5f7fd] p-2">
       <div class="w-full flex flex-col">
         <div class="userBar">
@@ -23,34 +42,56 @@
         </div>
       </div>
     </div>
-    <FooterVue />
+
+  <FooterVue />
   </div>
+
+  
 </template>
 
 <script>
 import FooterVue from '@/components/FooterVue.vue';
+
+import { onMounted, ref } from 'vue';
+import { storeToRefs } from 'pinia';
+import { useStore } from '@/stores/store.js';
+
 
 export default {
   name: 'Home-View',
   components: {
     FooterVue,
   },
-  data() {
+   data() {
     return {};
   },
-  mounted() {
+  setup() {
+    const store = useStore();
+    const { isClicked } = storeToRefs(store);
+    const isModalVisible = ref(false);
+
+    mounted() {
     this.isClicked = 'home';
   },
-  methods: {
-    userIconClick() {
-      alert("dkdkkd");
-      // 프로필 편집으로 이동하기 위한 버튼
-    },
-    remainingTodoClick() {
-      alert("");
-    },
-    planetBtnClick() {
+    
+    return {
+      isModalVisible,
+      checkTodoTagClick(){
+      },
+      userIconClick() {
+        alert("dkdkkd");
+        // 프로필 편집으로 이동하기 위한 버튼
+      },
+      remainingTodoClick() {
+        alert("");
+      },
+      planetBtnClick() {
+        isModalVisible.value = !isModalVisible.value // Toggle modal visibility
+      },
+      goSettingBtnClick() {
 
+      },
+      todaysTodoDateClick() {
     },
     goSettingBtnClick() {
       this.$router.push({ name: 'setting' });
@@ -63,20 +104,42 @@ export default {
 </script>
 
 <style scoped>
+/* 애니메이션 */
+@keyframes touchBtn{
+  0% {
+    transform:scale(1);
+    background-color: #f5f7fd;
+  }
+
+  100% {
+    transform:scale(0.95);
+    background-color: #ECEDF2;
+    align-self: center;
+  }
+} 
+
+.flex-grow {
+  background-color: #f5f7fd; /* 페이지 내용 배경 색상 */
+}
+
 .planetTxtBar {
   padding-left: 10px;
+  padding-top: 10px;
   background-color: #f5f7fd;
   position: relative;
   font-size: larger;
   color: #8F9095;
 }
 .planetTxtBtn {
+  padding: 5px;
   padding-left: 10px;
   padding-right: 10px;
-  padding-top: 10px;
+  border-radius: 10px;
 }
 .planetTxtBtn:hover {
-
+  animation-name: touchBtn;
+  animation-duration: 0.1s;
+  animation-fill-mode: forwards;
 }
 .background {
   background-color: #f5f7fd;
@@ -87,6 +150,15 @@ export default {
   top: 0;
   right: 0;
   padding: 10px;
+  border-radius: 30px;
+}
+.goSettingBtn:hover{
+  animation-name: touchBtn;
+  animation-duration: 0.1s;
+  animation-fill-mode: forwards;
+}
+.on{
+  display:block;
 }
 
 .userIconBtn {
@@ -106,14 +178,22 @@ export default {
 }
 
 .remainingTodoBtn {
+  width:100%;
+  height:auto;
   background-color: #FFFFFF;
   position: relative;
   margin: 5px;
   padding: 10px;
+  margin-top: 20px;
   border-radius: 10px;
   color: #5A7CD5;
   font-size: small;
   text-align: left;
+}
+.remainingTodoBtn:hover{
+  animation-name: touchBtn;
+  animation-duration: 0.1s;
+  animation-fill-mode: forwards;
 }
 .remainingTodoTxt {
   position: absolute;
@@ -137,12 +217,36 @@ export default {
 }
 .todoEditBtn {
   width: 100%;
-  background-color: #ECEDF2;
+  height:fit-content;
+  background-color: #f5f7fd;
   border-radius: 8px;
   padding: 15px;
   margin-top: 10px;
   color: #8F9095;
   font-size: small;
   text-align: left;
+}
+.todoEditBtn:hover{
+  animation-name: touchBtn;
+  animation-duration: 0.1s;
+  animation-fill-mode: forwards;
+}
+
+
+.checkTodoTagModal{
+  position:absolute;
+  background-color: #FFFFFF;
+  width: 150px;
+  height:fit-content;
+  align-items: start;
+  box-shadow: 0px 0px 30px  #8F9095;
+  border-radius: 10px;
+  padding:10px;
+}
+.checkTodoTagBtn{
+  width:100%;
+  text-align: start;
+  font-size:medium;
+  border-width: 0px 0px 1px 0px;
 }
 </style>
