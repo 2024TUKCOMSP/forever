@@ -1,7 +1,7 @@
 <template>
   <!--홈 화면-->
 
-  <div class="h-screen flex flex-col background-color #ECEDF2">
+  <div class="h-screen flex flex-col">
     <div class="planetTxtBar">
       <button type="button" @click="planetBtnClick" class="planetTxtBtn">Planet v</button>
       <button type="button" @click="goSettingBtnClick" class="goSettingBtn">설정</button>
