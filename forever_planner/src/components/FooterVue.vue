@@ -33,6 +33,7 @@ const clickDiaryButton = () => {
 
 const clickThemeButton = () => {
   isClicked.value = 'theme';
+  router.push({ name: 'theme' });
 };
 </script>
 
