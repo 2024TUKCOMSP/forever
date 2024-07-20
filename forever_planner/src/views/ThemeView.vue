@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class ="h-screen flex-grow w-full bg-[#f5f7fd] p-2">
         왜안됨
         <FooterVue />
     </div>
@@ -34,5 +34,5 @@ export default{
 }
 </script>
 
-<style>
+<style scoped>
 </style>
