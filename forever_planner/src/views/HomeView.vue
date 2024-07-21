@@ -33,7 +33,6 @@
         </div>
         <button type="button" class="remainingTodoBtn" @click="remainingTodoClick">
           <span>2개의 남은 할 일</span>
-          <span class="remainingTodoTxt">&gt;</span>
         </button>
         <div class="todaysTodo">
           <p>오늘</p>
@@ -175,7 +174,7 @@ export default {
 }
 
 .remainingTodoBtn {
-  width:100%;
+  width:98%;
   height:auto;
   background-color: #FFFFFF;
   position: relative;
@@ -196,7 +195,6 @@ export default {
   position: absolute;
   right: 0;
   top: 0;
-  padding: 6px 12px 6px 6px;
   font-size: larger;
   color: #8F9095;
 }

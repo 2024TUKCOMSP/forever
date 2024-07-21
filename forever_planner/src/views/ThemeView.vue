@@ -1,8 +1,10 @@
 <template>
-    <div class ="h-screen flex-grow w-full bg-[#f5f7fd] p-2">
-        왜안됨
-        <FooterVue />
+     <div class="w-full h-screen flex flex-col justify-between">
+    <div class="w-full h-full bg-[#f5f7fd] p-2 flex flex-col">
+      dddd
     </div>
+    <FooterVue />
+  </div>
 </template>
 
 <script>
