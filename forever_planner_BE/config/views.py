@@ -1,6 +1,8 @@
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+import uuid
+from datetime import datetime, timedelta
 from .models import Calendar, Post, Category
 from .serializers import CalendarSerializer, PostSerializer, CategorySerializer
 
@@ -61,71 +63,185 @@ def delete_category(request, categoryId):
 # 전체 일정 조회 함수
 @api_view(['POST'])
 def calendar_all(request):
-    # 요청에서 월과 연도를 가져옴
     month = request.data.get('calendarMonth')
     year = request.data.get('calendarYear')
 
-    # 해당 월과 연도의 일정 확인
+    if not all([month, year]):
+        return Response({'error': 'Missing required fields'}, status=status.HTTP_400_BAD_REQUEST)
+
+    try:
+        month = int(month)
+        year = int(year)
+    except ValueError:
+        return Response({'error': 'Invalid month or year'}, status=status.HTTP_400_BAD_REQUEST)
+
+    # 해당 월의 첫 번째 날과 마지막 날 계산
+    first_day = datetime(year, month, 1)
+    last_day = (first_day + timedelta(days=32)).replace(day=1) - timedelta(days=1)
+
+    # 해당 월의 모든 날짜에 대해 Calendar 객체 조회
     calendars = Calendar.objects.filter(calendarDate__year=year, calendarDate__month=month)
-    serializer = CalendarSerializer(calendars, many=True)
-    return Response(serializer.data)
+
+    response_data = []
+    for calendar in calendars:
+        posts = Post.objects.filter(calendar=calendar)
+        post_serializer = PostSerializer(posts, many=True)
+        calendar_data = {
+            "calendarId": calendar.calendarId,
+            "calendarDate": calendar.calendarDate.day,
+            "themeId": calendar.themeId,
+            "post": post_serializer.data
+        }
+        response_data.append(calendar_data)
+
+    return Response(response_data)
 
 # 특정 일정 조회 함수
 @api_view(['GET'])
 def calendar_detail(request, calendarId):
     try:
-        # 해당 ID의 일정을 검색
         calendar = Calendar.objects.get(calendarId=calendarId)
     except Calendar.DoesNotExist:
-        # 일정을 찾을 수 없는 경우
-        return Response(status=status.HTTP_404_NOT_FOUND)
-    
-    # 해당 게시물 데이터를  반환
-    serializer = PostSerializer(calendar.post)
-    return Response(serializer.data)
+        return Response({'error': 'Calendar not found'}, status=status.HTTP_404_NOT_FOUND)
+
+    posts = Post.objects.filter(calendar=calendar)
+    response_data = []
+
+    for post in posts:
+        category_serializer = CategorySerializer(post.category)
+        post_data = {
+            "postId": post.postId,
+            "title": post.title,
+            "content": post.content,
+            "isFinished": post.isFinished,
+            "categoryColor": post.category.categoryColor,
+            "categoryTitle": category_serializer.data['categoryTitle']
+        }
+        response_data.append(post_data)
+
+    return Response(response_data)
 
 # 일정 수정 함수
 @api_view(['PUT'])
 def post_update(request):
+    post_id = request.data.get('postId')
+    title = request.data.get('title')
+    content = request.data.get('content')
+    category_id = request.data.get('categoryId')
+
+    if not all([post_id, title, content, category_id]):
+        return Response({'error': 'Missing required fields'}, status=status.HTTP_400_BAD_REQUEST)
+
     try:
-        # 해당 ID의 게시물을 검색
-        post = Post.objects.get(postId=request.data.get('postId'))
+        # Post 객체 조회
+        post = Post.objects.get(postId=post_id)
     except Post.DoesNotExist:
-        # 게시물을 찾을 수 없는 경우
-        return Response(status=status.HTTP_404_NOT_FOUND)
-    
-    # 게시물 데이터를 업데이트
-    serializer = PostSerializer(post, data=request.data, partial=True)
-    if serializer.is_valid():
-        serializer.save()
-        return Response({'success': True})
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'error': 'Post not found'}, status=status.HTTP_404_NOT_FOUND)
+
+    try:
+        # Category 객체 조회
+        category = Category.objects.get(categoryId=category_id)
+    except Category.DoesNotExist:
+        return Response({'error': 'Category not found'}, status=status.HTTP_404_NOT_FOUND)
+
+    # Post 객체 업데이트
+    post.title = title
+    post.content = content
+    post.category = category
+    post.save()
+
+    return Response({'success': True}, status=status.HTTP_200_OK)
 
 # 일정 완료 상태 수정 함수
 @api_view(['PUT'])
 def post_finish(request):
+    # 요청 데이터에서 postId와 isFinished를 추출
+    post_id = request.data.get('postId')
+    is_finished = request.data.get('isFinished')
+
+    # 디버깅 출력을 추가
+    print(f"Received data: postId={post_id}, isFinished={is_finished}")
+
+    # 필수 데이터가 모두 있는지 확인
+    if post_id is None or is_finished is None:
+        return Response({'error': 'Missing required fields'}, status=status.HTTP_400_BAD_REQUEST)
+
     try:
-        # 해당 ID의 게시물을 검색
-        post = Post.objects.get(postId=request.data.get('postId'))
+        # Post 객체 조회
+        post = Post.objects.get(postId=post_id)
     except Post.DoesNotExist:
-        # 게시물을 찾을 수 없는 경우
-        return Response(status=status.HTTP_404_NOT_FOUND)
-    
-    # 완료 상태를 업데이트하고 저장
-    post.isFinished = request.data.get('isFinished')
+        # 게시물이 존재하지 않는 경우
+        return Response({'error': 'Post not found'}, status=status.HTTP_404_NOT_FOUND)
+
+    # 완료 상태 업데이트
+    post.isFinished = is_finished
     post.save()
-    return Response({'success': True})
+
+    # 성공 응답 반환
+    return Response({'success': True}, status=status.HTTP_200_OK)
 
 # 일정 추가 함수
 @api_view(['POST'])
 def post_create(request):
-    # 요청 데이터를 저장
-    serializer = PostSerializer(data=request.data)
-    if serializer.is_valid():
-        post = serializer.save()
-        return Response({'success': True, 'postId': post.postId})
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    # 요청 데이터에서 값 추출
+    title = request.data.get('title')
+    content = request.data.get('content')
+    category_id = request.data.get('categoryId')
+    calendar_month = request.data.get('calendarMonth')
+    calendar_year = request.data.get('calendarYear')
+    calendar_date = request.data.get('calendarDate')
 
+    # 필수 데이터 확인
+    if not all([title, content, category_id, calendar_month, calendar_year, calendar_date]):
+        return Response({'error': 'Missing required fields'}, status=status.HTTP_400_BAD_REQUEST)
+
+    # 데이터 타입 변환 및 검증
+    try:
+        calendar_month = int(calendar_month)
+        calendar_year = int(calendar_year)
+        calendar_date = int(calendar_date)
+    except ValueError:
+        return Response({'error': 'Invalid month, year, or date'}, status=status.HTTP_400_BAD_REQUEST)
+
+    # 날짜를 datetime 객체로 변환
+    try:
+        date = datetime(year=calendar_year, month=calendar_month, day=calendar_date)
+    except ValueError:
+        return Response({'error': 'Invalid date'}, status=status.HTTP_400_BAD_REQUEST)
+
+    # 날짜에 해당하는 Calendar 객체 조회 또는 생성
+    calendar, created = Calendar.objects.get_or_create(
+        calendarDate=date,
+        defaults={'themeId': uuid.uuid4()}
+    )
+
+    # 카테고리 조회
+    try:
+        category = Category.objects.get(categoryId=category_id)
+    except Category.DoesNotExist:
+        return Response({'error': 'Category not found'}, status=status.HTTP_404_NOT_FOUND)
+
+    # Post 객체 생성 및 저장
+    post = Post.objects.create(
+        title=title,
+        content=content,
+        category=category,
+        calendar=calendar
+    )
+
+    # 성공 응답 반환
+    return Response({
+        'success': True,
+        'postId': post.postId,
+        'calendarId': calendar.calendarId
+    }, status=status.HTTP_201_CREATED)
+
+    # 성공 응답 반환
+    return Response({
+        'success': True,
+        'postId': post.postId,
+        'calendarId': calendar.calendarId
+    }, status=status.HTTP_201_CREATED)
 # 모든 카테고리 조회 함수
 @api_view(['GET'])
 def category_all(request):
