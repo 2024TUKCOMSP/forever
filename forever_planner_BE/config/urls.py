@@ -16,12 +16,22 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from .views import create_category, edit_category, delete_category
+from . import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('category/create', create_category, name='create_category'),
-    path('category/edit', edit_category, name='edit_category'),
-    path('category/<uuid:categoryId>/', delete_category, name='delete_category'),
+    path('category/create', views.create_category, name='create_category'),
+    path('category/edit', views.edit_category, name='edit_category'),
+    path('category/<uuid:categoryId>/', views.delete_category, name='delete_category'),
+    path('category/all', views.category_all, name='category_all'),
+    path('calendar/all', views.calendar_all, name='calendar_all'),
+    path('calendar/<uuid:calendarId>', views.calendar_detail, name='calendar_detail'),
+    path('calendar/post', views.post_update, name='post_update'),
+    path('calendar/post/finish', views.post_finish, name='post_finish'),
+    path('calendar/post/create', views.post_create, name='post_create'),
+    path('calendar/post/recreate', views.post_recreate, name='post_recreate'),
+    path('home/today', views.today_schedule, name='today_schedule'),
+    path('home/all', views.all_tasks, name='all_tasks'),
+    path('home/last', views.add_task, name='add_task'),
     
 ]
