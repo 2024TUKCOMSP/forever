@@ -4,7 +4,7 @@
       <div class="w-full">
         <div class="pb-4">7월 12일 (금)</div>
         <ModalPostVueVue />
-        <ModalFinishedPostVueVue />
+        <ModalFinishedPostVue />
       </div>
       <div class="bg-[#EEEEEE] text-[#666666] w-full h-auto rounded-md p-4 text-sm">
         + 할 일을 추가하세요
@@ -16,7 +16,7 @@
 <script setup>
 import { useModalStore } from '@/stores/modalStore.js';
 import ModalPostVueVue from './ModalPostVue.vue';
-import ModalFinishedPostVueVue from './ModalFinishedPostVue.vue';
+import ModalFinishedPostVue from './ModalFinishedPostVue.vue';
 
 const { handleClickCloseModal } = useModalStore();
 </script>
