@@ -4,7 +4,7 @@
   <div class="h-screen flex flex-col">
     <div class="planetTxtBar">
       <button type="button" @click="planetBtnClick" class="planetTxtBtn">Planet v</button>
-      <button type="button" @click="goSettingBtnClick" class="goSettingBtn">설정</button>
+      <button type="button" @click="goSettingBtnClick" class="goSettingBtn"><i class="fa-solid fa-gear"></i></button>
 
           <!--모달 팝업-->
       <div class="checkTodoTagModal" v-show="isModalVisible" >
@@ -37,6 +37,11 @@
         <div class="todaysTodo">
           <p>오늘</p>
           <p class="todaysTodoDate">0월 0일</p>
+          <button type="button" class="todoEditBtn" @click="todaysTodoDateClick">+ 할 일을 추가하세요</button>
+        </div><br />
+
+        <div class="todaysTodo">
+          <p>언젠가</p>
           <button type="button" class="todoEditBtn" @click="todaysTodoDateClick">+ 할 일을 추가하세요</button>
         </div>
       </div>
@@ -84,7 +89,7 @@ export default {
         // 프로필 편집으로 이동하기 위한 버튼
       },
       remainingTodoClick() {
-        alert("");
+        router.push('remainingTodo');
       },
       planetBtnClick() {
         isModalVisible.value = !isModalVisible.value // Toggle modal visibility
@@ -117,7 +122,6 @@ export default {
 .flex-grow {
   background-color: #f5f7fd; /* 페이지 내용 배경 색상 */
 }
-
 .planetTxtBar {
   padding-left: 10px;
   padding-top: 10px;
@@ -146,6 +150,7 @@ export default {
   top: 0;
   right: 0;
   padding: 10px;
+  margin-right:10px;
   border-radius: 30px;
 }
 .goSettingBtn:hover{

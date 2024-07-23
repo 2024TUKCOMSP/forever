@@ -19,6 +19,13 @@
       <label class="settingSpan">다크 모드<input type="radio" name ="settingScreenMode" class="radioBtn"/></label><br />!-->
     </div> <br />
 
+    <!--<p class ="settingP">홈 화면 설정</p>
+    <div class="settingModeCss">
+      <p>미완료 할 일</p>
+      <p>오늘</p>
+      <p>언젠가</p>
+    </div><br />-->
+
     <p class="settingP">캘린더 설정</p>
     <button type="button" class="defaultBtn">캘린더에 표시할 항목</button> <br />
 

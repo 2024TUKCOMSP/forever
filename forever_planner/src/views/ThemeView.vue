@@ -4,12 +4,26 @@
       <header>
       <div class="planetBannerCSS">Colors</div> <br />
     </header>
-    <div class="colorPalette">
-      <button type="button" id="defaultColor" class="batchColorBtn">
-        <span id ="defaultColor" class ="batchSpan">Planit 3.0</span> <span class="goRight" id="defaultColor">적용중</span>
+      <div class="colorPalette">
+          
+        <div class="form_radio_btn"><label for="defaultColor" class="batchColorRadio">
+          Planit 3.0
+        <input type="radio" id = "defaultColor" name="colorPalette" value="defaultColor" checked />
+        <span></span>
+        </label></div>
 
-      </button>
-    </div>
+        <div class="form_radio_btn"><label for="byebyeMyBlueColor" class="batchColorRadio">
+          Bye bye My Color
+        <input type="radio" id = "byebyeMyBlueColor" name="colorPalette" value="byebyeMyBlueColor" />
+        <span></span>
+        </label></div>
+
+        <div class="form_radio_btn"><label for="timeAndFallenColor" class="batchColorRadio">
+          시간과 낙엽
+        <input type="radio" id = "timeAndFallenColor" name="colorPalette" value="timeAndFallenColor" />
+        <span></span>
+        </label></div>
+      </div>
     </div>
     <FooterVue />
   </div>
@@ -45,6 +59,20 @@ export default{
 </script>
 
 <style scoped>
+/* 애니메이션 */
+@keyframes touchBtn{
+  0% {
+    transform:scale(1);
+    background-color: #f5f7fd;
+  }
+
+  100% {
+    transform:scale(0.95);
+    background-color: #ECEDF2;
+    align-self: center;
+  }
+}
+
 .planetBannerCSS{
   padding:5px;
   padding-left: 10px;
@@ -59,11 +87,31 @@ export default{
 .batchSpan{
   float:left;
 }
-.batchColorBtn{
+.colorPalette{
+  width:100%;
+}
+.batchColorRadio{
   background-color: #fff;
   padding: 10px;
-  width:100%;
+  width: 100%;
   border-radius: 10px;
+  margin-bottom: 20px;
+  display:inline-block;
 
 }
+.batchColorRadio:hover{
+  animation-name: touchBtn;
+  animation-duration: 0.1s;
+  animation-fill-mode: forwards;
+}
+[type="radio"],
+span {
+  vertical-align: middle;
+  float:right;
+}
+[type="radio"]{
+  vertical-align: middle;
+  /*appearance: none*/
+}
+
 </style>
