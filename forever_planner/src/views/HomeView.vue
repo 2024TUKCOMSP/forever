@@ -32,7 +32,7 @@
           </div>
         </div>
         <button type="button" class="remainingTodoBtn" @click="remainingTodoClick">
-          <span>2개의 남은 할 일</span>
+          <span>2개의 남은 할 일</span><span class="goRight">></span>
         </button>
         <div class="todaysTodo">
           <p>오늘</p>
@@ -197,6 +197,9 @@ export default {
   top: 0;
   font-size: larger;
   color: #8F9095;
+}
+.goRight{
+  float:right;
 }
 
 .todaysTodo {

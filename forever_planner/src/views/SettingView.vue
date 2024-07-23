@@ -1,13 +1,13 @@
 <template>
 <div class="bg-[#f5f7fd] justify-between">
   <header class="settingHeader">
-    <button type="button" @click = "backWards" class="settingHeaderBtn">뒤로가기</button>
+    <button type="button" @click = "backWards" class="settingHeaderBtn">&lt;</button>
   </header>
   <br />
   <div class= "settingScreen">
     <b><h1>설정</h1></b>
 
-    <button type="button" class="defaultBtn">카테고리 편집 >> </button>
+    <button type="button" class="defaultBtn">카테고리 편집 <span class="goRight">&gt;</span></button>
 
     <br /><br />
 
@@ -22,7 +22,7 @@
     <p class="settingP">캘린더 설정</p>
     <button type="button" class="defaultBtn">캘린더에 표시할 항목</button> <br />
 
-    <button type="button" class ="defaultBtn">지난 달 통계 확인하기</button><br /><br /><br />
+    <button type="button" class ="defaultBtn">지난 달 통계 확인하기<span class="goRight">&gt;</span></button><br /><br /><br />
 
     <button type="button" class ="defaultBtn2">로그아웃</button><br /><br /><br />
     <button type="button" class ="defaultBtn2">탈퇴</button><br />
@@ -70,7 +70,9 @@ export default {
   position: fixed;
   top:0;
   background-color: #f5f7fd;
-
+}
+.settingHeaderBtn{
+  font-size:xx-large;
 }
 .settingScreen{
   background-color: #f5f7fd;
@@ -78,6 +80,10 @@ export default {
   height: 100vh;
   align-self: center;
   text-align: center;
+  margin-top: 20px;
+}
+.goRight{
+  float:right;
 }
 .settingP{
   font-size: small;
@@ -119,13 +125,13 @@ h1{
   margin-right: 10px;
   text-align: left;
   padding-left: 10px;
+  margin-top: 5px;
 }
 .screenMode{
   background-color: #fff;
-  margin-left: 10px;
-  margin-right: 10px;
   padding:5px;
-  width:95%;
+  padding-right: 10px;
+  width:100%;
   border-width: 0px 0px 1px 0px;
   border-radius: 10px;
   text-align: start;
