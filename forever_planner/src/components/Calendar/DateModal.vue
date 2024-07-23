@@ -6,7 +6,7 @@
         <ModalPostVueVue />
         <ModalFinishedPostVue />
       </div>
-      <div class="bg-[#EEEEEE] text-[#666666] w-full h-auto rounded-md p-4 text-sm">
+      <div @click="handleClickCategoryModal()" class="bg-[#EEEEEE] text-[#666666] w-full h-auto rounded-md p-4 text-sm">
         + 할 일을 추가하세요
       </div>
     </div>
@@ -18,7 +18,7 @@ import { useModalStore } from '@/stores/modalStore.js';
 import ModalPostVueVue from './ModalPostVue.vue';
 import ModalFinishedPostVue from './ModalFinishedPostVue.vue';
 
-const { handleClickCloseModal } = useModalStore();
+const { handleClickCloseModal, handleClickCategoryModal } = useModalStore();
 </script>
 
 
