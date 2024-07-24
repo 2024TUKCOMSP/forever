@@ -3,7 +3,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 import uuid
 from datetime import datetime, timedelta
-from .models import Calendar, Post, Category
+from .models import Calendar, Post, Category, HomeScreenSetting, ScreenSetting
 from .serializers import CalendarSerializer, PostSerializer, CategorySerializer
 
 # 카테고리 수정 함수
@@ -242,7 +242,6 @@ def post_create(request):
         'postId': post.postId,
         'calendarId': calendar.calendarId
     }, status=status.HTTP_201_CREATED)
-<<<<<<< HEAD
 
 # 일정 재추가 함수
 @api_view(['POST'])
@@ -275,8 +274,6 @@ def post_recreate(request):
     return Response({'success': True, 'postId': post.postId}, status=status.HTTP_201_CREATED)
 
 
-=======
->>>>>>> 869acdfb3ee8b659113912af110cc39816ec6dde
 # 모든 카테고리 조회 함수
 @api_view(['GET'])
 def category_all(request):
@@ -284,13 +281,20 @@ def category_all(request):
     categories = Category.objects.all()
     serializer = CategorySerializer(categories, many=True)
     return Response(serializer.data)
-<<<<<<< HEAD
     
 # 오늘의 일정 출력 함수
 @api_view(['GET'])
 def today_schedule(request):
+    # 홈 화면 설정을 가져옵니다.
+    home_screen_setting = HomeScreenSetting.objects.first()
+    
+    # 설정에 따라 오늘의 일정을 출력하지 않도록 합니다.
+    if not home_screen_setting or not home_screen_setting.is_visible_today_task:
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
     today = datetime.today().date()
     
+    # 오늘의 일정을 가져옵니다.
     try:
         calendar = Calendar.objects.get(calendarDate=today)
     except Calendar.DoesNotExist:
@@ -316,11 +320,19 @@ def today_schedule(request):
 
     return Response(response_data, status=status.HTTP_200_OK)
 
+#남은 할일
 @api_view(['GET'])
 def all_tasks(request):
+    # 홈 화면 설정을 가져옵니다.
+    home_screen_setting = HomeScreenSetting.objects.first()
+    
+    # 설정에 따라 할 일 목록을 출력하지 않도록 합니다.
+    if not home_screen_setting or not home_screen_setting.is_visible_some_task:
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
     today = datetime.today().date()
 
-    # isFinished가 False인 포스트를 필터링
+    # isFinished가 False인 포스트를 필터링합니다.
     posts = Post.objects.filter(isFinished=False)
     response_data = []
 
@@ -329,7 +341,7 @@ def all_tasks(request):
             calendar_date = post.calendar.calendarDate
             daycount = (today - calendar_date).days
 
-            # D-day가 지난 경우에만 출력
+            # D-day가 지난 경우에만 출력합니다.
             if daycount > 0:
                 calendar_id = post.calendar.calendarId
                 calendar_day = calendar_date.day
@@ -346,26 +358,36 @@ def all_tasks(request):
                 }
                 response_data.append(post_data)
         else:
-            # 캘린더가 없는 포스트는 D-day 계산이 불가능하므로 생략
+            # 캘린더가 없는 포스트는 D-day 계산이 불가능하므로 생략합니다.
             continue
 
     return Response(response_data, status=status.HTTP_200_OK)
-# 언젠가 할일 추가 함수
+
+#언젠가 할일
 @api_view(['POST'])
 def add_task(request):
+    # 홈 화면 설정을 가져옵니다.
+    home_screen_setting = HomeScreenSetting.objects.first()
+    
+    # 설정에 따라 할 일 추가를 허용하지 않도록 합니다.
+    if not home_screen_setting or not home_screen_setting.is_visible_not_yet_task:
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
     title = request.data.get('title')
     content = request.data.get('content')
     category_id = request.data.get('categoryId')
 
+    # 필요한 필드가 누락된 경우 에러를 반환합니다.
     if not all([title, content, category_id]):
         return Response({'error': 'Missing required fields'}, status=status.HTTP_400_BAD_REQUEST)
 
+    # 카테고리를 찾습니다.
     try:
         category = Category.objects.get(categoryId=category_id)
     except Category.DoesNotExist:
         return Response({'error': 'Category not found'}, status=status.HTTP_404_NOT_FOUND)
 
-    # 캘린더 없이 언젠가 할일 추가
+    # 캘린더 없이 언젠가 할 일을 추가합니다.
     post = Post.objects.create(
         title=title,
         content=content,
@@ -373,6 +395,47 @@ def add_task(request):
         isFinished=False
     )
 
+    # 성공적으로 추가된 할 일의 postId를 반환합니다.
     return Response({'success': True, 'postId': post.postId}, status=status.HTTP_201_CREATED)
-=======
->>>>>>> 869acdfb3ee8b659113912af110cc39816ec6dde
+
+
+# 홈 화면 설정
+@api_view(['PUT'])
+def home_task(request):
+    # 클라이언트로부터 가시성 설정 값을 가져옵니다.
+    is_visible_not_yet_task = request.data.get('isVisibleNotYetTask')
+    is_visible_today_task = request.data.get('isVisibleTodayTask')
+    is_visible_some_task = request.data.get('isVisibleSomeTask')
+    
+    # 모든 설정 값이 제공되지 않으면 에러를 반환합니다.
+    if any(setting is None for setting in [is_visible_not_yet_task, is_visible_today_task, is_visible_some_task]):
+        return Response({'error': 'All visibility settings are required'}, status=status.HTTP_400_BAD_REQUEST)
+
+    # HomeScreenSetting 모델에 가시성 설정 값을 업데이트하거나 생성합니다.
+    setting, created = HomeScreenSetting.objects.update_or_create(
+        defaults={
+            'is_visible_not_yet_task': is_visible_not_yet_task,
+            'is_visible_today_task': is_visible_today_task,
+            'is_visible_some_task': is_visible_some_task
+        }
+    )
+    
+    # 성공적으로 업데이트된 가시성 설정 값을 반환합니다.
+    return Response({
+        'success': True
+    }, status=status.HTTP_200_OK)
+
+# 화면 모드 설정
+@api_view(['PUT'])
+def screen_theme(request):
+    # 클라이언트로부터 ScreenTheme 값
+    ScreenTheme = request.data.get('ScreenTheme')
+    if not ScreenTheme:
+        return Response({'error': 'ScreenTheme is required'}, status=status.HTTP_400_BAD_REQUEST)
+    if ScreenTheme not in ['light', 'dark']:
+        return Response({'error': 'Invalid ScreenTheme value'}, status=status.HTTP_400_BAD_REQUEST)
+    
+    # ScreenSetting 모델에 ScreenTheme 값을 업데이트하거나 생성합니다.
+    setting, created = ScreenSetting.objects.update_or_create(id=1, defaults={'ScreenTheme': ScreenTheme})
+    
+    return Response({'success': True}, status=status.HTTP_200_OK)

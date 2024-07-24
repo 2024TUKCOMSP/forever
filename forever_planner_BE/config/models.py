@@ -1,6 +1,19 @@
 import uuid
 from django.db import models
 
+class ScreenSetting(models.Model):
+    SCREEN_THEME_CHOICES = [
+        ('light', 'Light'),
+        ('dark', 'Dark'),
+    ]
+    ScreenTheme = models.CharField(max_length=20, choices=SCREEN_THEME_CHOICES, default='light')
+
+class HomeScreenSetting(models.Model):
+    settingId = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    is_visible_not_yet_task = models.BooleanField(default=True)
+    is_visible_today_task = models.BooleanField(default=True)
+    is_visible_some_task = models.BooleanField(default=True)
+
 class Category(models.Model):
     categoryId = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     categoryColor = models.IntegerField()

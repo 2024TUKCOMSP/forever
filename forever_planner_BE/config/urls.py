@@ -33,5 +33,7 @@ urlpatterns = [
     path('home/today', views.today_schedule, name='today_schedule'),
     path('home/all', views.all_tasks, name='all_tasks'),
     path('home/last', views.add_task, name='add_task'),
+    path('Setting/screen', views.screen_theme, name='screen_theme'),
+    path('Setting/home', views.home_task, name='home_task'),
 
 ]
