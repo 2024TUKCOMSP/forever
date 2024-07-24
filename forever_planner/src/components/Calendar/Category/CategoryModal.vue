@@ -13,7 +13,7 @@
       </div>
       <div v-else class="flex w-full gap-2">
         <div v-for="category in 3" :key="category">
-          <CategoryEditVue />
+          <CategoryEditVue @click="clickMoveCategory()"/>
         </div>
         <CategoryAddVue @click="clickMoveCategory()"/>
       </div>
