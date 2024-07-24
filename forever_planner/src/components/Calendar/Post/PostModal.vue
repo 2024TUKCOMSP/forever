@@ -33,7 +33,7 @@
 </template>
 
 <script setup>
-import PostCalendar from './PostCalendar.vue'
+import PostCalendar from './PostCalendar.vue';
 import { useModalStore } from '@/stores/modalStore.js';
 import { ref } from 'vue'
 
