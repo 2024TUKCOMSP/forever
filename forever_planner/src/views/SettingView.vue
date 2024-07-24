@@ -1,12 +1,13 @@
 <template>
+<div class="bg-[#f5f7fd] justify-between">
   <header class="settingHeader">
-    <button type="button" @click = "backWards" class="settingHeaderBtn">뒤로가기</button>
+    <button type="button" @click = "backWards" class="settingHeaderBtn">&lt;</button>
   </header>
   <br />
   <div class= "settingScreen">
-    <b><h1 class = "h1">설정</h1></b>
+    <b><h1>설정</h1></b>
 
-    <button type="button" class="defaultBtn">카테고리 편집 >> </button>
+    <button type="button" class="defaultBtn">카테고리 편집 <span class="goRight">&gt;</span></button>
 
     <br /><br />
 
@@ -14,16 +15,26 @@
     <div class="settingModeCss">
       <button type="button" class="screenMode">라이트 모드 <span class="isChecked"></span></button>
       <button type="button" class="screenMode">다크 모드<span class ="isChecked"></span></button>
+      <!--<label class="settingSpan">라이트 모드<input type="radio" name="settingScreenMode" class="radioBtn"/></label><br />
+      <label class="settingSpan">다크 모드<input type="radio" name ="settingScreenMode" class="radioBtn"/></label><br />!-->
     </div> <br />
+
+    <!--<p class ="settingP">홈 화면 설정</p>
+    <div class="settingModeCss">
+      <p>미완료 할 일</p>
+      <p>오늘</p>
+      <p>언젠가</p>
+    </div><br />-->
 
     <p class="settingP">캘린더 설정</p>
     <button type="button" class="defaultBtn">캘린더에 표시할 항목</button> <br />
 
-    <button type="button" class ="defaultBtn">지난 달 통계 확인하기</button><br /><br /><br />
+    <button type="button" class ="defaultBtn">지난 달 통계 확인하기<span class="goRight">&gt;</span></button><br /><br /><br />
 
     <button type="button" class ="defaultBtn2">로그아웃</button><br /><br /><br />
     <button type="button" class ="defaultBtn2">탈퇴</button><br />
   </div>
+</div>
 </template>
 
 <script>
@@ -66,53 +77,68 @@ export default {
   position: fixed;
   top:0;
   background-color: #f5f7fd;
-  width:74vh; /*임시 처리*/
+}
+.settingHeaderBtn{
+  font-size:xx-large;
 }
 .settingScreen{
   background-color: #f5f7fd;
   width:auto;
   height: 100vh;
+  align-self: center;
+  text-align: center;
+  margin-top: 20px;
+}
+.goRight{
+  float:right;
 }
 .settingP{
   font-size: small;
-  margin:0px 0px 0px 10px;
+  margin:0px 0px 0px 15px;
+  display: flex;
+  justify-self:start;
 }
-.h1{
+.settingSpan{
+  margin: 0px 0px 0px 5px;
+}
+h1{
   font-size:xx-large;
   padding-bottom: 5px;
+  text-align: start;
+  padding-left: 10px;
 }
-
 .defaultBtn{
   background-color: #fff;
   border-radius: 10px;
-  margin:10px;
-  padding:5px;
-  padding-left: 20px;
+  margin:5px;
+  padding:10px;
   width:95%;
   text-align: start;
 }
 .defaultBtn2{
   background-color: #fff;
   border-radius: 10px;
-  margin:10px;
-  padding:5px;
-  padding-left: 20px;
+  margin:5px;
+  padding:10px;
   width:95%;
   text-align: start;
   color:red;
 }
 .settingModeCss{
+  width: 95%;
   border-radius: 10px;
   background-color: #fff;
   margin-left: 10px;
   margin-right: 10px;
+  text-align: left;
+  padding-left: 10px;
+  margin-top: 5px;
 }
 .screenMode{
   background-color: #fff;
-  margin-left: 10px;
-  margin-right: 10px;
   padding:5px;
-  width:95%;
+  padding-right: 10px;
+  width:100%;
   border-width: 0px 0px 1px 0px;
   border-radius: 10px;
   text-align: start;
@@ -121,6 +147,18 @@ export default {
   float: right;
 }
 button:hover{
+  animation-name: touchBtn;
+  animation-duration: 0.1s;
+  animation-fill-mode: forwards;
+}
+label{
+  border-width: 0px 0px 1px 0px;
+  width: 98%
+}
+.radioBtn{
+  float:right;
+}
+label:hover{
   animation-name: touchBtn;
   animation-duration: 0.1s;
   animation-fill-mode: forwards;
