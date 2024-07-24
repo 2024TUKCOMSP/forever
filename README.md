@@ -11,41 +11,50 @@ Firebase와 GitHub 등 다양한 개발 플랫폼을 학습하기 위해 진행�
 
 ## 🛠 기능별 설계
 
-### 회원 가입 및 로그인
-- Firebase Authentication을 사용하여 이메일/비밀번호, Google 계정 등의 방법으로 회원 가입 및 로그인을 구현합니다.
+### 카테고리 편집
+- 카테고리 색상 및 태그 저장
 
 ### 캘린더
-- 캘린더 뷰를 제공하여 캘린더 내에서 카테고리 선택 및 내용 작성이 가능합니다(커스텀 가능).
-- 캘린더에 표시할 항목을 카테고리 별로 확인할 수 있도록 지원합니다.
-
-### 일기 기능
-- 어플리케이션 내에서 텍스트와 이미지를 삽입하여 일기를 작성하고, 이를 지정된 범위의 친구와 나눌 수 있습니다.
-
-### 친구 기능
-- 아이디, 링크, 카카오톡 초대 기능을 이용하여 친구를 초대할 수 있습니다(카카오톡 API 사용).
-
-### 프로필 편집
-- 본인의 이름, 자기 소개, 프로필 사진 수정 기능과 본인의 랜덤 코드(식별 코드), 팔로잉/팔로워 확인 기능이 포함됩니다.
-
+- 해당 일자에 카테고리 및 일정 추가
+- 일정 수정
+- 오늘 일정 조회
+- 전체 일정 조회
+- 일정 완료 처리에 따른 남은 할일 조회
+  
 ### 테마 커스텀
-- 테마 색상 변경 기능을 지원합니다.
+- 테마 색상 변경
 
 ### 설정
 - 화면 모드(다크, 라이트 모드 지원)
 - 홈 화면에 대한 설정(미완료 할 일 등)
-- 지난 달 통계 확인(할 일 체크 유무)
-- 폰트 설정
-- 자주 묻는 질문(FAQ), 문의
-- 로그인, 탈퇴, 로그아웃
 
-## ⭐️ 핵심 기술
+## ⭐️ 기술 스택
 
-### 카카오톡 API (KakaoTalk API)
-- 카카오톡 API을 이용한 회원 가입
-- 친구 초대(링크 공유)
+[![Vue.js](https://img.shields.io/badge/Vue.js-35495E?style=for-the-badge&logo=vue.js&logoColor=4FC08D)](https://vuejs.org/)
+[![VSCode](https://img.shields.io/badge/VSCode-007ACC?style=for-the-badge&logo=visual-studio-code&logoColor=white)](https://code.visualstudio.com/)
+[![Django](https://img.shields.io/badge/Django-092E20?style=for-the-badge&logo=django&logoColor=white)](https://www.djangoproject.com/)
+[![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white)](https://www.mysql.com/)
+[![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/)
 
-### Vscode와 GitHub
-- 웹앱 개발을 위해 Vscode와 GitHub을 활용합니다.
+
+
+## 🐤 Demo
+
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/18f321b8-ff82-4c9d-821b-93e260d9d8b9" alt="캘린더" width="300"/>
+  <img src="https://github.com/user-attachments/assets/1e4ff223-9728-4b71-976b-a42e5ada0c5e" alt="할일선택" width="300"/>
+  <img src="https://github.com/user-attachments/assets/24aa7e2d-f374-40d0-affe-e9953c908e7f" alt="카테고리 선택" width="300"/>
+
+</p>
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/62ba3589-098f-42c0-8463-7761ad9ac099" alt="카테고리 편집" width="300"/>
+  <img src="https://github.com/user-attachments/assets/e9e3c749-03bc-4490-9af6-bff1ae4fe21c" alt="홈화면" width="300"/>
+  <img src="https://github.com/user-attachments/assets/4bd59851-eed5-488d-9cb0-717e4a36e996" alt="설정화면" width="300"/>
+</p>
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/f3b515af-d5b8-4a87-926f-250f4235b1bd" alt="테마변경" width="300"/>
+</p>
+
 
 ## 📌 정기 회의
 * #### 매주 화요일 오후 2시
