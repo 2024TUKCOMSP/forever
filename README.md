@@ -40,9 +40,13 @@ GitHub 등 다양한 개발 플랫폼을 학습하기 위해 진행된 프로젝
 
 ## 🐤 Demo
 
-| **캘린더 페이지** | **해당 일자에 일정확인** | **일정 추가** |
-| :-------------------: | :--------------------: | :--------------------: |
-| <img src="https://github.com/user-attachments/assets/18f321b8-ff82-4c9d-821b-93e260d9d8b9" alt="캘린더" width="250" height="509"/> | <img src="https://github.com/user-attachments/assets/1e4ff223-9728-4b71-976b-a42e5ada0c5e" alt="할일선택" width="250" height="509"/> | <img src="https://github.com/user-attachments/assets/24aa7e2d-f374-40d0-affe-e9953c908e7f" alt="카테고리 선택" width="250" height="509"/> |
+| **캘린더 페이지** | **해당 일자에 일정확인** | 
+| :-------------------: | :--------------------: |
+| <img src="https://github.com/user-attachments/assets/18f321b8-ff82-4c9d-821b-93e260d9d8b9" alt="캘린더" width="250" height="509"/> | <img src="https://github.com/user-attachments/assets/1e4ff223-9728-4b71-976b-a42e5ada0c5e" alt="할일선택" width="250" height="509"/> | 
+
+| **일정 추가** | **일정 삭제** |
+| :-------------------: | :--------------------: |
+<img src="https://github.com/user-attachments/assets/24aa7e2d-f374-40d0-affe-e9953c908e7f" alt="카테고리 선택" width="250" height="509"/> | <img src="https://github.com/user-attachments/assets/2cdad412-81bd-4919-bb9e-67a9ab04594b" alt="일정 삭제" width="250" height="509"/> |
 
 | **홈화면 페이지** | **설정 화면** |
 | :-------------------: | :--------------------: | 
@@ -51,6 +55,7 @@ GitHub 등 다양한 개발 플랫폼을 학습하기 위해 진행된 프로젝
 | **테마변경 페이지** | **카테고리 편집** |
 | :-------------------: | :--------------------: | 
 | <img src="https://github.com/user-attachments/assets/f3b515af-d5b8-4a87-926f-250f4235b1bd" alt="테마변경" width="300" width="250" height="509"/> | <img src="https://github.com/user-attachments/assets/62ba3589-098f-42c0-8463-7761ad9ac099" alt="카테고리 편집" width="250" height="509"/> |
+
 
 
 
