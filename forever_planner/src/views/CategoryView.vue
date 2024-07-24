@@ -6,7 +6,7 @@
          <i class="fa-solid fa-chevron-left h-[30px] w-[30px]"></i>
         </div>
       </div>
-      <input class="w-full h-16 rounded-2xl p-4 text-2xl focus:outline-none" placeholder="카테고리를 입력하세요"/>
+      <input class="w-full h-16 rounded-2xl p-4 text-2xl focus:outline-none" placeholder="카테고리를 입력하세요" maxlength="10"/>
       <div class="bg-white rounded-2xl p-6 flex flex-col items-center">
         <div class="flex items-center gap-12">
           <i class="fa-solid fa-chevron-left w-[20px] h-[20px]"></i>

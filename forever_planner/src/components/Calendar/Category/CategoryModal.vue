@@ -8,12 +8,12 @@
       </div>
       <div v-if="!editMode" class="flex w-full gap-2">
         <div v-for="category in 3" :key="category">
-          <CategoryVue />
+          <CategoryVue @click="clickMakePost()"/>
         </div>
       </div>
       <div v-else class="flex w-full gap-2">
         <div v-for="category in 3" :key="category">
-          <CategoryEditVue />
+          <CategoryEditVue @click="clickMoveCategory()"/>
         </div>
         <CategoryAddVue @click="clickMoveCategory()"/>
       </div>
@@ -30,7 +30,8 @@ import CategoryAddVue from './CategoryAddVue.vue';
 import CategoryEditVue from './CategoryEditVue.vue';
 
 const router = useRouter();
-const { handleClickCloseCategoryModal } = useModalStore();
+const type = ref("add");
+const { handleClickCloseCategoryModal, handleClickPostModal } = useModalStore();
 
 const editMode = ref(false);
 
@@ -40,6 +41,11 @@ const clickEditMode = () => {
 
 const clickMoveCategory = () => {
   router.push({ name: 'category' });
+};
+
+const clickMakePost = () => {
+  handleClickCloseCategoryModal();
+  handleClickPostModal(type.value);
 };
 </script>
 

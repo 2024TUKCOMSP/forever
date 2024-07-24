@@ -1,7 +1,7 @@
 <template>
   <div class="max-w-[500px] w-full h-full fixed top-0 bg-opacity-40 bg-black z-50 flex flex-col justify-end" @click="handleClickClosePostModal()">
-    <div class="p-4">
-      <div class="w-10 h-10 bg-[#FF0000] rounded-xl flex items-center justify-center trash-color">
+    <div v-if="postModalType == 'edit'" class="p-4" @click.stop>
+      <div @click="handleClickConfirmModal()" class="w-10 h-10 bg-[#FF2200] rounded-xl flex items-center justify-center trash-color">
         <i class="fa-solid fa-trash-can"></i>
       </div>
     </div>
@@ -18,7 +18,7 @@
             <div class="flex items-center" :class="isContentActive ? 'clicked-icon-color' : 'icon-color'" @click="clickContentButton()">
               <i class="fa-solid fa-note-sticky w-5 h-5"></i>
             </div>
-            <div class="text-[#00000050]">일상</div>
+            <div class="text-[#00000050]" @click="handleClickCategory()">일상</div>
           </div>
           <div class="flex items-center icon-color" @click="submit()">
             <i class="fa-solid fa-paper-plane w-5 h-5"></i>
@@ -33,11 +33,14 @@
 </template>
 
 <script setup>
-import PostCalendar from './PostCalendar.vue'
+import PostCalendar from './PostCalendar.vue';
 import { useModalStore } from '@/stores/modalStore.js';
+import { storeToRefs } from 'pinia';
 import { ref } from 'vue'
 
-const { handleClickClosePostModal } = useModalStore();
+const { handleClickClosePostModal, handleClickPostCategoryModal, handleClickConfirmModal } = useModalStore();
+const { postModalType } = storeToRefs(useModalStore());
+
 const isCalendarActive = ref(false);
 const isContentActive = ref(false);
 const postTitle = ref("방학");
@@ -51,6 +54,12 @@ const clickCalendarButton = () => {
 const clickContentButton = () => {
   isContentActive.value = !isContentActive.value;
   isCalendarActive.value = false;
+};
+
+const handleClickCategory = () => {
+  isContentActive.value = false;
+  isCalendarActive.value = false;
+  handleClickPostCategoryModal();
 };
 
 const submit = () => {
