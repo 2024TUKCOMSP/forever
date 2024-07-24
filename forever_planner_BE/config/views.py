@@ -242,6 +242,7 @@ def post_create(request):
         'postId': post.postId,
         'calendarId': calendar.calendarId
     }, status=status.HTTP_201_CREATED)
+<<<<<<< HEAD
 
 # 일정 재추가 함수
 @api_view(['POST'])
@@ -274,6 +275,8 @@ def post_recreate(request):
     return Response({'success': True, 'postId': post.postId}, status=status.HTTP_201_CREATED)
 
 
+=======
+>>>>>>> 869acdfb3ee8b659113912af110cc39816ec6dde
 # 모든 카테고리 조회 함수
 @api_view(['GET'])
 def category_all(request):
@@ -281,6 +284,7 @@ def category_all(request):
     categories = Category.objects.all()
     serializer = CategorySerializer(categories, many=True)
     return Response(serializer.data)
+<<<<<<< HEAD
     
 # 오늘의 일정 출력 함수
 @api_view(['GET'])
@@ -370,3 +374,5 @@ def add_task(request):
     )
 
     return Response({'success': True, 'postId': post.postId}, status=status.HTTP_201_CREATED)
+=======
+>>>>>>> 869acdfb3ee8b659113912af110cc39816ec6dde

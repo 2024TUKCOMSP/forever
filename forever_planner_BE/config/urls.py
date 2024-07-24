@@ -33,5 +33,6 @@ urlpatterns = [
     path('home/today', views.today_schedule, name='today_schedule'),
     path('home/all', views.all_tasks, name='all_tasks'),
     path('home/last', views.add_task, name='add_task'),
-    
+
+]
 ]
