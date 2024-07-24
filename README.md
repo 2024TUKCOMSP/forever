@@ -48,19 +48,11 @@ GitHub 등 다양한 개발 플랫폼을 학습하기 위해 진행된 프로젝
 | :-------------------: | :--------------------: | 
 | <img src="https://github.com/user-attachments/assets/e9e3c749-03bc-4490-9af6-bff1ae4fe21c" alt="홈화면" width="300" width="250" height="509"/> | <img src="https://github.com/user-attachments/assets/96540b7e-2b1a-4a0a-8e5f-0d2204479101" alt="설정" width="250" height="509"/> |
 
+| **테마변경 페이지** | **카테고리 편집** |
+| :-------------------: | :--------------------: | 
+| <img src="https://github.com/user-attachments/assets/f3b515af-d5b8-4a87-926f-250f4235b1bd" alt="테마변경" width="300" width="250" height="509"/> | <img src="https://github.com/user-attachments/assets/62ba3589-098f-42c0-8463-7761ad9ac099" alt="카테고리 편집" width="250" height="509"/> |
 
 
-<p align="center">
-  <img src="https://github.com/user-attachments/assets/e9e3c749-03bc-4490-9af6-bff1ae4fe21c" alt="홈화면" width="300"/>
-  &nbsp;&nbsp;&nbsp;&nbsp;
-  <img src="https://github.com/user-attachments/assets/4bd59851-eed5-488d-9cb0-717e4a36e996" alt="설정화면" width="300"/>
-</p>
-
-<p align="center">
-  <img src="https://github.com/user-attachments/assets/f3b515af-d5b8-4a87-926f-250f4235b1bd" alt="테마변경" width="300"/>
-  &nbsp;&nbsp;&nbsp;&nbsp;
-  <img src="https://github.com/user-attachments/assets/62ba3589-098f-42c0-8463-7761ad9ac099" alt="카테고리 편집" width="300"/>
-</p>
 
 
 
