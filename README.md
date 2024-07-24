@@ -40,16 +40,12 @@ Firebase와 GitHub 등 다양한 개발 플랫폼을 학습하기 위해 진행�
 
 ## ⭐️ 핵심 기술
 
-### 파이어베이스 (Firebase)
-- 회원 가입 및 로그인
-- 게시글 작성, 저장 및 편집
-
 ### 카카오톡 API (KakaoTalk API)
 - 카카오톡 API을 이용한 회원 가입
 - 친구 초대(링크 공유)
 
-### 안드로이드 스튜디오 (Android Studio)와 GitHub
-- 어플리케이션을 개발하기 위해 안드로이드 스튜디오와 GitHub을 활용합니다.
+### Vscode와 GitHub
+- 웹앱 개발을 위해 Vscode와 GitHub을 활용합니다.
 
 ## 📌 정기 회의
 * #### 매주 화요일 오후 2시
