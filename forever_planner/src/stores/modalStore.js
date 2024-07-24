@@ -6,6 +6,7 @@ export const useModalStore = defineStore('modalStore', () => {
   const categoryModalState = ref(false);
   const postModalState = ref(false);
   const postCategoryModalState = ref(false);
+  const confirmModalState = ref(false);
 
   const handleClickDateModal = () => {
     dateModalState.value = true;
@@ -39,6 +40,14 @@ export const useModalStore = defineStore('modalStore', () => {
     postCategoryModalState.value = false;
   };
 
+  const handleClickConfirmModal = () => {
+    confirmModalState.value = true;
+  };
+
+  const handleClickCloseConfirmModal = () => {
+    confirmModalState.value = false;
+  };
+
   return {
     dateModalState,
     handleClickDateModal,
@@ -52,5 +61,8 @@ export const useModalStore = defineStore('modalStore', () => {
     postCategoryModalState,
     handleClickPostCategoryModal,
     handleClickClosePostCategoryModal,
+    confirmModalState,
+    handleClickConfirmModal,
+    handleClickCloseConfirmModal,
   };
 });
