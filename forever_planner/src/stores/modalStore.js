@@ -4,6 +4,7 @@ import { defineStore } from 'pinia';
 export const useModalStore = defineStore('modalStore', () => {
   const dateModalState = ref(false);
   const categoryModalState = ref(false);
+  const postModalState = ref(false);
 
   const handleClickDateModal = () => {
     dateModalState.value = true;
@@ -21,12 +22,23 @@ export const useModalStore = defineStore('modalStore', () => {
     categoryModalState.value = false;
   };
 
+  const handleClickPostModal = () => {
+    postModalState.value = true;
+  };
+
+  const handleClickClosePostModal = () => {
+    postModalState.value = false;
+  };
+
   return {
     dateModalState,
     handleClickDateModal,
     handleClickCloseModal,
     handleClickCloseCategoryModal,
     handleClickCategoryModal,
-    categoryModalState
+    categoryModalState,
+    postModalState,
+    handleClickPostModal,
+    handleClickClosePostModal,
   };
 });
