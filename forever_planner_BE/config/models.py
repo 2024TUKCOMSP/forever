@@ -21,4 +21,3 @@ class Post(models.Model):
     isFinished = models.BooleanField(default=False)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     calendar = models.ForeignKey(Calendar, on_delete=models.CASCADE, related_name='posts', null=True, blank=True)
-

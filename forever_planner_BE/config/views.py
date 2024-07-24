@@ -242,6 +242,41 @@ def post_create(request):
         'postId': post.postId,
         'calendarId': calendar.calendarId
     }, status=status.HTTP_201_CREATED)
+<<<<<<< HEAD
+
+# 일정 재추가 함수
+@api_view(['POST'])
+def post_recreate(request):
+    calendar_id = request.data.get('calendarId')
+    title = request.data.get('title')
+    content = request.data.get('content')
+    category_id = request.data.get('categoryId')
+
+    if not all([calendar_id, title, content, category_id]):
+        return Response({'error': 'Missing required fields'}, status=status.HTTP_400_BAD_REQUEST)
+
+    try:
+        calendar = Calendar.objects.get(calendarId=calendar_id)
+    except Calendar.DoesNotExist:
+        return Response({'error': 'Calendar not found'}, status=status.HTTP_404_NOT_FOUND)
+
+    try:
+        category = Category.objects.get(categoryId=category_id)
+    except Category.DoesNotExist:
+        return Response({'error': 'Category not found'}, status=status.HTTP_404_NOT_FOUND)
+
+    post = Post.objects.create(
+        title=title,
+        content=content,
+        category=category,
+        calendar=calendar
+    )
+
+    return Response({'success': True, 'postId': post.postId}, status=status.HTTP_201_CREATED)
+
+
+=======
+>>>>>>> 869acdfb3ee8b659113912af110cc39816ec6dde
 # 모든 카테고리 조회 함수
 @api_view(['GET'])
 def category_all(request):
@@ -249,3 +284,95 @@ def category_all(request):
     categories = Category.objects.all()
     serializer = CategorySerializer(categories, many=True)
     return Response(serializer.data)
+<<<<<<< HEAD
+    
+# 오늘의 일정 출력 함수
+@api_view(['GET'])
+def today_schedule(request):
+    today = datetime.today().date()
+    
+    try:
+        calendar = Calendar.objects.get(calendarDate=today)
+    except Calendar.DoesNotExist:
+        return Response({'error': 'No schedule for today'}, status=status.HTTP_404_NOT_FOUND)
+
+    posts = Post.objects.filter(calendar=calendar)
+    response_data = {
+        'calendarDate': calendar.calendarDate.day,
+        'post': []
+    }
+    
+    for post in posts:
+        category_serializer = CategorySerializer(post.category)
+        post_data = {
+            'postId': post.postId,
+            'title': post.title,
+            'content': post.content,
+            'isFinished': post.isFinished,
+            'categoryColor': post.category.categoryColor,
+            'categoryTitle': category_serializer.data['categoryTitle']
+        }
+        response_data['post'].append(post_data)
+
+    return Response(response_data, status=status.HTTP_200_OK)
+
+@api_view(['GET'])
+def all_tasks(request):
+    today = datetime.today().date()
+
+    # isFinished가 False인 포스트를 필터링
+    posts = Post.objects.filter(isFinished=False)
+    response_data = []
+
+    for post in posts:
+        if post.calendar is not None:
+            calendar_date = post.calendar.calendarDate
+            daycount = (today - calendar_date).days
+
+            # D-day가 지난 경우에만 출력
+            if daycount > 0:
+                calendar_id = post.calendar.calendarId
+                calendar_day = calendar_date.day
+                post_data = {
+                    'calendarId': calendar_id,
+                    'calendarDate': calendar_day,
+                    'daycount': f'+{daycount}일',
+                    'post': {
+                        'postId': post.postId,
+                        'title': post.title,
+                        'content': post.content,
+                        'isFinished': post.isFinished
+                    }
+                }
+                response_data.append(post_data)
+        else:
+            # 캘린더가 없는 포스트는 D-day 계산이 불가능하므로 생략
+            continue
+
+    return Response(response_data, status=status.HTTP_200_OK)
+# 언젠가 할일 추가 함수
+@api_view(['POST'])
+def add_task(request):
+    title = request.data.get('title')
+    content = request.data.get('content')
+    category_id = request.data.get('categoryId')
+
+    if not all([title, content, category_id]):
+        return Response({'error': 'Missing required fields'}, status=status.HTTP_400_BAD_REQUEST)
+
+    try:
+        category = Category.objects.get(categoryId=category_id)
+    except Category.DoesNotExist:
+        return Response({'error': 'Category not found'}, status=status.HTTP_404_NOT_FOUND)
+
+    # 캘린더 없이 언젠가 할일 추가
+    post = Post.objects.create(
+        title=title,
+        content=content,
+        category=category,
+        isFinished=False
+    )
+
+    return Response({'success': True, 'postId': post.postId}, status=status.HTTP_201_CREATED)
+=======
+>>>>>>> 869acdfb3ee8b659113912af110cc39816ec6dde
