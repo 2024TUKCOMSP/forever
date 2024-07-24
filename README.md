@@ -65,7 +65,7 @@ GitHub 등 다양한 개발 플랫폼을 학습하기 위해 진행된 프로젝
   
 | **해당 일자에 일정확인** | **일정 추가** | **일정 삭제** |
 | :--------------------: | :-------------------: | :--------------------: |
-| <img src="https://github.com/user-attachments/assets/1e4ff223-9728-4b71-976b-a42e5ada0c5e" alt="할일선택" width="250" height="509"/> | <img src="https://github.com/user-attachments/assets/24aa7e2d-f374-40d0-affe-e9953c908e7f" alt="카테고리 선택" width="250" height="509"/> | <img src="https://github.com/user-attachments/assets/2cdad412-81bd-4919-bb9e-67a9ab04594b" alt="일정 삭제" width="250" height="509"/> |
+| <img src="https://github.com/user-attachments/assets/1e4ff223-9728-4b71-976b-a42e5ada0c5e" alt="할일선택" width="300" height="509"/> | <img src="https://github.com/user-attachments/assets/24aa7e2d-f374-40d0-affe-e9953c908e7f" alt="카테고리 선택" width="300" height="509"/> | <img src="https://github.com/user-attachments/assets/2cdad412-81bd-4919-bb9e-67a9ab04594b" alt="일정 삭제" width="300" height="509"/> |
 
 </div>
 
@@ -73,11 +73,11 @@ GitHub 등 다양한 개발 플랫폼을 학습하기 위해 진행된 프로젝
   
 | **홈화면 페이지** | **설정 화면** |
 | :-------------------: | :--------------------: | 
-| <img src="https://github.com/user-attachments/assets/e9e3c749-03bc-4490-9af6-bff1ae4fe21c" alt="홈화면" width="300" width="250" height="509"/> | <img src="https://github.com/user-attachments/assets/96540b7e-2b1a-4a0a-8e5f-0d2204479101" alt="설정" width="250" height="509"/> |
+| <img src="https://github.com/user-attachments/assets/e9e3c749-03bc-4490-9af6-bff1ae4fe21c" alt="홈화면" width="300" width="250" height="509"/> | <img src="https://github.com/user-attachments/assets/96540b7e-2b1a-4a0a-8e5f-0d2204479101" alt="설정" width="300" height="509"/> |
 
 | **테마변경 페이지** | **카테고리 편집** |
 | :-------------------: | :--------------------: | 
-| <img src="https://github.com/user-attachments/assets/f3b515af-d5b8-4a87-926f-250f4235b1bd" alt="테마변경" width="300" width="250" height="509"/> | <img src="https://github.com/user-attachments/assets/62ba3589-098f-42c0-8463-7761ad9ac099" alt="카테고리 편집" width="250" height="509"/> |
+| <img src="https://github.com/user-attachments/assets/f3b515af-d5b8-4a87-926f-250f4235b1bd" alt="테마변경" width="300" height="509"/> | <img src="https://github.com/user-attachments/assets/62ba3589-098f-42c0-8463-7761ad9ac099" alt="카테고리 편집" width="300" height="509"/> |
 
 </div>
 
