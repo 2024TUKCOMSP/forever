@@ -113,7 +113,7 @@ export default {
   }
 
   100% {
-    transform:scale(0.95);
+    transform:scale(0.97);
     background-color: #ECEDF2;
     align-self: center;
   }

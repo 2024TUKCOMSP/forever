@@ -13,18 +13,16 @@
 
     <p class="settingP">화면 모드</p>
     <div class="settingModeCss">
-      <button type="button" class="screenMode">라이트 모드 <span class="isChecked"></span></button>
-      <button type="button" class="screenMode">다크 모드<span class ="isChecked"></span></button>
-      <!--<label class="settingSpan">라이트 모드<input type="radio" name="settingScreenMode" class="radioBtn"/></label><br />
-      <label class="settingSpan">다크 모드<input type="radio" name ="settingScreenMode" class="radioBtn"/></label><br />!-->
+      <button type="button" class="screenMode" @click="isClickScreenModeBtn('Light')">라이트 모드 <span class="isChecked" id ="lightModeTxt"></span></button>
+      <button type="button" class="screenMode" @click="isClickScreenModeBtn('Dark')">다크 모드<span class ="isChecked" id="darkModeTxt"></span></button>
     </div> <br />
 
-    <!--<p class ="settingP">홈 화면 설정</p>
+    <p class ="settingP">홈 화면 설정</p>
     <div class="settingModeCss">
       <p>미완료 할 일</p>
       <p>오늘</p>
       <p>언젠가</p>
-    </div><br />-->
+    </div><br />
 
     <p class="settingP">캘린더 설정</p>
     <button type="button" class="defaultBtn">캘린더에 표시할 항목</button> <br />
@@ -51,8 +49,21 @@ export default {
     const backWards = () =>{
       router.push({name: 'home'});
     }
+
+    var isClickScreenModeBtn = function(txt){
+        if(txt == 'Dark'){
+          //다크 모드 동작
+          document.getElementById("test").innerHTML = "변경된 span값";
+          document.getElementById("test").innerHTML = "변경된 span값";
+        }else{
+          //라이트 모드 동작
+          document.getElementById("test").innerHTML = "변경된 span값";
+          document.getElementById("test").innerHTML = "변경된 span값";
+        }
+      }
     return{
       backWards,
+      isClickScreenModeBtn,
     }
   }
 }
@@ -67,7 +78,7 @@ export default {
   }
 
   100% {
-    transform:scale(0.95);
+    transform:scale(0.97);
     background-color: #ECEDF2;
     align-self: center;
   }
