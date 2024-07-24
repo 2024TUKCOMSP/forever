@@ -11,8 +11,8 @@
 </template>
 
 <script setup>
-import PostVue from './PostVue.vue';
-import FinishedPostVue from '@/components/FinishiedPostVue.vue'
+import PostVue from './Post/PostVue.vue';
+import FinishedPostVue from './Post/FinishedPostVue.vue';
 import { useModalStore } from '@/stores/modalStore.js';
 
 const { handleClickDateModal } = useModalStore();
