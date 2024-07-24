@@ -30,7 +30,8 @@ import CategoryAddVue from './CategoryAddVue.vue';
 import CategoryEditVue from './CategoryEditVue.vue';
 
 const router = useRouter();
-const { handleClickCloseCategoryModal } = useModalStore();
+const type = ref("add");
+const { handleClickCloseCategoryModal, handleClickPostModal } = useModalStore();
 
 const editMode = ref(false);
 
