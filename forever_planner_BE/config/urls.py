@@ -35,4 +35,3 @@ urlpatterns = [
     path('home/last', views.add_task, name='add_task'),
 
 ]
-]
