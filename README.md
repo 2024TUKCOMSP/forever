@@ -63,9 +63,17 @@ GitHub 등 다양한 개발 플랫폼을 학습하기 위해 진행된 프로젝
 
 <div align="center">
   
-| **해당 일자에 일정확인** | **일정 추가** | **일정 삭제** |
-| :--------------------: | :-------------------: | :--------------------: |
-| <img src="https://github.com/user-attachments/assets/1e4ff223-9728-4b71-976b-a42e5ada0c5e" alt="할일선택" width="300" height="509"/> | <img src="https://github.com/user-attachments/assets/24aa7e2d-f374-40d0-affe-e9953c908e7f" alt="카테고리 선택" width="300" height="509"/> | <img src="https://github.com/user-attachments/assets/2cdad412-81bd-4919-bb9e-67a9ab04594b" alt="일정 삭제" width="300" height="509"/> |
+| **해당 일자에 일정확인** | **일정 추가** |
+| :--------------------: |  :--------------------: |
+| <img src="https://github.com/user-attachments/assets/1e4ff223-9728-4b71-976b-a42e5ada0c5e" alt="할일선택" width="300" height="509"/> | <img src="https://github.com/user-attachments/assets/24aa7e2d-f374-40d0-affe-e9953c908e7f" alt="카테고리 선택" width="300" height="509"/> <img src="https://github.com/user-attachments/assets/d0bc492d-4048-4f84-8034-efb510028934" alt="일정 추가" width="300" height="509"/> |
+
+</div>
+
+<div align="center">
+  
+| **일정 삭제** |
+| :--------------------: |
+| <img src="https://github.com/user-attachments/assets/2cdad412-81bd-4919-bb9e-67a9ab04594b" alt="일정 삭제" width="300" height="509"/> <img src="https://github.com/user-attachments/assets/fdcd25d1-3f83-4a69-aec9-c18cdf9f58b8" alt="일정 삭제" width="300" height="509"/> |
 
 </div>
 
