@@ -42,6 +42,7 @@
 
       onMounted(() => {
         isClicked.value = 'remainingTodo';
+        window.scrollTo(0, 0);
       });
 
       const backWards = () =>{
