@@ -2,24 +2,24 @@
   <!--홈 화면-->
 
   <div class="h-screen flex flex-col">
-    <DateModal v-if="dateModalState" />
-    <CategoryModal v-if="categoryModalState" />
+    <!--<DateModal v-if="dateModalState" />
+    <CategoryModal v-if="categoryModalState" />  !-->
     <div class="planetTxtBar">
       <button type="button" @click="planetBtnClick" class="planetTxtBtn">Planet v</button>
       <button type="button" @click="goSettingBtnClick" class="goSettingBtn"><i class="fa-solid fa-gear"></i></button>
 
           <!--모달 팝업-->
-      <div class="checkTodoTagModal" v-show="isModalVisible" >
-        <button type="button" class="checkTodoTagBtn">
-          <!--컬러 추가-->
+      <div class="checkTodoTagModal" tabindex="-1" v-if ="isModalVisible" ref="checkTodoTagModal" @blur="closeModal">
+        <button type="button" class="checkTodoTagBtn" value ="일상" @click="checkTodoTagClick('일상')">
+          <span class ="tag1Round">●</span>
           태그명1
         </button><br />
-        <button type="button" class="checkTodoTagBtn">
-          <!--컬러 추가-->
+        <button type="button" class="checkTodoTagBtn" value ="중요" @click="checkTodoTagClick('중요')">
+          <span class ="tag2Round">●</span>
           태그명2
         </button><br />
-        <button type="button" class="checkTodoTagBtn">
-          <!--컬러 추가-->
+        <button type="button" class="checkTodoTagBtn" value ="공부" @click="checkTodoTagClick('공부')">
+          <span class ="tag3Round">●</span>
           태그명3
         </button><br />
       </div>
@@ -57,13 +57,13 @@
 
 <script>
 import FooterVue from '@/components/FooterVue.vue';
-import {onMounted, ref,  watchEffect } from 'vue';
+import {nextTick, onMounted,  watchEffect, ref} from 'vue';
 import { storeToRefs } from 'pinia';
 import { useStore } from '@/stores/store.js';
 import { useRouter } from 'vue-router';
 //import DateModal from '@/components/Calendar/DateModal.vue';
 //import CategoryModal from '@/components/Calendar/Category/CategoryModal.vue';
-import { useModalStore } from '@/stores/modalStore.js';
+import { useModalStore } from '@/stores/modalStore.js'; 
 
 
 
@@ -73,7 +73,8 @@ export default {
     FooterVue,
   },
    data() {
-    return {};
+    return {
+    };
   },
   setup() {
     const store = useStore();
@@ -99,13 +100,27 @@ export default {
       handleStopScroll();   //task: 어떤 기능인지 여쭤보기 
     });
 
+    const planetBtnClick = () => {
+      isModalVisible.value = true;
+      nextTick(()=> {
+        const modalElement = document.querySelector('.checkTodoTagModal');
+        if (modalElement ) {
+          modalElement.focus();
+        }
+      });
+    };
+
+    const checkTodoTagClick = (value) =>{
+      console.log(value);
+        router.push('/checkTodo');
+    }
+
     return {
-      isModalVisible,
       onMounted,
       handleStopScroll,
       watchEffect,
-      checkTodoTagClick(){
-      },
+      planetBtnClick,
+      checkTodoTagClick,
       userIconClick() {
         alert("dkdkkd");
         // 프로필 편집으로 이동하기 위한 버튼
@@ -113,8 +128,8 @@ export default {
       remainingTodoClick() {
         router.push('remainingTodo');
       },
-      planetBtnClick() {
-        isModalVisible.value = !isModalVisible.value // Toggle modal visibility
+      closeModal(){
+        setTimeout(()=>isModalVisible.value = false,300);
       },
       todaysTodoDateClick() {
         
@@ -125,6 +140,7 @@ export default {
       goSettingBtnClick() {
         router.push({ name: 'setting' });
       },
+      isModalVisible,
     }
   }
 }
@@ -271,11 +287,27 @@ export default {
   box-shadow: 0px 0px 30px  #8F9095;
   border-radius: 10px;
   padding:10px;
+  margin-left:5px;
 }
 .checkTodoTagBtn{
   width:100%;
   text-align: start;
   font-size:medium;
   border-width: 0px 0px 1px 0px;
+  border-radius:10px;
+}
+.checkTodoTagBtn:hover{
+  animation-name: touchBtn;
+  animation-duration: 0.1s;
+  animation-fill-mode: forwards;
+}
+.tag1Round{ 
+  color:#5A7CD5;
+}
+.tag2Round{ 
+  color:#5A7CD5;
+}
+.tag3Round{ 
+  color:#5A7CD5;
 }
 </style>
