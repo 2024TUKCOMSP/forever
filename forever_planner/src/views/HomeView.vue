@@ -61,8 +61,8 @@ import {onMounted, ref,  watchEffect } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useStore } from '@/stores/store.js';
 import { useRouter } from 'vue-router';
-import DateModal from '@/components/Calendar/DateModal.vue';
-import CategoryModal from '@/components/Calendar/Category/CategoryModal.vue';
+//import DateModal from '@/components/Calendar/DateModal.vue';
+//import CategoryModal from '@/components/Calendar/Category/CategoryModal.vue';
 import { useModalStore } from '@/stores/modalStore.js';
 
 
@@ -80,7 +80,7 @@ export default {
     const { isClicked } = storeToRefs(store);
     const isModalVisible = ref(false); 
     const router = useRouter(); //useRouter로 Vue Router 주입
-    const { dateModalState, categoryModalState } = storeToRefs(useModalStore());
+    const { dateModalState, /*categoryModalState*/ } = storeToRefs(useModalStore());
     
     const handleStopScroll = () => {
       if(dateModalState.value){
