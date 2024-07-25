@@ -19,9 +19,9 @@
 
     <p class ="settingP">홈 화면 설정</p>
     <div class="settingModeCss">
-      <p>미완료 할 일</p>
-      <p>오늘</p>
-      <p>언젠가</p>
+      <p class ="settingModeP">미완료 할 일<input role ="switch" type="checkbox" class="settingModeToggle"/></p>
+      <p class ="settingModeP">오늘<input role ="switch" type="checkbox" class="settingModeToggle"/></p>
+      <p class ="settingModeP">언젠가<input role ="switch" type="checkbox" class="settingModeToggle"/></p>
     </div><br />
 
     <p class="settingP">캘린더 설정</p>
@@ -117,6 +117,46 @@ export default {
   margin:0px 0px 0px 15px;
   display: flex;
   justify-self:start;
+}
+.settingModeP{
+  padding:5px;
+  border-width: 0px 0px 1px 0px;
+  width:98%;
+  position: relative;
+}
+[type="checkbox"] {
+  appearance: none;
+  position: relative;
+  border: max(2px, 0.1em) solid gray;
+  border-radius: 1.25em;
+  width: 2.25em;
+  height: 1.25em;
+}
+[type="checkbox"]::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  width: 1em;
+  height: 1em;
+  border-radius: 50%;
+  transform: scale(0.8);
+  background-color: gray;
+  transition: left 250ms linear;
+}
+[type="checkbox"]:checked::before {
+  background-color: #ffffff;
+  left: 1em;
+}
+[type="checkbox"]:checked {
+  background-color: rgb(46, 91, 255);
+  border-color: rgb(46, 91, 255);
+}
+.settingModeToggle{
+  cursor:pointer;
+  float: right;
+  position: absolute;
+  right:10px;
+  top:7px;
 }
 .settingSpan{
   margin: 0px 0px 0px 5px;
