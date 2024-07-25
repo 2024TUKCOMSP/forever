@@ -8,6 +8,14 @@ class ScreenSetting(models.Model):
     ]
     ScreenTheme = models.CharField(max_length=20, choices=SCREEN_THEME_CHOICES, default='light')
 
+class Theme(models.Model):
+    themeId = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    themeTitle = models.CharField(max_length=255)
+    colorList = models.JSONField()
+
+    def __str__(self):
+        return self.themeTitle
+
 class HomeScreenSetting(models.Model):
     settingId = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     is_visible_not_yet_task = models.BooleanField(default=True)
@@ -16,7 +24,7 @@ class HomeScreenSetting(models.Model):
 
 class Category(models.Model):
     categoryId = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    categoryColor = models.IntegerField()
+    categoryColor = models.CharField(max_length=255)
     categoryTitle = models.CharField(max_length=255)
 
     def __str__(self):
@@ -34,3 +42,4 @@ class Post(models.Model):
     isFinished = models.BooleanField(default=False)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     calendar = models.ForeignKey(Calendar, on_delete=models.CASCADE, related_name='posts', null=True, blank=True)
+

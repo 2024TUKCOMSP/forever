@@ -1,51 +1,69 @@
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from rest_framework import generics
 import uuid
 from datetime import datetime, timedelta
-from .models import Calendar, Post, Category, HomeScreenSetting, ScreenSetting
-from .serializers import CalendarSerializer, PostSerializer, CategorySerializer
-
-# 카테고리 수정 함수
-@api_view(['PUT'])
-def edit_category(request):
-    # 카테고리 ID, 색상 및 제목을 가져옴
-    categoryId = request.data.get('categoryId')
-    categoryColor = request.data.get('categoryColor')
-    categoryTitle = request.data.get('categoryTitle')
-
-    try:
-        # 카테고리를 검색하고 수정
-        category = Category.objects.get(categoryId=categoryId)
-        category.categoryColor = categoryColor
-        category.categoryTitle = categoryTitle
-        category.save()
-        response_data = {'success': True}
-        return Response(response_data, status=status.HTTP_200_OK)
-    except Category.DoesNotExist:
-        # 카테고리를 찾을 수 없는 경우
-        return Response({'success': False, 'error': 'Category not found'}, status=status.HTTP_404_NOT_FOUND)
+from .models import Calendar, Post, Category, HomeScreenSetting, ScreenSetting, Theme
+from .serializers import CalendarSerializer, PostSerializer, CategorySerializer, ThemeSerializer
 
 # 카테고리 생성 함수
 @api_view(['POST'])
 def create_category(request):
-    # 요청에서 카테고리 색상 및 제목을 가져옴
     categoryColor = request.data.get('categoryColor')
     categoryTitle = request.data.get('categoryTitle')
-
-    # 새로운 카테고리 생성
+    
+    # 유효한 색상인지 확인
+    valid_colors = []
+    themes = Theme.objects.all()
+    for theme in themes:
+        colors = theme.colorList  # assuming colorList is a list of dicts
+        valid_colors.extend([color['colorCode'] for color in colors])
+    
+    if categoryColor not in valid_colors:
+        return Response({'error': 'Invalid category color'}, status=status.HTTP_400_BAD_REQUEST)
+    
     category = Category(
         categoryColor=categoryColor,
         categoryTitle=categoryTitle
     )
     category.save()
-
-    # 데이터 생성 및 반환
+    
     response_data = {
         'categoryId': category.categoryId,
         'success': True
     }
     return Response(response_data, status=status.HTTP_201_CREATED)
+
+
+# 카테고리 수정 함수
+@api_view(['PUT'])
+def edit_category(request):
+    categoryId = request.data.get('categoryId')
+    categoryColor = request.data.get('categoryColor')
+    categoryTitle = request.data.get('categoryTitle')
+    
+    try:
+        category = Category.objects.get(categoryId=categoryId)
+    except Category.DoesNotExist:
+        return Response({'success': False, 'error': 'Category not found'}, status=status.HTTP_404_NOT_FOUND)
+    
+    # 유효한 색상인지 확인
+    valid_colors = []
+    themes = Theme.objects.all()
+    for theme in themes:
+        colors = theme.colorList  # assuming colorList is a list of dicts
+        valid_colors.extend([color['colorCode'] for color in colors])
+    
+    if categoryColor not in valid_colors:
+        return Response({'error': 'Invalid category color'}, status=status.HTTP_400_BAD_REQUEST)
+    
+    category.categoryColor = categoryColor
+    category.categoryTitle = categoryTitle
+    category.save()
+    
+    response_data = {'success': True}
+    return Response(response_data, status=status.HTTP_200_OK)
 
 # 카테고리 삭제 함수
 @api_view(['DELETE'])
@@ -79,7 +97,7 @@ def calendar_all(request):
     first_day = datetime(year, month, 1)
     last_day = (first_day + timedelta(days=32)).replace(day=1) - timedelta(days=1)
 
-    # 해당 월의 모든 날짜에 대해 Calendar 객체 조회
+    # 해당 월의 모든 날짜에 대해 Calendar조회
     calendars = Calendar.objects.filter(calendarDate__year=year, calendarDate__month=month)
 
     response_data = []
@@ -277,7 +295,7 @@ def post_recreate(request):
 # 모든 카테고리 조회 함수
 @api_view(['GET'])
 def category_all(request):
-    # 모든 카테고리를 검색하고 직렬화하여 반환
+    # 모든 카테고리를 검색하고반환
     categories = Category.objects.all()
     serializer = CategorySerializer(categories, many=True)
     return Response(serializer.data)
@@ -285,16 +303,13 @@ def category_all(request):
 # 오늘의 일정 출력 함수
 @api_view(['GET'])
 def today_schedule(request):
-    # 홈 화면 설정을 가져옵니다.
     home_screen_setting = HomeScreenSetting.objects.first()
     
-    # 설정에 따라 오늘의 일정을 출력하지 않도록 합니다.
     if not home_screen_setting or not home_screen_setting.is_visible_today_task:
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     today = datetime.today().date()
     
-    # 오늘의 일정을 가져옵니다.
     try:
         calendar = Calendar.objects.get(calendarDate=today)
     except Calendar.DoesNotExist:
@@ -323,16 +338,12 @@ def today_schedule(request):
 #남은 할일
 @api_view(['GET'])
 def all_tasks(request):
-    # 홈 화면 설정을 가져옵니다.
     home_screen_setting = HomeScreenSetting.objects.first()
-    
-    # 설정에 따라 할 일 목록을 출력하지 않도록 합니다.
+
     if not home_screen_setting or not home_screen_setting.is_visible_some_task:
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     today = datetime.today().date()
-
-    # isFinished가 False인 포스트를 필터링합니다.
     posts = Post.objects.filter(isFinished=False)
     response_data = []
 
@@ -341,7 +352,6 @@ def all_tasks(request):
             calendar_date = post.calendar.calendarDate
             daycount = (today - calendar_date).days
 
-            # D-day가 지난 경우에만 출력합니다.
             if daycount > 0:
                 calendar_id = post.calendar.calendarId
                 calendar_day = calendar_date.day
@@ -358,7 +368,7 @@ def all_tasks(request):
                 }
                 response_data.append(post_data)
         else:
-            # 캘린더가 없는 포스트는 D-day 계산이 불가능하므로 생략합니다.
+
             continue
 
     return Response(response_data, status=status.HTTP_200_OK)
@@ -366,28 +376,22 @@ def all_tasks(request):
 #언젠가 할일
 @api_view(['POST'])
 def add_task(request):
-    # 홈 화면 설정을 가져옵니다.
     home_screen_setting = HomeScreenSetting.objects.first()
     
-    # 설정에 따라 할 일 추가를 허용하지 않도록 합니다.
     if not home_screen_setting or not home_screen_setting.is_visible_not_yet_task:
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     title = request.data.get('title')
     content = request.data.get('content')
     category_id = request.data.get('categoryId')
-
-    # 필요한 필드가 누락된 경우 에러를 반환합니다.
     if not all([title, content, category_id]):
         return Response({'error': 'Missing required fields'}, status=status.HTTP_400_BAD_REQUEST)
 
-    # 카테고리를 찾습니다.
     try:
         category = Category.objects.get(categoryId=category_id)
     except Category.DoesNotExist:
         return Response({'error': 'Category not found'}, status=status.HTTP_404_NOT_FOUND)
 
-    # 캘린더 없이 언젠가 할 일을 추가합니다.
     post = Post.objects.create(
         title=title,
         content=content,
@@ -395,23 +399,19 @@ def add_task(request):
         isFinished=False
     )
 
-    # 성공적으로 추가된 할 일의 postId를 반환합니다.
     return Response({'success': True, 'postId': post.postId}, status=status.HTTP_201_CREATED)
 
 
 # 홈 화면 설정
 @api_view(['PUT'])
 def home_task(request):
-    # 클라이언트로부터 가시성 설정 값을 가져옵니다.
     is_visible_not_yet_task = request.data.get('isVisibleNotYetTask')
     is_visible_today_task = request.data.get('isVisibleTodayTask')
     is_visible_some_task = request.data.get('isVisibleSomeTask')
     
-    # 모든 설정 값이 제공되지 않으면 에러를 반환합니다.
     if any(setting is None for setting in [is_visible_not_yet_task, is_visible_today_task, is_visible_some_task]):
         return Response({'error': 'All visibility settings are required'}, status=status.HTTP_400_BAD_REQUEST)
 
-    # HomeScreenSetting 모델에 가시성 설정 값을 업데이트하거나 생성합니다.
     setting, created = HomeScreenSetting.objects.update_or_create(
         defaults={
             'is_visible_not_yet_task': is_visible_not_yet_task,
@@ -420,7 +420,6 @@ def home_task(request):
         }
     )
     
-    # 성공적으로 업데이트된 가시성 설정 값을 반환합니다.
     return Response({
         'success': True
     }, status=status.HTTP_200_OK)
@@ -435,7 +434,15 @@ def screen_theme(request):
     if ScreenTheme not in ['light', 'dark']:
         return Response({'error': 'Invalid ScreenTheme value'}, status=status.HTTP_400_BAD_REQUEST)
     
-    # ScreenSetting 모델에 ScreenTheme 값을 업데이트하거나 생성합니다.
     setting, created = ScreenSetting.objects.update_or_create(id=1, defaults={'ScreenTheme': ScreenTheme})
     
     return Response({'success': True}, status=status.HTTP_200_OK)
+
+class ThemeListView(generics.ListAPIView):
+    queryset = Theme.objects.all()
+    serializer_class = ThemeSerializer
+
+class ThemeDetailView(generics.RetrieveAPIView):
+    queryset = Theme.objects.all()
+    serializer_class = ThemeSerializer
+    lookup_field = 'themeId'
