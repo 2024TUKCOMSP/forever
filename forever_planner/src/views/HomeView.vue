@@ -2,6 +2,8 @@
   <!--홈 화면-->
 
   <div class="h-screen flex flex-col">
+    <DateModal v-if="dateModalState" />
+    <CategoryModal v-if="categoryModalState" />
     <div class="planetTxtBar">
       <button type="button" @click="planetBtnClick" class="planetTxtBtn">Planet v</button>
       <button type="button" @click="goSettingBtnClick" class="goSettingBtn"><i class="fa-solid fa-gear"></i></button>
@@ -42,7 +44,7 @@
 
         <div class="todaysTodo">
           <p>언젠가</p>
-          <button type="button" class="todoEditBtn" @click="todaysTodoDateClick">+ 할 일을 추가하세요</button>
+          <button type="button" class="todoEditBtn" @click="someDayTodoDateClick">+ 할 일을 추가하세요</button>
         </div>
       </div>
     </div>
@@ -55,10 +57,14 @@
 
 <script>
 import FooterVue from '@/components/FooterVue.vue';
-import {onMounted, ref} from 'vue';
+import {onMounted, ref,  watchEffect } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useStore } from '@/stores/store.js';
 import { useRouter } from 'vue-router';
+//import DateModal from '@/components/Calendar/DateModal.vue';
+//import CategoryModal from '@/components/Calendar/Category/CategoryModal.vue';
+import { useModalStore } from '@/stores/modalStore.js';
+
 
 
 export default {
@@ -74,14 +80,30 @@ export default {
     const { isClicked } = storeToRefs(store);
     const isModalVisible = ref(false); 
     const router = useRouter(); //useRouter로 Vue Router 주입
+    const { dateModalState, /*categoryModalState*/ } = storeToRefs(useModalStore());
     
+    const handleStopScroll = () => {
+      if(dateModalState.value){
+          document.documentElement.style.overflow = 'hidden';
+        }else{
+          document.documentElement.style.overflow = 'auto';
+        }
+    };
+
     onMounted(() => {
-    isClicked.value = 'home';
+      isClicked.value = 'home';
+      window.scrollTo(0, 0);
+    });
+
+    watchEffect(() => {
+      handleStopScroll();   //task: 어떤 기능인지 여쭤보기 
     });
 
     return {
       isModalVisible,
       onMounted,
+      handleStopScroll,
+      watchEffect,
       checkTodoTagClick(){
       },
       userIconClick() {
@@ -95,6 +117,10 @@ export default {
         isModalVisible.value = !isModalVisible.value // Toggle modal visibility
       },
       todaysTodoDateClick() {
+        
+      },
+      someDayTodoDateClick(){
+
       },
       goSettingBtnClick() {
         router.push({ name: 'setting' });

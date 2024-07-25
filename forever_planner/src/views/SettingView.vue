@@ -1,7 +1,7 @@
 <template>
 <div class="bg-[#f5f7fd] justify-between">
   <header class="settingHeader">
-    <button type="button" @click = "backWards" class="settingHeaderBtn">&lt;</button>
+    <button type="button" @click = "backWards" class="settingHeaderBtn"> <i class="fa-solid fa-chevron-left w-[20px] h-[20px]" id="backDrawThing"></i> </button>
   </header>
   <br />
   <div class= "settingScreen">
@@ -37,6 +37,7 @@
 
 <script>
 import {useRouter} from 'vue-router';
+import { onMounted } from 'vue';
 
 export default {
   name: 'Setting-View',
@@ -49,6 +50,10 @@ export default {
     const backWards = () =>{
       router.push({name: 'home'});
     }
+
+    onMounted(()=>{
+      window.scrollTo(0, 0);
+    })
 
     var isClickScreenModeBtn = function(txt){
         if(txt == 'Dark'){
@@ -64,6 +69,7 @@ export default {
     return{
       backWards,
       isClickScreenModeBtn,
+      onMounted,
     }
   }
 }
@@ -84,6 +90,9 @@ export default {
   }
 } 
 
+#backDrawThing{
+  margin:10px;
+}
 .settingHeader{
   position: fixed;
   top:0;
