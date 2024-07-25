@@ -2,7 +2,8 @@
   <div class="w-full h-screen flex flex-col justify-between">
     <div class="w-full h-full bg-[#f5f7fd] p-2 flex flex-col">
       <header class="header">
-        <button type="button" @click = "backWards" class="headerBtn"><b>&lt;</b></button>
+        <button type="button" @click = "backWards" class="headerBtn"><i class="fa-solid fa-chevron-left w-[20px] h-[20px]" id="backDrawThing"></i></button>
+        <button type="button" class = "allCompleteBtn"><b>모두 완료</b></button>
       </header>
       <b><p class ="remainingTxt">완료하지 않은 할 일이<br />
         <span class="remainingTodoNum">0</span>개 있습니다.</p></b>
@@ -11,8 +12,11 @@
         <div class="batchRemainingTodo">
           <p class="batchP">D+<span class="remainingDate">0</span></p>
           <p class="remainingTodoDate">0월 0일</p>
-          <button type="button" class="todoEditBtn" @click="todaysTodoDateClick">텍스트 받아와 수정 필요
-            <input type="CheckBox" class="todoCheckBox"/>
+          <button type="button" class="delayButton">미루기</button>
+          <button type="button" class="todoEditBtn" @click="todaysTodoDateClick">
+            <p class="todoTag">중요</p>
+            <p class="todoTxt">ㅊㄹㄹㄹ</p>
+            <button type="button" class ="todoCheck" ><i class="fa-regular fa-square"></i></button>
           </button>
         </div>
       </div>  
@@ -72,6 +76,11 @@
   }
 } 
 
+.header{
+  /*position: fixed;*/
+  top:0;
+  background-color: #f5f7fd;
+}
 .headerBtn{
   padding:10px;
   width:40px;
@@ -79,6 +88,19 @@
   border-radius: 10px;
 }
 .headerBtn:hover{
+  animation-name: touchBtn;
+  animation-duration: 0.1s;
+  animation-fill-mode: forwards;
+}
+.allCompleteBtn{
+  float:right;
+  padding:10px;
+  width:max-content;
+  margin-right: 5px;
+  border-radius: 10px;
+  color:#354387
+}
+.allCompleteBtn:hover{
   animation-name: touchBtn;
   animation-duration: 0.1s;
   animation-fill-mode: forwards;
@@ -117,6 +139,7 @@
   color: #8F9095;
   font-size: small;
   text-align: left;
+  position: relative;
 }
 .todoEditBtn:hover{
   animation-name: touchBtn;
@@ -125,5 +148,36 @@
 }
 .todoCheckBox{
     float:right;
+}
+.todoCheck{
+  float:right;
+    text-align: center;
+    position: absolute;
+    padding:10px;
+    right:10px;
+    top:8px;
+    border-radius: 10px;
+    margin-right: 5px;
+    font-size: large;
+}
+.todoTxt{
+  color: #965d5d;
+}
+.todoTag{
+  font-size: xx-small;
+}
+.delayButton{
+  float:right;
+  position: absolute;
+  padding: 10px;
+  right:10px;
+  top:12px;
+  color:#64656a;
+  border-radius: 10px;
+}
+.delayButton:hover{
+  animation-name: touchBtn;
+  animation-duration: 0.1s;
+  animation-fill-mode: forwards;
 }
 </style>
