@@ -5,6 +5,7 @@ import SettingView from '../views/SettingView.vue';
 import ThemeView from '../views/ThemeView.vue';
 import RemainingTodoView from '@/views/RemainingTodoView.vue';
 import CategoryView from '../views/CategoryView';
+import CheckTodoView from '@/views/CheckTodoView.vue';
 
 const router = createRouter({
   history: createWebHistory(),
@@ -38,6 +39,11 @@ const router = createRouter({
       path: '/category',
       name: 'category',
       component: CategoryView,
+    },
+    {
+      path: '/checkTodo',
+      name: 'checkTodo',
+      component: CheckTodoView,
     }
   ],
 });
