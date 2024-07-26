@@ -64,7 +64,7 @@ import { useRouter } from 'vue-router';
 //import DateModal from '@/components/Calendar/DateModal.vue';
 //import CategoryModal from '@/components/Calendar/Category/CategoryModal.vue';
 import { useModalStore } from '@/stores/modalStore.js'; 
-
+//dddd
 
 
 export default {
@@ -73,8 +73,7 @@ export default {
     FooterVue,
   },
    data() {
-    return {
-    };
+    return {};
   },
   setup() {
     const store = useStore();
@@ -122,7 +121,7 @@ export default {
       planetBtnClick,
       checkTodoTagClick,
       userIconClick() {
-        alert("dkdkkd");
+        alert("dkdkkghhghgghgdd");
         // 프로필 편집으로 이동하기 위한 버튼
       },
       remainingTodoClick() {
