@@ -1,25 +1,24 @@
 <template>
-  <!--홈 화면-->
-
+  <CategoryModal v-if="categoryModalState" />
+  <PostModal v-if="postModalState" />
+  <PostCategoryModal v-if="postCategoryModalState" />
+  <ConfirmModal v-if="confirmModalState" />
   <div class="h-screen flex flex-col">
-    <!--<DateModal v-if="dateModalState" />
-    <CategoryModal v-if="categoryModalState" />  !-->
     <div class="planetTxtBar">
       <button type="button" @click="planetBtnClick" class="planetTxtBtn">Planet v</button>
       <button type="button" @click="goSettingBtnClick" class="goSettingBtn"><i class="fa-solid fa-gear"></i></button>
 
-          <!--모달 팝업-->
-      <div class="checkTodoTagModal" tabindex="-1" v-if ="isModalVisible" ref="checkTodoTagModal" @blur="closeModal">
-        <button type="button" class="checkTodoTagBtn" value ="일상" @click="checkTodoTagClick('일상')">
-          <span class ="tag1Round">●</span>
+      <div class="checkTodoTagModal" tabindex="-1" v-if="isModalVisible" ref="checkTodoTagModal" @blur="closeModal">
+        <button type="button" class="checkTodoTagBtn" value="일상" @click="checkTodoTagClick('일상')">
+          <span class="tag1Round">●</span>
           태그명1
         </button><br />
-        <button type="button" class="checkTodoTagBtn" value ="중요" @click="checkTodoTagClick('중요')">
-          <span class ="tag2Round">●</span>
+        <button type="button" class="checkTodoTagBtn" value="중요" @click="checkTodoTagClick('중요')">
+          <span class="tag2Round">●</span>
           태그명2
         </button><br />
-        <button type="button" class="checkTodoTagBtn" value ="공부" @click="checkTodoTagClick('공부')">
-          <span class ="tag3Round">●</span>
+        <button type="button" class="checkTodoTagBtn" value="공부" @click="checkTodoTagClick('공부')">
+          <span class="tag3Round">●</span>
           태그명3
         </button><br />
       </div>
@@ -39,7 +38,7 @@
         <div class="todaysTodo">
           <p>오늘</p>
           <p class="todaysTodoDate">0월 0일</p>
-          <button type="button" class="todoEditBtn" @click="todaysTodoDateClick">+ 할 일을 추가하세요</button>
+          <button type="button" class="todoEditBtn" @click="handleClickCategoryModal">+ 할 일을 추가하세요</button>
         </div><br />
 
         <div class="todaysTodo">
@@ -49,10 +48,8 @@
       </div>
     </div>
 
-  <FooterVue />
+    <FooterVue />
   </div>
-
-  
 </template>
 
 <script>
@@ -62,7 +59,10 @@ import { storeToRefs } from 'pinia';
 import { useStore } from '@/stores/store.js';
 import { useRouter } from 'vue-router';
 //import DateModal from '@/components/Calendar/DateModal.vue';
-//import CategoryModal from '@/components/Calendar/Category/CategoryModal.vue';
+import CategoryModal from '@/components/Calendar/Category/CategoryModal.vue';
+import PostModal from '@/components/Calendar/Post/PostModal.vue';
+import PostCategoryModal from '@/components/Calendar/Category/PostCategoryModal.vue';
+import ConfirmModal from '@/components/Calendar/ConfirmModal.vue';
 import { useModalStore } from '@/stores/modalStore.js'; 
 //dddd
 
@@ -71,6 +71,10 @@ export default {
   name: 'Home-View',
   components: {
     FooterVue,
+    CategoryModal,
+    PostModal,
+    PostCategoryModal,
+    ConfirmModal,
   },
    data() {
     return {};
@@ -80,7 +84,8 @@ export default {
     const { isClicked } = storeToRefs(store);
     const isModalVisible = ref(false); 
     const router = useRouter(); //useRouter로 Vue Router 주입
-    const { dateModalState, /*categoryModalState*/ } = storeToRefs(useModalStore());
+    const { dateModalState, categoryModalState, postModalState, postCategoryModalState, confirmModalState } = storeToRefs(useModalStore());
+    const { handleClickCategoryModal } = useModalStore();
     
     const handleStopScroll = () => {
       if(dateModalState.value){
@@ -131,7 +136,7 @@ export default {
         setTimeout(()=>isModalVisible.value = false,300);
       },
       todaysTodoDateClick() {
-        
+
       },
       someDayTodoDateClick(){
 
@@ -140,6 +145,11 @@ export default {
         router.push({ name: 'setting' });
       },
       isModalVisible,
+      handleClickCategoryModal,
+      categoryModalState,
+      postModalState,
+      postCategoryModalState,
+      confirmModalState
     }
   }
 }
