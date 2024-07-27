@@ -55,12 +55,11 @@
           <p>언젠가</p>
           
           <div>
-             <!--임시로 하나 추가-->
-            <div class="compTodo">
-              <div class="bg-[#e4eefc] w-full rounded text-2xs flex h-full"></div>
-              <p class="date">2024.07.18</p>
-              <span class="compTodoTxt">아무말</span>
-              <button type="button" class ="unCompTodoCheck"><i class="fa-solid fa-check"></i></button>
+            <!--임시로 하나 추가-->
+            <div class="unCompTodo">
+              <p class="date">클래스명은같은데들어갈내용이다름</p>
+              <span class="unCompTodoTxt">아무말</span>
+              <button type="button" class ="unCompTodoCheck" ><i class="fa-regular fa-square"></i></button>
             </div>
           </div>
           
