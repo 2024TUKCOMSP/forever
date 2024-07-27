@@ -38,11 +38,33 @@
         <div class="todaysTodo">
           <p>오늘</p>
           <p class="todaysTodoDate">0월 0일</p>
+
+          <div>
+             <!--임시로 하나 추가-->
+            <div class="unCompTodo">
+              <p class="date">2024.07.18</p>
+              <span class="unCompTodoTxt">아무말</span>
+              <button type="button" class ="unCompTodoCheck" ><i class="fa-regular fa-square"></i></button>
+            </div>
+          </div>
+
           <button type="button" class="todoEditBtn" @click="handleClickCategoryModal">+ 할 일을 추가하세요</button>
         </div><br />
 
         <div class="todaysTodo">
           <p>언젠가</p>
+          
+          <div>
+             <!--임시로 하나 추가-->
+            <div class="compTodo">
+              <div class="bg-[#e4eefc] w-full rounded text-2xs flex h-full"></div>
+              <p class="date">2024.07.18</p>
+              <span class="compTodoTxt">아무말</span>
+              <button type="button" class ="unCompTodoCheck"><i class="fa-solid fa-check"></i></button>
+            </div>
+          </div>
+          
+          
           <button type="button" class="todoEditBtn" @click="someDayTodoDateClick">+ 할 일을 추가하세요</button>
         </div>
       </div>
@@ -319,4 +341,51 @@ export default {
 .tag3Round{ 
   color:#5A7CD5;
 }
+
+
+.unCompTodo{
+    position: relative;
+    border-style: solid;
+    border-color: #3d456e;
+    border-width:  0px 0px 0px 7px;
+    background-color: #8e99ce;
+    width:100%;
+    border-radius: 5px;
+    padding: 10px;
+    margin-top:5px;
+}
+.unCompTodo:hover{
+  animation-name: touchBtn;
+  animation-duration: 0.1s;
+  animation-fill-mode: forwards;
+}
+.compTodo{
+    position: relative;
+    background-color: #8e99ce;
+    width:100%;
+    border-radius: 5px;
+    padding: 10px;
+    margin-top: 5px;
+}
+.compTodo:hover{
+  animation-name: touchBtn;
+  animation-duration: 0.1s;
+  animation-fill-mode: forwards;
+}
+
+
+.date{
+    font-size: xx-small;
+}
+.unCompTodoCheck{
+    float:right;
+    text-align: center;
+    position: absolute;
+    padding:10px;
+    right:0px;
+    top:7px;
+    border-radius: 10px;
+    margin-right: 5px;
+}
+
 </style>
