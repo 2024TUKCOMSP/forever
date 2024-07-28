@@ -17,7 +17,6 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from . import views
-from .views import ThemeListView, ThemeDetailView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -36,7 +35,7 @@ urlpatterns = [
     path('home/last', views.add_task, name='add_task'),
     path('Setting/screen', views.screen_theme, name='screen_theme'),
     path('Setting/home', views.home_task, name='home_task'),
-    path('theme/all/', ThemeListView.as_view(), name='theme_list'),
-    path('theme/<uuid:themeId>/', ThemeDetailView.as_view(), name='theme_detail'),
+    path('theme/all/', views.theme_list(), name='theme_list'),
+    path('theme/<uuid:themeId>/', views.theme_detail(), name='theme_detail'),
 
 ]
