@@ -9,8 +9,8 @@ export const useModalStore = defineStore('modalStore', () => {
   const confirmModalState = ref(false);
   const postModalType = ref("");
 
-  const handleClickDateModal = () => {
-    dateModalState.value = true;
+  const handleClickDateModal = (date) => {
+    if (date) dateModalState.value = true;
   };
 
   const handleClickCloseModal = () => {
