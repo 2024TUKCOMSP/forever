@@ -3,8 +3,7 @@
     <div v-for="week in 5" :key="week" class="flex w-full h-full">
       <div v-for="date in 7" :key="date" class="w-full h-full flex flex-col items-center justify-start" @click="handleClickDateModal()">
         <div class="pb-0.5">{{ date }}</div>
-        <PostVue />
-        <FinishedPostVue />
+        <PostVue v-if="date !== ''" />
       </div>
     </div>
   </div>
@@ -12,7 +11,6 @@
 
 <script setup>
 import PostVue from './Post/PostVue.vue';
-import FinishedPostVue from './Post/FinishedPostVue.vue';
 import { useModalStore } from '@/stores/modalStore.js';
 
 const { handleClickDateModal } = useModalStore();
