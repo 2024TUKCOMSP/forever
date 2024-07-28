@@ -92,6 +92,17 @@ DATABASES = {
     }
 }
 
+CORS_ALLOW_CREDENTIALS = True  # 쿠키가 cross-site HTTP 요청에 포함될 수 있음
+CORS_ALLOW_HEADERS = ["*"]  # 요청시 사용될 수 있는 non-standard HTTP 헤더 목록
+CORS_ALLOW_METHODS = [  # 허용할 옵션
+    "DELETE",
+    "GET",
+    "OPTIONS",
+    "PATCH",
+    "POST",
+    "PUT",
+]
+CORS_ALLOW_ALL_ORIGINS: True
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
