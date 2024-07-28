@@ -102,7 +102,7 @@ CORS_ALLOW_METHODS = [  # 허용할 옵션
     "POST",
     "PUT",
 ]
-CORS_ALLOW_ALL_ORIGINS: True
+CORS_ALLOW_ALL_ORIGINS = True
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
