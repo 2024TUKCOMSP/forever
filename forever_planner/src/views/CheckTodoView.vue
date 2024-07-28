@@ -8,6 +8,7 @@
     <b><h1 class="checkTodoTagName">일정_임시태그명</h1></b><br />
     
     <div class="settingModeCss">
+      
       <p class="checkTodoP"><b>미완료</b></p>
       <div class="unCompleteTodoDiv">
 
@@ -26,9 +27,10 @@
       <div class="completeTodoDiv">
 
          <!--임시로 하나 추가-->
-         <div class="unCompTodo">
+         <div class="compTodo">
+            <div class="bg-[#e4eefc] w-full rounded text-2xs flex h-full"></div>
             <p class="date">2024.07.18</p>
-            <span class="unCompTodoTxt">아무말</span>
+            <span class="compTodoTxt">아무말</span>
             <button type="button" class ="unCompTodoCheck"><i class="fa-solid fa-check"></i></button>
         </div>
 
@@ -130,6 +132,9 @@ h1{
 
 .unCompTodo{
     position: relative;
+    border-style: solid;
+    border-color: #3d456e;
+    border-width:  0px 0px 0px 7px;
     background-color: #8e99ce;
     width:94%;
     margin: 0px 10px 10px 10px;
@@ -137,6 +142,19 @@ h1{
     padding: 10px;
 }
 .unCompTodo:hover{
+  animation-name: touchBtn;
+  animation-duration: 0.1s;
+  animation-fill-mode: forwards;
+}
+.compTodo{
+    position: relative;
+    background-color: #8e99ce;
+    width:94%;
+    margin: 0px 10px 10px 10px;
+    border-radius: 5px;
+    padding: 10px;
+}
+.compTodo:hover{
   animation-name: touchBtn;
   animation-duration: 0.1s;
   animation-fill-mode: forwards;
