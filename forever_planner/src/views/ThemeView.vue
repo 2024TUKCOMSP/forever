@@ -4,7 +4,7 @@
       <div class="text-xl font-semibold py-4">Colors</div>
       <div class="flex gap-4 flex-col">
         <div v-for="theme in colors" :key="theme">
-          <ThemeVue 
+          <ThemeVue @click="clickChangeTheme(theme)"
             :theme="theme" />
         </div>
       </div>
@@ -14,22 +14,18 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue';
-import axios from 'axios';
+import { onMounted } from 'vue';
 import FooterVue from '@/components/FooterVue.vue';
 import ThemeVue from '@/components/Theme/ThemeVue.vue';
+import { storeToRefs } from 'pinia';
+import { useStore } from '@/stores/store';
 
-const isSelected = ref([false, true]);
-const colors = ref([]);
-
-const getColors = async () => {
-  const res = await axios.get(`http://34.146.205.159:8000/theme/all/?format=json`);
-  colors.value = res.data;
-};
+const store = useStore();
+const { colors } = storeToRefs(store);
+const { getColors, clickChangeTheme } = store;
 
 onMounted(async() => {
   await getColors();
-  console.log(colors.value);
 });
 </script>
 

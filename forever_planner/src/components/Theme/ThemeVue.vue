@@ -2,7 +2,7 @@
   <div class="bg-white w-full rounded-2xl flex flex-col p-6 gap-4">
     <div class="flex justify-between">
       <div>{{ theme.themeTitle }}</div>
-      <div class="text-[#999999]">적용중</div>
+      <div v-if="theme.is_use" class="text-[#999999]">적용중</div>
     </div>
     <div class="flex justify-between px-2">
       <div v-for="color in theme.colorList" :key="color">
