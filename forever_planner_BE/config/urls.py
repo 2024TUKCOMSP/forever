@@ -37,5 +37,5 @@ urlpatterns = [
     path('Setting/home', views.home_task, name='home_task'),
     path('theme/all/', views.theme_list, name='theme_list'),
     path('theme/<uuid:themeId>/', views.theme_detail, name='theme_detail'),
-    path('theme/<str:themeTitle>/', views.theme_use, name='theme_use'),
+    path('theme/use/', views.theme_use, name='theme_use'),
 ]

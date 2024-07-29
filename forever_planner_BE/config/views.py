@@ -456,11 +456,18 @@ def theme_detail(request, themeId):
     serializer = ThemeSerializer(theme)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
-@api_view(['GET'])
-def theme_use(request, themeTitle):
+@api_view(['POST'])
+def theme_use(request):
+    theme_id = request.data.get('themeId')
+    if not theme_id:
+        return Response({'error': 'themeId is required'}, status=status.HTTP_400_BAD_REQUEST)
     try:
-        theme = Theme.objects.get(themeTitle=themeTitle)
+        theme = Theme.objects.get(themeId=theme_id)
     except Theme.DoesNotExist:
         return Response({'error': 'Theme not found'}, status=status.HTTP_404_NOT_FOUND)
+    
+    Theme.objects.update(is_use=False)
+    theme.is_use = True
+    theme.save()
 
-    return Response({'is_use': theme.is_use}, status=status.HTTP_200_OK)
+    return Response({'message': 'Success', 'is_use': theme.is_use}, status=status.HTTP_200_OK)
