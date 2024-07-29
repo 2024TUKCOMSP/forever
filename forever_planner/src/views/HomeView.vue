@@ -84,7 +84,11 @@ import CategoryModal from '@/components/Calendar/Category/CategoryModal.vue';
 import PostModal from '@/components/Calendar/Post/PostModal.vue';
 import PostCategoryModal from '@/components/Calendar/Category/PostCategoryModal.vue';
 import ConfirmModal from '@/components/Calendar/ConfirmModal.vue';
-import { useModalStore } from '@/stores/modalStore.js'; 
+import { useModalStore } from '@/stores/modalStore.js';
+import SomeDayModalPostVue from '@/components/Calendar/Post/SomeDayModalPostVue.vue'; 
+import SomeDayPostCalendar from '@/components/Calendar/Post/SomeDayPostCalendar.vue';
+import SomeDayPostModal from '@/components/Calendar/Post/SomeDayPostModal.vue';
+import SomeDayPostVue from '@/components/Calendar/Post/SomeDayPostVue.vue';
 //dddd
 
 

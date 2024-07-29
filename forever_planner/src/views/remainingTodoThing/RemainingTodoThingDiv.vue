@@ -1,23 +1,14 @@
 <template>
-  <div class="remainingSettingDiv">
-      <div class="batchRemainingTodo">
-          <p class="batchP">D+<span class="remainingDate">0</span></p>
-          <p class="remainingTodoDate">0월 0일</p>
-          <button type="button" class="delayButton">미루기</button>
-          <!--<button type="button" class="todoEditBtn" @click="todaysTodoDateClick">
-            <p class="todoTag">중요</p>
-            <p class="todoTxt">ㅊㄹㄹㄹ</p>
-            <button type="button" class ="todoCheck" ><i class="fa-regular fa-square"></i></button>
-          </button>-->
-          <RemainingTodoList />
-    </div>
-  </div> 
+    <RemainingTodoList :remainingTodos = "remainingTodo" />
 </template>
 
 <script>
 import RemainingTodoList from '@/views/remainingTodoThing/RemainingThingTodoList.vue'
 import { onMounted, ref } from 'vue';
 import axios from 'axios';
+
+//const isFinished = ref([false, true]);
+
 
 export default{
     components: {
@@ -27,9 +18,14 @@ export default{
         return {};
     },
     setup(){
+        const remainingTodo = ref([]);
+
         const getRemainingTodo = async() =>{
-            const res = await axios.get(`http://34.146.205.159:8000/home/all`);
-            
+            try{const res = await axios.get(`http://34.146.205.159:8000/home/all?format=json`);
+            remainingTodo.value = res.data;
+            }catch(error){
+                console.error('연결 실패');
+            }
         }
 
         onMounted(async() => {
@@ -38,7 +34,7 @@ export default{
         })
 
         return{
-
+            remainingTodo
         }
     }
 }
