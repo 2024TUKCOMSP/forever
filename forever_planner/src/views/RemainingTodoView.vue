@@ -8,7 +8,9 @@
       <b><p class ="remainingTxt">완료하지 않은 할 일이<br />
         <span class="remainingTodoNum">0</span>개 있습니다.</p></b>
 
-      <div class="remainingSettingDiv">
+
+        <RemainingTodoThingDiv />
+       <!-- <div class="remainingSettingDiv">
         <div class="batchRemainingTodo">
           <p class="batchP">D+<span class="remainingDate">0</span></p>
           <p class="remainingTodoDate">0월 0일</p>
@@ -19,7 +21,7 @@
             <button type="button" class ="todoCheck" ><i class="fa-regular fa-square"></i></button>
           </button>
         </div>
-      </div>  
+      </div>  -->
     </div>
     <FooterVue />
   </div>
@@ -30,11 +32,13 @@
   import { useStore } from '@/stores/store.js';
   import { storeToRefs } from 'pinia';
   import { useRouter } from 'vue-router';
+  import RemainingTodoThingDiv from '@/views/remainingTodoThing/RemainingTodoThingDiv.vue'
 
   export default{
     name: 'RemainingTodo-View',
     components: {
         FooterVue,
+        RemainingTodoThingDiv,
     },
     data() {
         return{};
@@ -52,8 +56,6 @@
       const backWards = () =>{
         router.push({name: 'home'});
       };
-
-      
 
       return{
         onMounted,
