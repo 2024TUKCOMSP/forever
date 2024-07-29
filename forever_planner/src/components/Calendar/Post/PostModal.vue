@@ -6,23 +6,25 @@
       </div>
     </div>
     <div class="flex flex-col w-full">
-      <div class="w-full h-auto bg-[#e4eefc] rounded-t-2xl flex flex-col items-center select-none px-6 py-4 justify-between gap-2" @click.stop>
-        <input placeholder="할 일을 입력하세요" v-model="postTitle" class="w-full bg-[#e4eefc] focus:outline-none text-lg" />
-        <textarea v-if="isContentActive" placeholder="메모를 입력하세요" v-model="content" class="w-full bg-[#e4eefc] focus:outline-none resize-none" maxlength="70"></textarea>
-        <div class="flex justify-between w-full pt-2">
-          <div class="flex gap-4 items-center">
-            <div class="flex items-center" :class="isCalendarActive ? 'clicked-icon-color' : 'icon-color'" @click="clickCalendarButton()">
-              <i class="fa-solid fa-calendar-day w-5 h-5"></i>
+      <div class="w-full h-auto bg-[#de9bac] rounded-t-2xl" @click.stop>
+        <div class="flex flex-col items-center select-none px-6 py-4 justify-between gap-2 w-full h-full rounded-t-2xl bg-[#FFFFFFBB]">
+          <input placeholder="할 일을 입력하세요" v-model="postTitle" class="w-full bg-[#FFFFFF00] focus:outline-none text-lg" />
+            <textarea v-if="isContentActive" placeholder="메모를 입력하세요" v-model="content" class="w-full bg-[#FFFFFF00] focus:outline-none resize-none" maxlength="70"></textarea>
+            <div class="flex justify-between w-full pt-2">
+              <div class="flex gap-4 items-center">
+                <div class="flex items-center" :class="isCalendarActive ? 'clicked-icon-color' : 'icon-color'" @click="clickCalendarButton()">
+                  <i class="fa-solid fa-calendar-day w-5 h-5"></i>
+                </div>
+                <div class="text-[#00000050]">7월 12일 (금)</div>
+                <div class="flex items-center" :class="isContentActive ? 'clicked-icon-color' : 'icon-color'" @click="clickContentButton()">
+                  <i class="fa-solid fa-note-sticky w-5 h-5"></i>
+                </div>
+                <div class="text-[#00000050]" @click="handleClickCategory()">일상</div>
+              </div>
+              <div class="flex items-center icon-color" @click="submit()">
+                <i class="fa-solid fa-paper-plane w-5 h-5"></i>
+              </div>
             </div>
-            <div class="text-[#00000050]">7월 12일 (금)</div>
-            <div class="flex items-center" :class="isContentActive ? 'clicked-icon-color' : 'icon-color'" @click="clickContentButton()">
-              <i class="fa-solid fa-note-sticky w-5 h-5"></i>
-            </div>
-            <div class="text-[#00000050]" @click="handleClickCategory()">일상</div>
-          </div>
-          <div class="flex items-center icon-color" @click="submit()">
-            <i class="fa-solid fa-paper-plane w-5 h-5"></i>
-          </div>
         </div>
       </div>
       <div v-if="isCalendarActive" class="w-full">
@@ -75,7 +77,7 @@ const submit = () => {
 }
 
 .clicked-icon-color {
-  color: #a7c8f7;
+  color: #de9bac;
   transition: color 0.1s;
 }
 

@@ -11,6 +11,9 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
+import pymysql  
+pymysql.install_as_MySQLdb()
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -25,7 +28,7 @@ SECRET_KEY = 'django-insecure-rxw2x#d&(k)1bdup2&1e0k_f#+g=4rx9v@l^!5iyiwg%jy(e0j
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['ec2-54-180-163-233.ap-northeast-2.compute.amazonaws.com']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -89,6 +92,17 @@ DATABASES = {
     }
 }
 
+CORS_ALLOW_CREDENTIALS = True  # 쿠키가 cross-site HTTP 요청에 포함될 수 있음
+CORS_ALLOW_HEADERS = ["*"]  # 요청시 사용될 수 있는 non-standard HTTP 헤더 목록
+CORS_ALLOW_METHODS = [  # 허용할 옵션
+    "DELETE",
+    "GET",
+    "OPTIONS",
+    "PATCH",
+    "POST",
+    "PUT",
+]
+CORS_ALLOW_ALL_ORIGINS = True
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators

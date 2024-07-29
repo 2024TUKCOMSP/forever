@@ -438,11 +438,20 @@ def screen_theme(request):
     
     return Response({'success': True}, status=status.HTTP_200_OK)
 
-class ThemeListView(generics.ListAPIView):
-    queryset = Theme.objects.all()
-    serializer_class = ThemeSerializer
+@api_view(['GET'])
+def theme_list(request):
 
-class ThemeDetailView(generics.RetrieveAPIView):
-    queryset = Theme.objects.all()
-    serializer_class = ThemeSerializer
-    lookup_field = 'themeId'
+    themes = Theme.objects.all()
+    serializer = ThemeSerializer(themes, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+@api_view(['GET'])
+def theme_detail(request, themeId):
+    
+    try:
+        theme = Theme.objects.get(themeId=themeId)
+    except Theme.DoesNotExist:
+        return Response({'error': 'Theme not found'}, status=status.HTTP_404_NOT_FOUND)
+
+    serializer = ThemeSerializer(theme)
+    return Response(serializer.data, status=status.HTTP_200_OK)
