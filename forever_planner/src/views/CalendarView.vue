@@ -6,7 +6,7 @@
   <ConfirmModal v-if="confirmModalState" />
   <div class="w-full h-screen flex flex-col justify-between">
     <div class="w-full h-full bg-[#f5f7fd] p-2 flex flex-col justify-end">
-      <div class="text-2xl font-semibold p-3">7월</div>
+      <div class="text-2xl font-semibold p-3">{{ currentMonth }}월</div>
       <CalendarVue class="w-full h-full"/>
     </div>
     <FooterVue />
@@ -23,9 +23,11 @@ import PostCategoryModal from '@/components/Calendar/Category/PostCategoryModal.
 import ConfirmModal from '@/components/Calendar/ConfirmModal.vue';
 import { storeToRefs } from 'pinia';
 import { useModalStore } from '@/stores/modalStore.js';
+import { useStore } from '@/stores/store.js'
 import { onMounted, watchEffect } from 'vue';
 
 const { dateModalState, categoryModalState, postModalState, postCategoryModalState, confirmModalState } = storeToRefs(useModalStore());
+const { currentMonth } = storeToRefs(useStore());
 
 const handleStopScroll = () => {
   if (dateModalState.value) document.documentElement.style.overflow = 'hidden';
@@ -36,7 +38,7 @@ watchEffect(() => {
   handleStopScroll();
 });
 
-onMounted(() => {
+onMounted(async() => {
   window.scrollTo(0, 0);
 });
 </script>
