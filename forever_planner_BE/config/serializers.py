@@ -26,4 +26,4 @@ class CalendarSerializer(serializers.ModelSerializer):
 class ThemeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Theme
-        fields = ['themeId','themeTitle','colorList']
+        fields = ['themeId','themeTitle','colorList','is_use']

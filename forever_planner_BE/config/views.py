@@ -455,3 +455,12 @@ def theme_detail(request, themeId):
 
     serializer = ThemeSerializer(theme)
     return Response(serializer.data, status=status.HTTP_200_OK)
+
+@api_view(['GET'])
+def theme_use(request, themeTitle):
+    try:
+        theme = Theme.objects.get(themeTitle=themeTitle)
+    except Theme.DoesNotExist:
+        return Response({'error': 'Theme not found'}, status=status.HTTP_404_NOT_FOUND)
+
+    return Response({'is_use': theme.is_use}, status=status.HTTP_200_OK)
