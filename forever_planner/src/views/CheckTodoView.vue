@@ -5,7 +5,7 @@
       <button type="button" @click = "backWards" class="settingHeaderBtn"> <i class="fa-solid fa-chevron-left w-[20px] h-[20px]" id="backDrawThing"></i> </button>
     </header><br />
 
-    <b><h1 class="checkTodoTagName">일정_임시태그명</h1></b><br />
+    <b><h1 class="checkTodoTagName">{{ tag }}</h1></b><br />
     
     <div class="settingModeCss">
       
@@ -43,7 +43,7 @@
 
 
 <script>
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 import FooterVue from '@/components/FooterVue.vue';
 
 export default{
@@ -52,7 +52,8 @@ export default{
     FooterVue,
   },
     setup() {
-        
+      const route = useRoute();
+      const tag = route.query.tag;
         const router = useRouter();
         const backWards = () =>{
             router.go(-1);
@@ -60,7 +61,7 @@ export default{
 
         return{
             backWards,
-
+            tag,
         }
     }
 }
