@@ -26,10 +26,6 @@ const useModal = useModalStore();
 const { datePostDatas } = storeToRefs(useModal);
 const { handleClickCloseModal, handleClickCategoryModal, handleClickPostModal } = useModal;
 const type = ref("edit");
-
-onMounted (() => {
-  console.log(datePostDatas.value)
-})
 </script>
 
 <style lang="css" scoped>
