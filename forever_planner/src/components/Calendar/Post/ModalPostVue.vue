@@ -38,15 +38,19 @@ const props = defineProps({
 });
 
 const getBackgroundColor = () => {
-  return { backgroundColor: usingTheme.value.colorList[props.post.category.categoryColor].colorCode };
+  return { backgroundColor: getColor() };
 };
 
 const getBorderColor = () => {
-  return { borderColor: usingTheme.value.colorList[props.post.category.categoryColor].colorCode };
+  return { borderColor: getColor() };
 };
 
 const getIconColor = () => {
-  return { color: usingTheme.value.colorList[props.post.category.categoryColor].colorCode };
+  return { color: getColor() };
+};
+
+const getColor = () => {
+  return usingTheme.value.colorList[props.post.category.categoryColor].colorCode;
 };
 </script>
 
