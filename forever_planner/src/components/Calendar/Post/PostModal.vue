@@ -27,7 +27,7 @@
             </div>
         </div>
       </div>
-      <div v-if="isCalendarActive" class="w-full">
+      <div v-if="isCalendarActive" class="w-full" @click.stop>
         <PostCalendar />
       </div>
     </div>
