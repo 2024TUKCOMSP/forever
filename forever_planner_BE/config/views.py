@@ -142,35 +142,68 @@ def calendar_detail(request, calendarId):
     return Response(response_data)
 
 # 일정 수정 함수
+from rest_framework import status
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from datetime import datetime
+import uuid
+
+from .models import Calendar, Post, Category
+from .serializers import PostSerializer, CategorySerializer
+
 @api_view(['PUT'])
 def post_update(request):
     post_id = request.data.get('postId')
     title = request.data.get('title')
     content = request.data.get('content')
     category_id = request.data.get('categoryId')
+    calendar_month = request.data.get('calendarMonth')
+    calendar_year = request.data.get('calendarYear')
+    calendar_date = request.data.get('calendarDate')
 
-    if not all([post_id, title, content, category_id]):
+    if not all([post_id, title, content, category_id, calendar_month, calendar_year, calendar_date]):
         return Response({'error': 'Missing required fields'}, status=status.HTTP_400_BAD_REQUEST)
 
     try:
-        # Post 객체 조회
         post = Post.objects.get(postId=post_id)
     except Post.DoesNotExist:
         return Response({'error': 'Post not found'}, status=status.HTTP_404_NOT_FOUND)
 
     try:
-        # Category 객체 조회
         category = Category.objects.get(categoryId=category_id)
     except Category.DoesNotExist:
         return Response({'error': 'Category not found'}, status=status.HTTP_404_NOT_FOUND)
+
+    # 날짜를 datetime 객체로 변환
+    try:
+        calendar_month = int(calendar_month)
+        calendar_year = int(calendar_year)
+        calendar_date = int(calendar_date)
+        date = datetime(year=calendar_year, month=calendar_month, day=calendar_date).date()
+    except (ValueError, TypeError):
+        return Response({'error': 'Invalid date or format'}, status=status.HTTP_400_BAD_REQUEST)
+
+    # 날짜에 해당하는 Calendar 객체 조회 또는 생성
+    calendar, created = Calendar.objects.get_or_create(
+        calendarDate=date,
+        defaults={'themeId': uuid.uuid4()}  # 기존 날짜를 수정하는 경우 기본값은 사용하지 않습니다.
+    )
+
+    if not created:
+        # 이미 존재하는 Calendar 객체가 있는 경우 업데이트를 처리할 수 있습니다.
+        calendar.themeId = post.calendar.themeId  # 기존 테마 유지
+        calendar.save()
 
     # Post 객체 업데이트
     post.title = title
     post.content = content
     post.category = category
+    post.calendar = calendar
     post.save()
 
     return Response({'success': True}, status=status.HTTP_200_OK)
+
+
 
 # 일정 완료 상태 수정 함수
 @api_view(['PUT'])
