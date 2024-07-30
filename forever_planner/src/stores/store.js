@@ -51,6 +51,19 @@ export const useStore = defineStore('store', () => {
     }
   };
 
+  const updatePost = async (postId, title, content, categoryId) => {
+    const res = await axios.put(`${HOST}calendar/post?format=json`, {
+      postId: postId,
+      title: title,
+      content: content,
+      categoryId: categoryId,
+      calendarMonth: postMonth.value,
+      calendarYear: postYear.value,
+      calendarDate: postDate.value,
+    });
+    getAllCalendar();
+  };
+
   return {
     isClicked,
     changeFinishedState,
@@ -67,5 +80,6 @@ export const useStore = defineStore('store', () => {
     postMonth,
     postYear,
     postDate,
+    updatePost,
   };
 });
