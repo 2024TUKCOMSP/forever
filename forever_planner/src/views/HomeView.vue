@@ -15,17 +15,15 @@
       <button type="button" @click="goSettingBtnClick" class="goSettingBtn"><i class="fa-solid fa-gear"></i></button>
 
       <div class="checkTodoTagModal" tabindex="-1" v-if="isModalVisible" ref="checkTodoTagModal" @blur="closeModal">
-        <button type="button" class="checkTodoTagBtn" value="일상" @click="checkTodoTagClick('일상')">
-          <span class="tag1Round">●</span>
-          태그명1
-        </button><br />
-        <button type="button" class="checkTodoTagBtn" value="중요" @click="checkTodoTagClick('중요')">
-          <span class="tag2Round">●</span>
-          태그명2
-        </button><br />
-        <button type="button" class="checkTodoTagBtn" value="공부" @click="checkTodoTagClick('공부')">
-          <span class="tag3Round">●</span>
-          태그명3
+        <button
+          type="button"
+          v-for ="tag in checkTodoTags"
+          :key="tag.categoryId"
+          class="checkTodoTagBtn" 
+          :value="tag.categoryTitle" 
+          @click="checkTodoTagClick(tag.categoryTitle)">
+          <span :class="['tag1Round'+'tag'+tag.categoryColor+'Round']">●</span>
+          {{ tag.categoryTitle }}
         </button><br />
       </div>
     </div>
@@ -97,6 +95,7 @@ import { useModalStore } from '@/stores/modalStore.js';
 //import SomeDayPostVue from '@/components/Calendar/Post/SomeDayPostVue.vue';
 //import { useSomeDayModalStore } from '@/stores/useSomeDayModalStore';
 //dddd
+import axios from 'axios';
 
 
 export default {
@@ -124,6 +123,7 @@ export default {
     const { handleClickCategoryModal } = useModalStore();
     //const {someDayPostCalendarState, someDayConfirmModalState, someDayPostCategoryState, someDayPostModalState} = storeToRefs(useSomeDayModalStore());
    // const { someDayTodoDateClick } = useSomeDayModalStore();
+     const checkTodoTags = ref([]);
     
     const handleStopScroll = () => {
       if(dateModalState.value){
@@ -133,23 +133,34 @@ export default {
         }
     };
 
-    onMounted(() => {
+    const getCheckTodoModal = async () =>{
+      try{
+        const res = await axios.get(`http://34.146.205.159:8000/category/all?format=json`);
+        checkTodoTags.value = res.data;
+        console.log(`데이터 받아옴 ${JSON.stringify(checkTodoTags.value)}`);
+      }catch{
+        console.log("데이터 받아오기 실패", error);
+      }
+    }
+
+    onMounted(async() => {
       isClicked.value = 'home';
       window.scrollTo(0, 0);
+      await getCheckTodoModal();
     });
 
     watchEffect(() => {
       handleStopScroll();   //task: 어떤 기능인지 여쭤보기 
     });
 
-    const planetBtnClick = () => {
-      isModalVisible.value = true;
-      nextTick(()=> {
+    const planetBtnClick = async() => {
+      await nextTick(()=> {
         const modalElement = document.querySelector('.checkTodoTagModal');
         if (modalElement ) {
           modalElement.focus();
         }
       });
+      isModalVisible.value = true;
     };
 
     const checkTodoTagClick = (value) =>{
@@ -164,7 +175,7 @@ export default {
       planetBtnClick,
       checkTodoTagClick,
       userIconClick() {
-        alert("dkdkkghhghgghgdd");
+        alert("프로필 편집으로 이동하기 위한 버튼");
         // 프로필 편집으로 이동하기 위한 버튼
       },
       remainingTodoClick() {
@@ -186,6 +197,7 @@ export default {
       postCategoryModalState,
       confirmModalState, 
 
+      checkTodoTags,
     /*  someDayPostCalendarState,
       someDayConfirmModalState,
       someDayPostCategoryState,
