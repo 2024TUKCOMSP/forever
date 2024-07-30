@@ -165,7 +165,7 @@ export default {
 
     const checkTodoTagClick = (value) =>{
       console.log(value);
-        router.push('/checkTodo');
+        router.push({ path: '/checkTodo', query: { tag: value } });
     }
 
     return {
