@@ -19,9 +19,9 @@
 
     <p class ="settingP">홈 화면 설정</p>
     <div class="settingModeCss">
-      <p class ="settingModeP">미완료 할 일<input role ="switch" type="checkbox" class="settingModeToggle"/></p>
-      <p class ="settingModeP">오늘<input role ="switch" type="checkbox" class="settingModeToggle"/></p>
-      <p class ="settingModeP">언젠가<input role ="switch" type="checkbox" class="settingModeToggle"/></p>
+      <p class ="settingModeP">미완료 할 일<input role ="switch" type="checkbox" class="settingModeToggle" v-model ="settings.isVisibleNotYetTask" @change="updateSettings(isVisibleNotYetTask, settings.isVisibleNotYetTask)"/></p>
+      <p class ="settingModeP">오늘<input role ="switch" type="checkbox" class="settingModeToggle" v-model="settings.isVisibleTodayTask" @change="updateSettings(isVisibleTodayTask, settings.isVisibleTodayTask)"/></p>
+      <p class ="settingModeP">언젠가<input role ="switch" type="checkbox" class="settingModeToggle" v-model ="settings.isVisibleSomeTask" @change="updateSettings(isVisibleSomeTask, settings.isVisibleSomeTask)"/></p>
     </div><br />
 
     <p class="settingP">캘린더 설정</p>
@@ -37,7 +37,8 @@
 
 <script>
 import {useRouter} from 'vue-router';
-import { onMounted } from 'vue';
+import { onMounted, ref} from 'vue';
+import axios from 'axios';
 
 export default {
   name: 'Setting-View',
@@ -46,6 +47,20 @@ export default {
   },
   setup() {
     const router = useRouter(); 
+    const settings = ref({
+      isVisibleNotYetTask: false,
+      isVisibleTodayTask: false,
+      isVisibleSomeTask: false,
+    })
+
+    const updateSettings = async (key, value) => {
+      try {
+        const response = await axios.put(`http://34.146.205.159:8000/Setting/home`, {[key]: value});
+        console.log("설정 업데이트", response.data);
+      }catch(error){
+        console.log("업테이트 중 오류 발생", error);
+      }
+    }
 
     const backWards = () =>{
       router.push({name: 'home'});
@@ -70,6 +85,9 @@ export default {
       backWards,
       isClickScreenModeBtn,
       onMounted,
+      updateSettings,
+      settings,
+
     }
   }
 }
