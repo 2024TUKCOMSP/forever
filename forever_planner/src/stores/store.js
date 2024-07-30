@@ -7,10 +7,13 @@ export const useStore = defineStore('store', () => {
   const isClicked = ref('diary');
   const currentMonth = ref(new Date().getMonth() + 1);
   const currentYear = ref(new Date().getFullYear);
+  const postMonth = ref(0);
+  const postYear = ref(0);
   const colors = ref([]);
   const postDatas = ref([]);
   const currentColors = ref([]);
   const usingTheme = ref([]);
+  const postDate = ref(0);
 
   const changeFinishedState = async (state, postId) => {
     const res = await axios.put(`${HOST}calendar/post/finish?format=json`, {
@@ -61,5 +64,8 @@ export const useStore = defineStore('store', () => {
     getCurrentThemeColor,
     currentColors,
     usingTheme,
+    postMonth,
+    postYear,
+    postDate,
   };
 });
