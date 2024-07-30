@@ -7,63 +7,65 @@ from datetime import datetime, timedelta
 from .models import Calendar, Post, Category, HomeScreenSetting, ScreenSetting, Theme
 from .serializers import CalendarSerializer, PostSerializer, CategorySerializer, ThemeSerializer
 
-# 카테고리 생성 함수
 @api_view(['POST'])
 def create_category(request):
     categoryColor = request.data.get('categoryColor')
     categoryTitle = request.data.get('categoryTitle')
-    
-    # 유효한 색상인지 확인
-    valid_colors = []
-    themes = Theme.objects.all()
-    for theme in themes:
-        colors = theme.colorList  # assuming colorList is a list of dicts
-        valid_colors.extend([color['colorCode'] for color in colors])
-    
-    if categoryColor not in valid_colors:
-        return Response({'error': 'Invalid category color'}, status=status.HTTP_400_BAD_REQUEST)
-    
+
+    try:
+        theme = Theme.objects.get(is_use=True)
+    except Theme.DoesNotExist:
+        return Response({'error': 'No active theme found'}, status=status.HTTP_400_BAD_REQUEST)
+
+    try:
+        categoryColor = int(categoryColor)
+        if categoryColor < 0 or categoryColor >= len(theme.colorList):
+            raise ValueError
+    except (ValueError, TypeError):
+        return Response({'error': 'Invalid category color index'}, status=status.HTTP_400_BAD_REQUEST)
+
     category = Category(
         categoryColor=categoryColor,
         categoryTitle=categoryTitle
     )
     category.save()
-    
+
     response_data = {
         'categoryId': category.categoryId,
         'success': True
     }
     return Response(response_data, status=status.HTTP_201_CREATED)
 
-
-# 카테고리 수정 함수
 @api_view(['PUT'])
 def edit_category(request):
     categoryId = request.data.get('categoryId')
     categoryColor = request.data.get('categoryColor')
     categoryTitle = request.data.get('categoryTitle')
-    
+
     try:
         category = Category.objects.get(categoryId=categoryId)
     except Category.DoesNotExist:
         return Response({'success': False, 'error': 'Category not found'}, status=status.HTTP_404_NOT_FOUND)
     
-    # 유효한 색상인지 확인
-    valid_colors = []
-    themes = Theme.objects.all()
-    for theme in themes:
-        colors = theme.colorList  # assuming colorList is a list of dicts
-        valid_colors.extend([color['colorCode'] for color in colors])
-    
-    if categoryColor not in valid_colors:
-        return Response({'error': 'Invalid category color'}, status=status.HTTP_400_BAD_REQUEST)
-    
+    try:
+        theme = Theme.objects.get(is_use=True)
+    except Theme.DoesNotExist:
+        return Response({'error': 'No active theme found'}, status=status.HTTP_400_BAD_REQUEST)
+
+    try:
+        categoryColor = int(categoryColor)
+        if categoryColor < 0 or categoryColor >= len(theme.colorList):
+            raise ValueError
+    except (ValueError, TypeError):
+        return Response({'error': 'Invalid category color index'}, status=status.HTTP_400_BAD_REQUEST)
+
     category.categoryColor = categoryColor
     category.categoryTitle = categoryTitle
     category.save()
-    
+
     response_data = {'success': True}
     return Response(response_data, status=status.HTTP_200_OK)
+
 
 # 카테고리 삭제 함수
 @api_view(['DELETE'])
@@ -357,7 +359,7 @@ def all_tasks(request):
                 calendar_day = calendar_date.day
                 post_data = {
                     'calendarId': calendar_id,
-                    'calendarDate': calendar_day,
+                    'calendarDate': calendar_date,
                     'daycount': f'+{daycount}일',
                     'post': {
                         'postId': post.postId,
@@ -455,3 +457,31 @@ def theme_detail(request, themeId):
 
     serializer = ThemeSerializer(theme)
     return Response(serializer.data, status=status.HTTP_200_OK)
+
+@api_view(['POST'])
+def theme_use(request):
+    theme_id = request.data.get('themeId')
+    if not theme_id:
+        return Response({'error': 'themeId is required'}, status=status.HTTP_400_BAD_REQUEST)
+
+    try:
+        theme = Theme.objects.get(themeId=theme_id)
+    except Theme.DoesNotExist:
+        return Response({'error': 'Theme not found'}, status=status.HTTP_404_NOT_FOUND)
+
+    Theme.objects.update(is_use=False)
+    theme.is_use = True
+    theme.save()
+
+    update_category_colors(theme)  
+
+    return Response({'message': 'Success', 'is_use': theme.is_use}, status=status.HTTP_200_OK)
+
+def update_category_colors(new_theme):
+    categories = Category.objects.all()
+    for category in categories:
+        new_color_list = new_theme.colorList
+        if category.categoryColor < len(new_color_list):
+            new_color_code = new_color_list[category.categoryColor]['colorCode']
+            category.categoryColor = category.categoryColor  
+            category.save()

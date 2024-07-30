@@ -12,6 +12,7 @@ class Theme(models.Model):
     themeId = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     themeTitle = models.CharField(max_length=255)
     colorList = models.JSONField()
+    is_use = models.BooleanField(default=False)
 
     def __str__(self):
         return self.themeTitle
@@ -24,7 +25,7 @@ class HomeScreenSetting(models.Model):
 
 class Category(models.Model):
     categoryId = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    categoryColor = models.CharField(max_length=255)
+    categoryColor = models.IntegerField()
     categoryTitle = models.CharField(max_length=255)
 
     def __str__(self):
