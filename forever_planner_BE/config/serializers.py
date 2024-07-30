@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from .models import Calendar, Post, Category,Theme
 
+
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
@@ -10,6 +11,7 @@ class CategorySerializer(serializers.ModelSerializer):
         if not (value.startswith("#") and len(value) in [4, 7]):
             raise serializers.ValidationError("Invalid category color")
         return value
+
 
 class PostSerializer(serializers.ModelSerializer):
     category = CategorySerializer()
@@ -27,3 +29,6 @@ class ThemeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Theme
         fields = ['themeId','themeTitle','colorList','is_use']
+
+    def get_colorList(self, obj):
+        return [color['colorCode'] for color in obj.colorList]

@@ -25,7 +25,7 @@ class HomeScreenSetting(models.Model):
 
 class Category(models.Model):
     categoryId = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    categoryColor = models.CharField(max_length=7)
+    categoryColor = models.IntegerField()
     categoryTitle = models.CharField(max_length=255)
 
     def __str__(self):
