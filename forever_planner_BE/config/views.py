@@ -359,7 +359,7 @@ def all_tasks(request):
                 calendar_day = calendar_date.day
                 post_data = {
                     'calendarId': calendar_id,
-                    'calendarDate': calendar_day,
+                    'calendarDate': calendar_date,
                     'daycount': f'+{daycount}일',
                     'post': {
                         'postId': post.postId,
