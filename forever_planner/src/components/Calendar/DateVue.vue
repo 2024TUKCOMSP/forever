@@ -9,14 +9,17 @@
         v-for="(date, dayIndex) in week"
         :key="dayIndex"
         class="w-full h-full flex flex-col items-center justify-start"
-        @click="handleClickDateModal(date)"
+        @click="handleClickDateModal(date, getPostsForDate(date) )"
       >
-        <div class="pb-0.5"
-          :class="getDateClass(date)"
-        >
+        <div class="pb-0.5" :class="getDateClass(date)">
           {{ date !== '' ? date : '' }}
         </div>
-        <PostVue v-if="date !== ''" />
+        <PostVue 
+          v-for="post in getPostsForDate(date)" 
+          :key="post.postId + currentColorKey" 
+          :post="post"
+          :currentColors="currentColors"
+        />
       </div>
     </div>
   </div>
@@ -28,15 +31,21 @@ import { startOfMonth, endOfMonth, startOfWeek, endOfWeek, eachDayOfInterval, ad
 import PostVue from './Post/PostVue.vue';
 import { useModalStore } from '@/stores/modalStore.js';
 import { useStore } from '@/stores/store.js';
+import { storeToRefs } from 'pinia';
 
-const { handleClickDateModal } = useModalStore();
-const { changeMonth } = useStore();
+const store = useStore();
+const { currentMonth, currentYear, postDatas, currentColors } = storeToRefs(store);
+const { getAllCalendar, getCurrentThemeColor } = store;
+const { handleClickDateModal, handleClickCloseModal } = useModalStore();
+const { modalDate, dateModalState } = storeToRefs(useModalStore());
 
 const currentDate = ref(new Date());
 const today = new Date();
 
 const touchStartX = ref(0);
 const touchEndX = ref(0);
+
+const currentColorKey = ref(0);
 
 const getCalendar = (date) => {
   const startMonth = startOfMonth(date);
@@ -119,14 +128,32 @@ const handleTouchEnd = (event) => {
   }
 };
 
-watch(
-  () => currentDate.value,
-  (newDate) => {
-    const month = newDate.getMonth() + 1;
-    changeMonth(month);
+const getPostsForDate = (date) => {
+  if (date === '') return [];
+  const fullDate = new Date(currentDate.value.getFullYear(), currentDate.value.getMonth(), date);
+  const dateStr = fullDate.getDate();
+  const posts = postDatas.value.find(postData => postData.calendarDate === dateStr);
+  return posts ? posts.post : [];
+};
+
+watch(() => currentDate.value, async(newDate) => {
+    currentYear.value = newDate.getFullYear();
+    currentMonth.value = newDate.getMonth() + 1;
+    await getAllCalendar();
+    await getCurrentThemeColor(postDatas.value[0].themeId);
   },
   { immediate: true }
 );
+
+watch(currentColors, () => {
+  currentColorKey.value += 1;
+});
+
+watch(() => postDatas.value, (newData) => {
+  if(dateModalState.value) {
+    handleClickDateModal(modalDate.value, getPostsForDate(modalDate.value));
+  };
+});
 </script>
 
 <style scoped>
