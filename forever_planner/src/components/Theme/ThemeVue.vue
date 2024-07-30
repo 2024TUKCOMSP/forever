@@ -6,14 +6,14 @@
     </div>
     <div class="flex justify-between px-2">
       <div v-for="color in theme.colorList" :key="color">
-        <div class="w-8 h-8 rounded-full" :style="{ backgroundColor: color }"></div>
+        <div class="w-8 h-8 rounded-full" :style="{ backgroundColor: color.colorCode }"></div>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue';
+import { onMounted } from 'vue';
 
 const props = defineProps({
   isSelected: {
