@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full bg-[#de9bac]">
+  <div class="w-full" :style="getBackgroundColor()">
     <div class="relative w-full bg-[#FFFFFFBB] gap-1.5 flex flex-col py-4">
       <div class="absolute inset-0 bg-[#00000008]"></div>
       <div class="w-full flex justify-center pb-2">
@@ -18,7 +18,15 @@
 </template>
 
 <script setup>
+import { useModalStore } from '@/stores/modalStore';
+import { storeToRefs } from 'pinia';
+
+const { categoryColor } = storeToRefs(useModalStore());
 const weeks = ["일", "월", "화", "수", "목", "금", "토"];
+
+const getBackgroundColor = () => {
+  return { backgroundColor: categoryColor.value };
+};
 </script>
 
 <style scoped>
