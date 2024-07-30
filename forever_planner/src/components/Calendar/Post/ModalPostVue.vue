@@ -3,7 +3,7 @@
     <div class="w-full h-[48px] rounded-md text-xs flex justify-end relative" :style="getBackgroundColor()">
       <div class="h-full bg-[#ffffffbb] flex items-center pr-4" :class="post.isFinished ? 'w-full rounded-md' : 'w-[98%] rounded-r-md'">
         <div class="flex w-full h-full" :class="post.isFinished ? 'px-2' : 'px-0.5'">
-          <div class="flex flex-col pl-2 justify-center grow" @click="handleClickPostModal(type)">
+          <div class="flex flex-col pl-2 justify-center grow" @click="handleClickPostModal(type, getColor(), post)">
             <div class="text-2xs text-[#999999]">{{ post.category.categoryTitle }}</div>
             <div>{{ post.title }}</div>
           </div>

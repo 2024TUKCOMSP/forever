@@ -10,6 +10,8 @@ export const useModalStore = defineStore('modalStore', () => {
   const postModalType = ref("");
   const datePostDatas = ref({});
   const modalDate = ref(0);
+  const categoryColor = ref("");
+  const postData = ref([]);
 
   const handleClickDateModal = (date, data) => {
     datePostDatas.value = data;
@@ -29,8 +31,10 @@ export const useModalStore = defineStore('modalStore', () => {
     categoryModalState.value = false;
   };
 
-  const handleClickPostModal = (type) => {
+  const handleClickPostModal = (type, color, data) => {
+    categoryColor.value = color;
     postModalType.value = type;
+    postData.value = data;
     postModalState.value = true;
   };
 
@@ -73,5 +77,7 @@ export const useModalStore = defineStore('modalStore', () => {
     postModalType,
     datePostDatas,
     modalDate,
+    categoryColor,
+    postData,
   };
 });
