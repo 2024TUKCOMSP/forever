@@ -266,7 +266,7 @@ def category_all(request):
     return Response(serializer.data)
 
 @api_view(['GET'])
-def today_schedule(request):
+def today_tasks(request):
     home_screen_setting = HomeScreenSetting.objects.first()
     
     if not home_screen_setting or not home_screen_setting.is_visible_today_task:
@@ -293,7 +293,8 @@ def today_schedule(request):
             'content': post.content,
             'isFinished': post.isFinished,
             'categoryColor': post.category.categoryColor,
-            'categoryTitle': category_serializer.data['categoryTitle']
+            'categoryTitle': category_serializer.data['categoryTitle'],
+            'categoryId': post.category.categoryId
         }
         response_data['post'].append(post_data)
 
@@ -302,50 +303,49 @@ def today_schedule(request):
 @api_view(['GET'])
 def all_tasks(request):
     home_screen_setting = HomeScreenSetting.objects.first()
-
-    if not home_screen_setting or not home_screen_setting.is_visible_some_task:
+    if not home_screen_setting or not home_screen_setting.is_visible_not_yet_task:
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     today = datetime.today().date()
-    posts = Post.objects.filter(isFinished=False)
+    posts = Post.objects.filter(isFinished=False).exclude(calendar__calendarDate=today).exclude(calendar__isnull=True)
+
     response_data = []
 
     for post in posts:
-        if post.calendar is not None:
-            calendar_date = post.calendar.calendarDate
-            daycount = (today - calendar_date).days
+        calendar_date = post.calendar.calendarDate if post.calendar else None
+        daycount = (today - calendar_date).days if calendar_date else None
 
-            if daycount > 0:
-                calendar_id = post.calendar.calendarId
-                calendar_day = calendar_date.day
-                post_data = {
-                    'calendarId': calendar_id,
-                    'calendarDate': calendar_date,
-                    'daycount': f'+{daycount}일',
-                    'post': {
-                        'postId': post.postId,
-                        'title': post.title,
-                        'content': post.content,
-                        'isFinished': post.isFinished
-                    }
-                }
-                response_data.append(post_data)
-        else:
-            continue
+        post_data = {
+            'calendarId': post.calendar.calendarId if post.calendar else None,
+            'calendarDate': calendar_date.day if calendar_date else None,
+            'daycount': f'+{daycount}일' if daycount is not None else None,
+            'post': {
+                'postId': post.postId,
+                'title': post.title,
+                'content': post.content,
+                'isFinished': post.isFinished,
+                'categoryColor': post.category.categoryColor,
+                'categoryTitle': post.category.categoryTitle,
+                'categoryId': post.category.categoryId
+            }
+        }
+        response_data.append(post_data)
 
     return Response(response_data, status=status.HTTP_200_OK)
+
+
 
 @api_view(['POST'])
 def add_task(request):
     home_screen_setting = HomeScreenSetting.objects.first()
-    
     if not home_screen_setting or not home_screen_setting.is_visible_not_yet_task:
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     title = request.data.get('title')
-    content = request.data.get('content')
+    content = request.data.get('content', '') 
     category_id = request.data.get('categoryId')
-    if not all([title, content, category_id]):
+
+    if not all([title, category_id]):
         return Response({'error': '필수 필드가 누락되었습니다.'}, status=status.HTTP_400_BAD_REQUEST)
 
     try:
@@ -355,13 +355,41 @@ def add_task(request):
 
     post = Post.objects.create(
         title=title,
-        content=content,
+        content=content, 
         category=category,
         isFinished=False
     )
 
-    return Response({'success': True, 'postId': post.postId}, status=status.HTTP_201_CREATED)
+    return Response({
+        'success': True,
+        'postId': post.postId
+    }, status=status.HTTP_201_CREATED)
 
+
+@api_view(['GET'])
+def last_tasks(request):
+    home_screen_setting = HomeScreenSetting.objects.first()
+    
+    if not home_screen_setting or not home_screen_setting.is_visible_some_task:
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+    posts = Post.objects.filter(isFinished=False, calendar__isnull=True)
+    response_data = []
+
+    for post in posts:
+        category_serializer = CategorySerializer(post.category)
+        post_data = {
+            'postId': post.postId,
+            'title': post.title,
+            'content': post.content,
+            'isFinished': post.isFinished,
+            'categoryId': post.category.categoryId,
+            'categoryColor': post.category.categoryColor,
+            'categoryTitle': category_serializer.data['categoryTitle']
+        }
+        response_data.append(post_data)
+
+    return Response({'post': response_data}, status=status.HTTP_200_OK)
 @api_view(['PUT'])
 def home_task(request):
     is_visible_not_yet_task = request.data.get('isVisibleNotYetTask')
