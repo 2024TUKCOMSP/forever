@@ -85,6 +85,14 @@ export const useStore = defineStore('store', () => {
     categories.value = res.data;
   };
 
+  const createCategory = async (num, title) => {
+    const res = await axios.post(`${HOST}category/create`, {
+      categoryColor: num,
+      categoryTitle: title,
+    });
+    getCategories();
+  };
+
   return {
     isClicked,
     changeFinishedState,
@@ -107,5 +115,6 @@ export const useStore = defineStore('store', () => {
     createPost,
     currentCategoryId,
     selectedCategory,
+    createCategory,
   };
 });
