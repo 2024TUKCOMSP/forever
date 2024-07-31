@@ -14,6 +14,7 @@ export const useStore = defineStore('store', () => {
   const currentColors = ref([]);
   const usingTheme = ref([]);
   const postDate = ref(0);
+  const categories = ref([]);
 
   const changeFinishedState = async (state, postId) => {
     const res = await axios.put(`${HOST}calendar/post/finish?format=json`, {
@@ -64,6 +65,11 @@ export const useStore = defineStore('store', () => {
     getAllCalendar();
   };
 
+  const getCategories = async () => {
+    const res = await axios.get(`${HOST}category/all?format=json`);
+    categories.value = res.data;
+  };
+
   return {
     isClicked,
     changeFinishedState,
@@ -81,5 +87,7 @@ export const useStore = defineStore('store', () => {
     postYear,
     postDate,
     updatePost,
+    getCategories,
+    categories,
   };
 });

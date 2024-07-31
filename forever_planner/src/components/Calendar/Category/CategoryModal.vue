@@ -8,11 +8,11 @@
       </div>
       <div v-if="!editMode" class="flex flex-col w-full gap-2">
         <div v-for="(row, rowIndex) in chunkedCategories" :key="rowIndex" class="flex w-full gap-2">
-          <div v-for="category in row" :key="category.id" class="flex-1">
-            <div @click="clickMakePost()" class="w-full aspect-square bg-[#F8F8F8] rounded-2xl flex items-center justify-center">
+          <div v-for="categories in row" :key="categories.categoryId" class="flex-1">
+            <div @click="clickMakePost(categories)" class="w-full aspect-square bg-[#F8F8F8] rounded-2xl flex items-center justify-center">
               <div class="flex flex-col gap-2 items-center">
-                <div class="w-[24px] h-[24px] rounded-full bg-[#a7c8f7]"></div>
-                <div>{{ category.name }}</div>
+                <div class="w-[24px] h-[24px] rounded-full" :style="getBackgroundColor(categories)"></div>
+                <div>{{ categories.categoryTitle }}</div>
               </div>
             </div>
           </div>
@@ -23,17 +23,17 @@
       </div>
       <div v-else class="flex flex-col w-full gap-2">
         <div v-for="(row, rowIndex) in chunkedEditCategories" :key="rowIndex" class="flex w-full gap-2">
-          <div v-for="category in row" :key="category.id || `plus-${rowIndex}`" class="flex-1">
+          <div v-for="categories in row" :key="categories.categoryId || `plus-${rowIndex}`" class="flex-1">
             <div
-              v-if="category.id"
+              v-if="categories.categoryId"
               class="w-full aspect-square bg-[#F8F8F8] rounded-2xl flex items-center justify-center"
               @click="clickMoveCategory()"
             >
               <div class="flex flex-col gap-1.5 items-center">
-                <div class="icon-color">
+                <div :style="getIconColor(categories)">
                   <i class="fa-solid fa-square-pen w-[24px] h-[24px]"></i>
                 </div>
-                <div>{{ category.name }}</div>
+                <div>{{ categories.categoryTitle }}</div>
               </div>
             </div>
             <div v-else class="w-full aspect-square bg-[#F8F8F8] rounded-2xl flex items-center justify-center" @click="clickMoveCategory()">
@@ -56,13 +56,17 @@
 
 
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { useModalStore } from '@/stores/modalStore.js';
+import { useStore } from '@/stores/store';
+import { storeToRefs } from 'pinia';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
 const type = ref("add");
 const { handleClickCloseCategoryModal, handleClickPostModal } = useModalStore();
+const { getCategories } = useStore();
+const { categories, usingTheme, currentCategoryId } = storeToRefs(useStore());
 
 const editMode = ref(false);
 
@@ -74,21 +78,11 @@ const clickMoveCategory = () => {
   router.push({ name: 'category' });
 };
 
-const clickMakePost = () => {
+const clickMakePost = (category) => {
   handleClickCloseCategoryModal();
-  handleClickPostModal(type.value);
+  currentCategoryId.value = category.categoryId;
+  handleClickPostModal(type.value, getColor(category));
 };
-
-const categories = ref([
-  { id: 1, name: '일상' },
-  { id: 2, name: '일상' },
-  { id: 3, name: '일상' },
-  { id: 4, name: '일상' },
-  { id: 5, name: '일상' },
-  { id: 6, name: '일상' },
-  { id: 7, name: '일상' },
-  { id: 8, name: '일상' },
-]);
 
 const chunkedCategories = computed(() => {
   const chunks = [];
@@ -110,10 +104,23 @@ const chunkedEditCategories = computed(() => {
   }
   return chunks;
 });
+
+const getBackgroundColor = (category) => {
+  return { backgroundColor : usingTheme.value.colorList[category.categoryColor].colorCode };
+};
+
+const getIconColor = (category) => {
+  return { color : usingTheme.value.colorList[category.categoryColor].colorCode };
+};
+
+const getColor = (category) => {
+  return usingTheme.value.colorList[category.categoryColor].colorCode;
+}
+
+onMounted(() => {
+  getCategories();
+});
 </script>
 
 <style lang="css" scoped>
-.icon-color {
-  color: #a7c8f7;
-}
 </style>
