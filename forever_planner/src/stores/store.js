@@ -16,6 +16,7 @@ export const useStore = defineStore('store', () => {
   const postDate = ref(0);
   const categories = ref([]);
   const currentCategoryId = ref("");
+  const selectedCategory = ref([]);
 
   const changeFinishedState = async (state, postId) => {
     const res = await axios.put(`${HOST}calendar/post/finish?format=json`, {
@@ -76,7 +77,6 @@ export const useStore = defineStore('store', () => {
       calendarYear: postYear.value,
       calendarDate: postDate.value,
     });
-    console.log(res.data)
     getAllCalendar();
   };
 
@@ -106,5 +106,6 @@ export const useStore = defineStore('store', () => {
     categories,
     createPost,
     currentCategoryId,
+    selectedCategory,
   };
 });

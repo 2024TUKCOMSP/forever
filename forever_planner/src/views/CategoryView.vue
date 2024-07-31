@@ -8,14 +8,12 @@
       </div>
       <input class="w-full h-16 rounded-2xl p-4 text-2xl focus:outline-none" placeholder="카테고리를 입력하세요" maxlength="10"/>
       <div class="bg-white rounded-2xl p-6 flex flex-col items-center">
-        <div class="flex items-center gap-12">
-          <i class="fa-solid fa-chevron-left w-[20px] h-[20px]"></i>
-          <div class="text-xl">Planit 3.0</div>
-          <i class="fa-solid fa-chevron-right w-[20px] h-[20px]"></i>
-        </div>
+        <div class="text-xl flex items-center">{{ usingTheme.themeTitle }}</div>
         <div class="flex flex-col gap-4 w-full p-6">
           <div v-for="line in 2" :key="line" class="flex justify-between w-full">
-            <div v-for="color in 4" :key="color" class="w-[52px] h-[52px] rounded-full bg-[#a7c8f7]"></div>
+            <div v-for="color in 4" :key="color" class="w-12 h-12 rounded-full flex items-center justify-center" :style="getColor(line, color)">
+              <i class="fa-regular fa-circle w-10 h-10"></i>
+            </div>
           </div>
         </div>
       </div>
@@ -28,7 +26,13 @@
 
 <script setup>
 import { useRouter } from 'vue-router';
+import { useStore } from '@/stores/store';
+import { storeToRefs } from 'pinia';
+import { onMounted } from 'vue';
 
+const store = useStore();
+const { getColors } = store;
+const { usingTheme } = storeToRefs(store);
 const router = useRouter();
 
 const clickGoBehind = () => {
@@ -38,6 +42,14 @@ const clickGoBehind = () => {
 const saveCategory = () => {
   router.go(-1);
 };
+
+const getColor = (line, num) => {
+  return { background: usingTheme.value.colorList[(line - 1) * 4 + (num - 1)].colorCode, color: "#ffffff" }
+};
+
+onMounted(async () => {
+  await getColors();
+});
 </script>
 
 <style scoped>
