@@ -106,7 +106,7 @@ export default {
       const editCategoryBtnClick = () =>{
         setTimeout(()=>{
           editModeState.value = !editModeState.value;
-        console.log("카테고리 편집 버튼 클릭"+editModeState.value);
+          console.log("카테고리 편집 버튼 클릭"+editModeState.value);
         },10);
       };
 
