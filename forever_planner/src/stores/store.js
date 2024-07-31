@@ -15,6 +15,7 @@ export const useStore = defineStore('store', () => {
   const usingTheme = ref([]);
   const postDate = ref(0);
   const categories = ref([]);
+  const currentCategoryId = ref("");
 
   const changeFinishedState = async (state, postId) => {
     const res = await axios.put(`${HOST}calendar/post/finish?format=json`, {
@@ -38,6 +39,7 @@ export const useStore = defineStore('store', () => {
   };
 
   const getAllCalendar = async () => {
+    postDatas.value = [];
     const res = await axios.post(`${HOST}calendar/all?format=json`, {
       calendarMonth: currentMonth.value,
       calendarYear: currentYear.value,
@@ -65,6 +67,19 @@ export const useStore = defineStore('store', () => {
     getAllCalendar();
   };
 
+  const createPost = async (title, content, categoryId) => {
+    const res = await axios.post(`${HOST}calendar/post/create?format=json`, {
+      title: title,
+      content: content,
+      categoryId: categoryId,
+      calendarMonth: postMonth.value,
+      calendarYear: postYear.value,
+      calendarDate: postDate.value,
+    });
+    console.log(res.data)
+    getAllCalendar();
+  };
+
   const getCategories = async () => {
     const res = await axios.get(`${HOST}category/all?format=json`);
     categories.value = res.data;
@@ -89,5 +104,7 @@ export const useStore = defineStore('store', () => {
     updatePost,
     getCategories,
     categories,
+    createPost,
+    currentCategoryId,
   };
 });

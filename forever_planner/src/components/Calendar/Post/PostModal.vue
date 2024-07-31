@@ -44,8 +44,8 @@ import { getDay } from 'date-fns';
 
 const { handleClickClosePostModal, handleClickPostCategoryModal, handleClickConfirmModal } = useModalStore();
 const { postModalType, categoryColor, postData, modalDate } = storeToRefs(useModalStore());
-const { currentMonth, currentYear, postMonth, postYear, postDate } = storeToRefs(useStore());
-const { updatePost } = useStore();
+const { currentMonth, currentYear, postMonth, postYear, postDate, currentCategoryId } = storeToRefs(useStore());
+const { updatePost, createPost } = useStore();
 
 const isCalendarActive = ref(false);
 const isContentActive = ref(false);
@@ -70,7 +70,8 @@ const handleClickCategory = () => {
 };
 
 const submit = () => {
-  updatePost(postData.value.postId, postTitle.value, content.value, postData.value.category.categoryId);
+  if(postModalType.value === "edit") updatePost(postData.value.postId, postTitle.value, content.value, postData.value.category.categoryId);
+  else createPost(postTitle.value, content.value, currentCategoryId.value);
   handleClickClosePostModal();
 };
 
@@ -109,7 +110,6 @@ onMounted(() => {
     content.value = postData.value.content;
     category.value = postData.value.category.categoryTitle;
   };
-  console.log(postData.value)
 });
 </script>
 
