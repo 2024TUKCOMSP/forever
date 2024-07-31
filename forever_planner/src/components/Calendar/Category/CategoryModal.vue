@@ -79,7 +79,6 @@ const clickMoveCategory = () => {
 };
 
 const clickMakePost = (category) => {
-  handleClickCloseCategoryModal();
   currentCategoryId.value = category.categoryId;
   handleClickPostModal(type.value, getColor(category));
 };
