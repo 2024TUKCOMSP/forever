@@ -35,7 +35,7 @@ import { storeToRefs } from 'pinia';
 
 const store = useStore();
 const { currentMonth, currentYear, postDatas, currentColors } = storeToRefs(store);
-const { getAllCalendar, getCurrentThemeColor } = store;
+const { getAllCalendar } = store;
 const { handleClickDateModal, handleClickCloseModal } = useModalStore();
 const { modalDate, dateModalState } = storeToRefs(useModalStore());
 
@@ -140,7 +140,6 @@ watch(() => currentDate.value, async(newDate) => {
     currentYear.value = newDate.getFullYear();
     currentMonth.value = newDate.getMonth() + 1;
     await getAllCalendar();
-    await getCurrentThemeColor(postDatas.value[0].themeId);
   },
   { immediate: true }
 );
