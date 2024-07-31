@@ -27,7 +27,7 @@
             <div
               v-if="categories.categoryId"
               class="w-full aspect-square bg-[#F8F8F8] rounded-2xl flex items-center justify-center"
-              @click="clickMoveCategory()"
+              @click="clickEditCategory(categories)"
             >
               <div class="flex flex-col gap-1.5 items-center">
                 <div :style="getIconColor(categories)">
@@ -67,7 +67,7 @@ const type = ref("add");
 const { handleClickCloseCategoryModal, handleClickPostModal } = useModalStore();
 const { currentCategory } = storeToRefs(useModalStore());
 const { getCategories } = useStore();
-const { categories, usingTheme, currentCategoryId } = storeToRefs(useStore());
+const { categories, usingTheme, currentCategoryId, editCategory } = storeToRefs(useStore());
 
 const editMode = ref(false);
 
@@ -117,7 +117,12 @@ const getIconColor = (category) => {
 
 const getColor = (category) => {
   return usingTheme.value.colorList[category.categoryColor].colorCode;
-}
+};
+
+const clickEditCategory = (category) => {
+  editCategory.value = category;
+  clickMoveCategory();
+};
 
 onMounted(() => {
   getCategories();

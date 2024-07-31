@@ -17,6 +17,7 @@ export const useStore = defineStore('store', () => {
   const categories = ref([]);
   const currentCategoryId = ref("");
   const selectedCategory = ref([]);
+  const editCategory = ref([]);
 
   const changeFinishedState = async (state, postId) => {
     const res = await axios.put(`${HOST}calendar/post/finish?format=json`, {
@@ -93,6 +94,14 @@ export const useStore = defineStore('store', () => {
     getCategories();
   };
 
+  const editCurrentCategory = async (id, num, title) => {
+    const res = await axios.put(`${HOST}category/edit?format=json`, {
+      categoryId: id,
+      categoryColor: num,
+      categoryTitle: title,
+    });
+    getCategories();
+  };
   return {
     isClicked,
     changeFinishedState,
@@ -116,5 +125,7 @@ export const useStore = defineStore('store', () => {
     currentCategoryId,
     selectedCategory,
     createCategory,
+    editCategory,
+    editCurrentCategory,
   };
 });

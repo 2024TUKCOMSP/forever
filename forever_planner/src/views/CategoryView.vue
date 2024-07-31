@@ -33,19 +33,24 @@ import { useStore } from '@/stores/store';
 import { storeToRefs } from 'pinia';
 
 const store = useStore();
-const { getColors, createCategory } = store;
-const { usingTheme } = storeToRefs(store);
+const { getColors, createCategory, editCurrentCategory, deleteCategory } = store;
+const { usingTheme, editCategory } = storeToRefs(store);
 const router = useRouter();
 const selectedCategoryNum = ref(-1);
 const title = ref("");
 
 const clickGoBehind = () => {
   router.go(-1);
+  editCategory.value = [];
+};
+
 };
 
 const saveCategory = () => {
-  createCategory(selectedCategoryNum.value, title.value);
+  if(editCategory.value.categoryId) editCurrentCategory(editCategory.value.categoryId, selectedCategoryNum.value, title.value);
+  else createCategory(selectedCategoryNum.value, title.value);
   router.go(-1);
+  editCategory.value = [];
 };
 
 const getColor = (line, num) => {
@@ -62,6 +67,10 @@ const isSelected = (num) => {
 
 onMounted(async () => {
   await getColors();
+  if(editCategory.value.categoryId) {
+    selectedCategoryNum.value = editCategory.value.categoryColor;
+    title.value = editCategory.value.categoryTitle;
+  }
 });
 </script>
 
