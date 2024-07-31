@@ -19,7 +19,8 @@
                 <div class="flex items-center" :style="getContentIconColor()" @click="clickContentButton()">
                   <i class="fa-solid fa-note-sticky w-5 h-5"></i>
                 </div>
-                <div class="text-[#00000050]" @click="handleClickCategory()">{{ category }}</div>
+                <div v-if="currentCategory.length !== 0" class="text-[#00000050]" @click="handleClickCategory()">{{ currentCategory.categoryTitle }}</div>
+                <div v-else class="text-[#00000050]" @click="handleClickCategory()">{{ category }}</div>
               </div>
               <div class="flex items-center icon-color" @click="submit()">
                 <i class="fa-solid fa-paper-plane w-5 h-5"></i>
@@ -43,7 +44,7 @@ import { onMounted, ref, computed, watch } from 'vue';
 import { getDay } from 'date-fns';
 
 const { handleClickClosePostModal, handleClickPostCategoryModal, handleClickConfirmModal } = useModalStore();
-const { postModalType, categoryColor, postData, modalDate } = storeToRefs(useModalStore());
+const { postModalType, categoryColor, postData, modalDate, currentCategory, postCategoryModalState } = storeToRefs(useModalStore());
 const { currentMonth, currentYear, postMonth, postYear, postDate, currentCategoryId } = storeToRefs(useStore());
 const { updatePost, createPost } = useStore();
 
@@ -70,7 +71,7 @@ const handleClickCategory = () => {
 };
 
 const submit = () => {
-  if(postModalType.value === "edit") updatePost(postData.value.postId, postTitle.value, content.value, postData.value.category.categoryId);
+  if(postModalType.value === "edit") updatePost(postData.value.postId, postTitle.value, content.value, currentCategory.value.categoryId);
   else createPost(postTitle.value, content.value, currentCategoryId.value);
   handleClickClosePostModal();
 };
@@ -102,6 +103,7 @@ watch([postDate, postMonth, postYear], () => {
 });
 
 onMounted(() => {
+  currentCategory.value = [];
   postMonth.value = currentMonth.value;
   postYear.value = currentYear.value;
   postDate.value = modalDate.value;

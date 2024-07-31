@@ -20,10 +20,13 @@ import { storeToRefs } from 'pinia';
 import { onMounted } from 'vue';
 
 const { handleClickClosePostCategoryModal } = useModalStore();
+const { currentCategory, categoryColor } = storeToRefs(useModalStore());
 const { getCategories } = useStore();
 const { categories, usingTheme } = storeToRefs(useStore());
 
 const confirm = (category) => {
+  currentCategory.value = category;
+  categoryColor.value = usingTheme.value.colorList[category.categoryColor].colorCode;
   handleClickClosePostCategoryModal();
 };
 
