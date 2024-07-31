@@ -9,7 +9,14 @@ import router from './router';
 
 const app = createApp(App);
 
+
+app.config.globalProperties.$isVisibleNotYetTask = true;
+app.config.globalProperties.$isVisibleTodayTask = true;
+app.config.globalProperties.$isVisibleSomeTask = true;
+
 app.use(createPinia());
 app.use(router);
 
 app.mount('#app');
+
+

@@ -6,6 +6,8 @@ import ThemeView from '../views/ThemeView.vue';
 import RemainingTodoView from '@/views/RemainingTodoView.vue';
 import CategoryView from '../views/CategoryView';
 import CheckTodoView from '@/views/CheckTodoView.vue';
+//import store from '../store';
+//import { createStore } from 'vuex';
 
 const router = createRouter({
   history: createWebHistory(),

@@ -41,31 +41,55 @@
 
 <script>
 import {useRouter} from 'vue-router';
-import { onMounted, ref, watch, onUnmounted, nextTick } from 'vue';
+import { onMounted, ref, watch, onUnmounted, nextTick, computed, getCurrentInstance } from 'vue';
 import axios from 'axios'; 
 import CategoryModal from '@/components/Calendar/Category/CategoryModal.vue';
+//import { useStore } from 'vuex';
+//import { eventBus } from '@/stores/eventBus';
 
 export default {
+  //props:['isVisibleNotYetTask', 'isVisibleTodayTask', 'isVisibleSomeTask'],
+  //부모에게 받은 값을 바로 가공하면 에러 발생. 가공 필요
+ /* created(){
+    this.setting.isVisibleNotYetTask = this.isVisibleNotYetTask,
+    this.setting.isVisibleSomeTask = this.isVisibleSomeTask,
+    this.setting.isVisibleTodayTask = this.isVisibleTodayTask
+  },*/
   name: 'Setting-View',
   components : {
     CategoryModal,
   },
   data() {
-    return {};
+    //isVisibleSet:{} //1. 새로운 객체에 props로 받은 값들 넣기
+    //setting: {}
+    return{};
   },
   setup() {
     const router = useRouter(); 
     const editModeState = ref(false);
+    const instance = getCurrentInstance(); // 현재 인스턴스 가져오기
+    const $isVisibleNotYetTask = instance.appContext.config.globalProperties.$isVisibleNotYetTask;
+    const $isVisibleTodayTask = instance.appContext.config.globalProperties.$isVisibleTodayTask;
+    const $isVisibleSomeTask = instance.appContext.config.globalProperties.$isVisibleSomeTask;
     const settings = ref({
-      isVisibleNotYetTask: true,
-      isVisibleTodayTask: true,
-      isVisibleSomeTask: true,
+      isVisibleNotYetTask: Boolean($isVisibleNotYetTask),
+      isVisibleTodayTask: Boolean($isVisibleTodayTask),
+      isVisibleSomeTask: Boolean($isVisibleSomeTask),
     })
+
+
+    //const props = defineProps()
+
+    //const settings = computed(() => store.state.settings);
 
     const updateSettings = async (key, value) => {
       try {
         const response = await axios.put(`http://34.146.205.159:8000/Setting/home`, settings.value);
         console.log("설정 업데이트", response, settings.value);
+         
+        instance.appContext.config.globalProperties.$isVisibleNotYetTask = settings.value.isVisibleNotYetTask;
+        instance.appContext.config.globalProperties.$isVisibleTodayTask = settings.value.isVisibleTodayTask;
+        instance.appContext.config.globalProperties.$isVisibleSomeTask = settings.value.isVisibleSomeTask;
       }catch(error){
         console.log("업테이트 중 오류 발생", error);
       }
@@ -77,11 +101,14 @@ export default {
 
     onMounted(()=>{
       window.scrollTo(0, 0);
-      
+      //console.log("코드 확인"+ $isVisibleNotYetTask);
     })
 
     //setting Object가 변경되었을 때에 설정 업데이트. 
     watch(settings, (newSettings)=> {
+      console.log("설정 업데이트", settings.value);
+      //console.log(instance.appContext.config.globalProperties.$isVisibleNotYetTask);
+      //console.log($isVisibleNotYetTask);
       updateSettings();
     }, { deep: true });
 
@@ -107,7 +134,7 @@ export default {
       const editCategoryBtnClick = () =>{
         setTimeout(()=>{
           editModeState.value = !editModeState.value;
-          console.log("카테고리 편집 버튼 클릭"+editModeState.value);
+          //console.log("카테고리 편집 버튼 클릭"+editModeState.value);
         },10);
       };
 
@@ -126,6 +153,10 @@ export default {
       editCategoryBtnClick,
       editModeState,
       closeEditCategoryModal,
+      //editInfo,
+        //userWasEdited라는 신호가 eventBus로 전달이됨. new Date와 함께.
+    //$eit~는 자식이 부모에게 데이터 전달시 사용함. 이런 관점에서 eventBus라는 인스턴스가 '부모'역할
+    //을 한다고 할수 있음. 즉, 보내는 데이터를 eventBus가 받는 다고 할수 있음. (형제컴포넌트를 연결하기 위해 가상의 부모 역할을 한다고 추론가능.)
     }
   }
 }

@@ -78,7 +78,7 @@
 
 <script>
 import FooterVue from '@/components/FooterVue.vue';
-import {nextTick, onMounted,  watchEffect, ref} from 'vue';
+import {nextTick, onMounted,  watchEffect, ref, computed, getCurrentInstance } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useStore } from '@/stores/store.js';
 import { useRouter } from 'vue-router';
@@ -92,7 +92,7 @@ import { useModalStore } from '@/stores/modalStore.js';
 //import SomeDayConfirmModal from '@/components/Calendar/SomeDayConfirmModal.vue';
 //import SomeDayPostModal from '@/components/Calendar/Post/SomeDayPostModal.vue';
 //import SomeDayPostCalendar from '@/components/Calendar/Post/SomeDayPostCalendar.vue';
-import SettingView from './SettingView.vue';
+//import SettingView from './SettingView.vue';
 
 import axios from 'axios';
 
@@ -118,28 +118,35 @@ export default {
     const { dateModalState, categoryModalState, postModalState, postCategoryModalState, confirmModalState  } = storeToRefs(useModalStore());
     const { handleClickCategoryModal } = useModalStore();
     const checkTodoTags = ref([]);
-    var settings = ref({
-      setVisibleNotYetTask: true,
-      setVisibleTodayTask: true,
-      setVisibleSomeTask: true,
-    });
+    const instance = getCurrentInstance(); // 현재 인스턴스 가져오기
+    const $isVisibleNotYetTask = instance.appContext.config.globalProperties.$isVisibleNotYetTask;
+    const $isVisibleTodayTask = instance.appContext.config.globalProperties.$isVisibleTodayTask;
+    const $isVisibleSomeTask = instance.appContext.config.globalProperties.$isVisibleSomeTask;
+    const settings = ref({
+      setVisibleNotYetTask: Boolean($isVisibleNotYetTask),
+      setVisibleTodayTask: Boolean($isVisibleTodayTask),
+      setVisibleSomeTask: Boolean($isVisibleSomeTask),
+    })
 
-    const fetchSettings = async () => {
+    /*
+   const fetchSettings = async () => {
       try {
-        const response = await axios.put('http://34.146.205.159:8000/Setting/home?format=json', {
-          isVisibleNotYetTask: true,
-          isVisibleTodayTask: true,
-          isVisibleSomeTask: true,
+       const response = await axios.put('http://34.146.205.159:8000/Setting/home?format=json', {
+          isVisibleNotYetTask: VUE_APP_ISVISIBLENOTYETTASK, //원래 다른 변수명으로 받았으나. 제대로 돌아가지 않고
+          isVisibleTodayTask: VUE_APP_ISVISIBLETODAYTASK,  //다른 걸 먼저 해치우는 게 낫겠다 싶어 true로 put하게 둠
+          isVisibleSomeTask: VUE_APP_ISVISIBLESOMETASK,
         });
         settings.setVisibleNotYetTask = response.isVisibleNotYetTask;
         settings.setVisibleTodayTask = response.isVisibleTodayTask;
         settings.setVisibleSomeTask = response.isVisibleSomeTask;
         console.log(JSON.stringify(settings) + "확인");
-        console.log(JSON.stringify(response));
+        //console.log(JSON.stringify(response));
       } catch (error) {
         console.error("데이터 받아오기 실패", error);
       }
     };
+*/
+    
     
     function handleStopScroll() {
       if (dateModalState.value) {
@@ -162,8 +169,9 @@ export default {
     onMounted(async() => {
       isClicked.value = 'home';
       window.scrollTo(0, 0);
-      await fetchSettings();
+     // await fetchSettings();
       await getCheckTodoModal();
+      //console.log(process.env.VUE_APP_ISVISIBLENOTYETTASK);
     });
 
     watchEffect(() => {
@@ -224,7 +232,7 @@ export default {
       someDayTodoDateClick,
       settings,
 
-      fetchSettings,
+      //fetchSettings,
       
       //someDayCategoryModalState,
       //someDayPostModalState,
