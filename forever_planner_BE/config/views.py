@@ -249,6 +249,16 @@ def post_create(request):
         'calendarId': calendar.calendarId
     }, status=status.HTTP_201_CREATED)
 
+@api_view(['DELETE'])
+def post_delete(request, postId):
+    try:
+        post = Post.objects.get(postId=postId)
+    except Post.DoesNotExist:
+        return Response({'success': False, 'error': '포스트를 찾을 수 없습니다.'}, status=status.HTTP_404_NOT_FOUND)
+
+    post.delete()
+    return Response({'success': True}, status=status.HTTP_200_OK)
+
 @api_view(['GET'])
 def category_all(request):
     categories = Category.objects.filter(is_deleted=False)
@@ -360,17 +370,28 @@ def home_task(request):
     
     if any(setting is None for setting in [is_visible_not_yet_task, is_visible_today_task, is_visible_some_task]):
         return Response({'error': '모든 가시성 설정이 필요합니다.'}, status=status.HTTP_400_BAD_REQUEST)
-
-    setting, created = HomeScreenSetting.objects.update_or_create(
-        defaults={
-            'is_visible_not_yet_task': is_visible_not_yet_task,
-            'is_visible_today_task': is_visible_today_task,
-            'is_visible_some_task': is_visible_some_task
-        }
-    )
     
+    try:
+        setting, created = HomeScreenSetting.objects.get_or_create(
+            defaults={
+                'is_visible_not_yet_task': is_visible_not_yet_task,
+                'is_visible_today_task': is_visible_today_task,
+                'is_visible_some_task': is_visible_some_task
+            }
+        )
+        if not created:
+            setting.is_visible_not_yet_task = is_visible_not_yet_task
+            setting.is_visible_today_task = is_visible_today_task
+            setting.is_visible_some_task = is_visible_some_task
+            setting.save()
+    
+    except Exception as e:
+        return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
     return Response({
-        'success': True
+        'isVisibleNotYetTask': setting.is_visible_not_yet_task,
+        'isVisibleTodayTask': setting.is_visible_today_task,
+        'isVisibleSomeTask': setting.is_visible_some_task
     }, status=status.HTTP_200_OK)
 
 @api_view(['PUT'])

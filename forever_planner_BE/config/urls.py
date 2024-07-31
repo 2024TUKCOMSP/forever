@@ -29,6 +29,7 @@ urlpatterns = [
     path('calendar/post', views.post_update, name='post_update'),
     path('calendar/post/finish', views.post_finish, name='post_finish'),
     path('calendar/post/create', views.post_create, name='post_create'),
+    path('calendar/post/<uuid:postId>', views.post_delete, name='post_delete'),
     path('home/today', views.today_schedule, name='today_schedule'),
     path('home/all', views.all_tasks, name='all_tasks'),
     path('home/last', views.add_task, name='add_task'),
