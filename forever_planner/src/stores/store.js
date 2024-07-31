@@ -110,6 +110,13 @@ export const useStore = defineStore('store', () => {
     getCategories();
   };
 
+  const deletePost = async (id) => {
+    const res = await axios.delete(`${HOST}calendar/post/${id}?format=json`, {
+      postId: id,
+    });
+    getAllCalendar();
+  }
+
   return {
     isClicked,
     changeFinishedState,
@@ -136,5 +143,6 @@ export const useStore = defineStore('store', () => {
     editCategory,
     editCurrentCategory,
     deleteCategory,
+    deletePost,
   };
 });

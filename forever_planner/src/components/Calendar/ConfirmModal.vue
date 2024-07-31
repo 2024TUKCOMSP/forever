@@ -12,10 +12,13 @@
 
 <script setup>
 import { useModalStore } from '@/stores/modalStore.js';
+import { useStore } from '@/stores/store';
 
-const { handleClickCloseConfirmModal, handleClickClosePostModal } = useModalStore();
+const { handleClickCloseConfirmModal, handleClickClosePostModal, postData } = useModalStore();
+const { deletePost } = useStore();
 
 const handleClickDelete = () => {
+  deletePost(postData.postId);
   handleClickCloseConfirmModal();
   handleClickClosePostModal();
 };
