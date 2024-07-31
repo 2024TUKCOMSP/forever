@@ -1,11 +1,13 @@
 <template>
 <div class="bg-[#f5f7fd] justify-between">
   <header class="settingHeader">
+    <div class="settingHeaderDiv">
     <button type="button" @click = "backWards" class="settingHeaderBtn"> <i class="fa-solid fa-chevron-left w-[20px] h-[20px]" id="backDrawThing"></i> </button>
+  </div>
   </header>
   <br />
   <div class= "settingScreen">
-    <b><h1>설정</h1></b>
+    <b><h1> 설정</h1></b>
 
     <button type="button" class="defaultBtn">카테고리 편집 <span class="goRight">&gt;</span></button>
 
@@ -38,7 +40,7 @@
 <script>
 import {useRouter} from 'vue-router';
 import { onMounted, ref, watch } from 'vue';
-import axios from 'axios';
+import axios from 'axios'; 
 
 export default {
   name: 'Setting-View',
@@ -119,6 +121,10 @@ export default {
 .settingHeader{
   position: fixed;
   top:0;
+  background-color: #f5f7fd;
+  width:20em
+}
+.settingHeaderDiv{
   background-color: #f5f7fd;
 }
 .settingHeaderBtn{

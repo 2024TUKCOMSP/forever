@@ -36,7 +36,7 @@
   
   <script setup>
   import SomeDayPostCalendar from './SomeDayPostCalendar.vue';
-  import { useModalStore } from '@/stores/modalStore.js';
+  import { useModalStore } from '@/stores/modalStore';
   import { storeToRefs } from 'pinia';
   import { ref } from 'vue'
   

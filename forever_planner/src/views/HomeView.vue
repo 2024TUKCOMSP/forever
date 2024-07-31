@@ -4,11 +4,6 @@
   <PostCategoryModal v-if="postCategoryModalState" />
   <ConfirmModal v-if="confirmModalState" />
 
-  <!--<SomeDayPostCalendar v-if="someDayPostCalendarState" />
-  <SomeDayModalPostVue v-if="someDayPostModalState" />
-  <PostCategoryModal v-if="someDayPostCategoryState" />
-  <ConfirmModal v-if="someDayConfirmModalState" />  -->
-
   <div class="h-screen flex flex-col">
     <div class="planetTxtBar">
       <button type="button" @click="planetBtnClick" class="planetTxtBtn">Planet v</button>
@@ -68,7 +63,7 @@
           </div>
           
           
-          <button type="button" class="todoEditBtn" @click="handleClickCategoryModal">+ 할 일을 추가하세요</button>
+          <button type="button" class="todoEditBtn" @click="someDayTodoDateClick">+ 할 일을 추가하세요</button>
         </div>
       </div>
     </div>
@@ -89,12 +84,12 @@ import PostModal from '@/components/Calendar/Post/PostModal.vue';
 import PostCategoryModal from '@/components/Calendar/Category/PostCategoryModal.vue';
 import ConfirmModal from '@/components/Calendar/ConfirmModal.vue';
 import { useModalStore } from '@/stores/modalStore.js';
-//import SomeDayModalPostVue from '@/components/Calendar/Post/SomeDayModalPostVue.vue'; 
-//import SomeDayPostCalendar from '@/components/Calendar/Post/SomeDayPostCalendar.vue';
-//import SomeDayPostModal from '@/components/Calendar/Post/SomeDayPostModal.vue';
-//import SomeDayPostVue from '@/components/Calendar/Post/SomeDayPostVue.vue';
-//import { useSomeDayModalStore } from '@/stores/useSomeDayModalStore';
 //dddd
+//import SomeDayConfirmModal from '@/components/Calendar/SomeDayConfirmModal.vue';
+//import SomeDayPostModal from '@/components/Calendar/Post/SomeDayPostModal.vue';
+//import SomeDayPostCalendar from '@/components/Calendar/Post/SomeDayPostCalendar.vue';
+
+
 import axios from 'axios';
 
 
@@ -106,10 +101,7 @@ export default {
     PostModal,
     PostCategoryModal,
     ConfirmModal,
-   // SomeDayModalPostVue,
-   // SomeDayPostCalendar,
-   // SomeDayPostModal,
-  //  SomeDayPostVue,
+
   },
    data() {
     return {};
@@ -121,8 +113,6 @@ export default {
     const router = useRouter(); //useRouter로 Vue Router 주입
     const { dateModalState, categoryModalState, postModalState, postCategoryModalState, confirmModalState  } = storeToRefs(useModalStore());
     const { handleClickCategoryModal } = useModalStore();
-    //const {someDayPostCalendarState, someDayConfirmModalState, someDayPostCategoryState, someDayPostModalState} = storeToRefs(useSomeDayModalStore());
-   // const { someDayTodoDateClick } = useSomeDayModalStore();
      const checkTodoTags = ref([]);
     
     const handleStopScroll = () => {
@@ -168,6 +158,10 @@ export default {
         router.push({ path: '/checkTodo', query: { tag: value } });
     }
 
+    const someDayTodoDateClick = () =>{
+      console.log("버튼 눌림");
+    }
+
     return {
       onMounted,
       handleStopScroll,
@@ -198,11 +192,11 @@ export default {
       confirmModalState, 
 
       checkTodoTags,
-    /*  someDayPostCalendarState,
-      someDayConfirmModalState,
-      someDayPostCategoryState,
-      someDayPostModalState,
-      someDayTodoDateClick,*/
+      someDayTodoDateClick,
+      //someDayCategoryModalState,
+      //someDayPostModalState,
+      //someDayPostCategoryModalState,
+      //someDayConfirmModalState, 
     }
   }
 }
