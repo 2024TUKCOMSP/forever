@@ -21,13 +21,13 @@
   import { ref } from 'vue';
   import { storeToRefs } from 'pinia';
   import { useStore } from '@/stores/store';
-  import { useModalStore } from '@/stores/modalStore.js';
+  import { useModalStore } from '@/stores/useSomeDayModalStore';
   
   const store = useStore();
   const { isFinished } = storeToRefs(store);
   const { changeFinishedState } = store;
   const { handleClickPostModal } = useModalStore();
-  
+
   const type = ref("edit")
   </script>
   

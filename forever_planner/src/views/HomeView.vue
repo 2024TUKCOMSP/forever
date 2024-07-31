@@ -4,11 +4,6 @@
   <PostCategoryModal v-if="postCategoryModalState" />
   <ConfirmModal v-if="confirmModalState" />
 
-  <!--<SomeDayPostCalendar v-if="someDayPostCalendarState" />
-  <SomeDayModalPostVue v-if="someDayPostModalState" />
-  <PostCategoryModal v-if="someDayPostCategoryState" />
-  <ConfirmModal v-if="someDayConfirmModalState" />  -->
-
   <div class="h-screen flex flex-col">
     <div class="planetTxtBar">
       <button type="button" @click="planetBtnClick" class="planetTxtBtn">Planet v</button>
@@ -36,10 +31,14 @@
             <p class="userName">디폴트이름</p>
           </div>
         </div>
+
+      <div v-if="settings.setVisibleNotYetTask">
         <button type="button" class="remainingTodoBtn" @click="remainingTodoClick">
           <span>2개의 남은 할 일</span><span class="goRight">></span>
         </button>
-        <div class="todaysTodo">
+      </div>
+
+        <div class="todaysTodo" v-if="settings.setVisibleTodayTask">
           <p>오늘</p>
           <p class="todaysTodoDate">0월 0일</p>
 
@@ -55,7 +54,7 @@
           <button type="button" class="todoEditBtn" @click="handleClickCategoryModal">+ 할 일을 추가하세요</button>
         </div><br />
 
-        <div class="todaysTodo">
+        <div class="todaysTodo" v-if="settings.setVisibleSomeTask">
           <p>언젠가</p>
           
           <div>
@@ -68,7 +67,7 @@
           </div>
           
           
-          <button type="button" class="todoEditBtn" @click="handleClickCategoryModal">+ 할 일을 추가하세요</button>
+          <button type="button" class="todoEditBtn" @click="someDayTodoDateClick">+ 할 일을 추가하세요</button>
         </div>
       </div>
     </div>
@@ -89,12 +88,12 @@ import PostModal from '@/components/Calendar/Post/PostModal.vue';
 import PostCategoryModal from '@/components/Calendar/Category/PostCategoryModal.vue';
 import ConfirmModal from '@/components/Calendar/ConfirmModal.vue';
 import { useModalStore } from '@/stores/modalStore.js';
-//import SomeDayModalPostVue from '@/components/Calendar/Post/SomeDayModalPostVue.vue'; 
-//import SomeDayPostCalendar from '@/components/Calendar/Post/SomeDayPostCalendar.vue';
-//import SomeDayPostModal from '@/components/Calendar/Post/SomeDayPostModal.vue';
-//import SomeDayPostVue from '@/components/Calendar/Post/SomeDayPostVue.vue';
-//import { useSomeDayModalStore } from '@/stores/useSomeDayModalStore';
 //dddd
+//import SomeDayConfirmModal from '@/components/Calendar/SomeDayConfirmModal.vue';
+//import SomeDayPostModal from '@/components/Calendar/Post/SomeDayPostModal.vue';
+//import SomeDayPostCalendar from '@/components/Calendar/Post/SomeDayPostCalendar.vue';
+import SettingView from './SettingView.vue';
+
 import axios from 'axios';
 
 
@@ -106,10 +105,7 @@ export default {
     PostModal,
     PostCategoryModal,
     ConfirmModal,
-   // SomeDayModalPostVue,
-   // SomeDayPostCalendar,
-   // SomeDayPostModal,
-  //  SomeDayPostVue,
+
   },
    data() {
     return {};
@@ -121,17 +117,37 @@ export default {
     const router = useRouter(); //useRouter로 Vue Router 주입
     const { dateModalState, categoryModalState, postModalState, postCategoryModalState, confirmModalState  } = storeToRefs(useModalStore());
     const { handleClickCategoryModal } = useModalStore();
-    //const {someDayPostCalendarState, someDayConfirmModalState, someDayPostCategoryState, someDayPostModalState} = storeToRefs(useSomeDayModalStore());
-   // const { someDayTodoDateClick } = useSomeDayModalStore();
-     const checkTodoTags = ref([]);
-    
-    const handleStopScroll = () => {
-      if(dateModalState.value){
-          document.documentElement.style.overflow = 'hidden';
-        }else{
-          document.documentElement.style.overflow = 'auto';
-        }
+    const checkTodoTags = ref([]);
+    var settings = ref({
+      setVisibleNotYetTask: true,
+      setVisibleTodayTask: true,
+      setVisibleSomeTask: true,
+    });
+
+    const fetchSettings = async () => {
+      try {
+        const response = await axios.put('http://34.146.205.159:8000/Setting/home?format=json', {
+          isVisibleNotYetTask: true,
+          isVisibleTodayTask: true,
+          isVisibleSomeTask: true,
+        });
+        settings.setVisibleNotYetTask = response.isVisibleNotYetTask;
+        settings.setVisibleTodayTask = response.isVisibleTodayTask;
+        settings.setVisibleSomeTask = response.isVisibleSomeTask;
+        console.log(JSON.stringify(settings) + "확인");
+        console.log(JSON.stringify(response));
+      } catch (error) {
+        console.error("데이터 받아오기 실패", error);
+      }
     };
+    
+    function handleStopScroll() {
+      if (dateModalState.value) {
+        document.documentElement.style.overflow = 'hidden';
+      } else {
+        document.documentElement.style.overflow = 'auto';
+      }
+    }
 
     const getCheckTodoModal = async () =>{
       try{
@@ -146,6 +162,7 @@ export default {
     onMounted(async() => {
       isClicked.value = 'home';
       window.scrollTo(0, 0);
+      await fetchSettings();
       await getCheckTodoModal();
     });
 
@@ -166,6 +183,12 @@ export default {
     const checkTodoTagClick = (value) =>{
       console.log(value);
         router.push({ path: '/checkTodo', query: { tag: value } });
+    }
+
+    const someDayTodoDateClick = () =>{
+      console.log("버튼 눌림");
+      //handleClickCategoryModal처럼 동작
+
     }
 
     return {
@@ -198,11 +221,15 @@ export default {
       confirmModalState, 
 
       checkTodoTags,
-    /*  someDayPostCalendarState,
-      someDayConfirmModalState,
-      someDayPostCategoryState,
-      someDayPostModalState,
-      someDayTodoDateClick,*/
+      someDayTodoDateClick,
+      settings,
+
+      fetchSettings,
+      
+      //someDayCategoryModalState,
+      //someDayPostModalState,
+      //someDayPostCategoryModalState,
+      //someDayConfirmModalState, 
     }
   }
 }

@@ -1,20 +1,24 @@
 <template>
 <div class="bg-[#f5f7fd] justify-between">
   <header class="settingHeader">
+    <div class="settingHeaderDiv">
     <button type="button" @click = "backWards" class="settingHeaderBtn"> <i class="fa-solid fa-chevron-left w-[20px] h-[20px]" id="backDrawThing"></i> </button>
+  </div>
   </header>
   <br />
-  <div class= "settingScreen">
-    <b><h1>설정</h1></b>
+  <div class= "settingScreen" @click = "closeEditCategoryModal">
+    <CategoryModal v-if ="editModeState == true" ref="categoryModal" />
+    <b><h1> 설정</h1></b>
 
-    <button type="button" class="defaultBtn">카테고리 편집 <span class="goRight">&gt;</span></button>
+    <button type="button" class="defaultBtn" @click="editCategoryBtnClick">카테고리 편집 <span class="goRight">&gt;</span></button>
 
     <br /><br />
 
     <p class="settingP">화면 모드</p>
     <div class="settingModeCss">
-      <button type="button" class="screenMode" @click="isClickScreenModeBtn('Light')">라이트 모드 <span class="isChecked" id ="lightModeTxt"></span></button>
-      <button type="button" class="screenMode" @click="isClickScreenModeBtn('Dark')">다크 모드<span class ="isChecked" id="darkModeTxt"></span></button>
+      <button type="button" class="screenMode" @click="isClickScreenModeBtn('Light')">라이트 모드 <span class="isChecked" id ="lightModeTxt"><i class="fa-solid fa-check"></i></span></button>
+     <!-- <button type="button" class="screenMode" @click="isClickScreenModeBtn('Dark')">다크 모드<span class ="isChecked" id="darkModeTxt"></span></button> -->
+      <button type="button" class="screenMode" @click="isClickScreenModeBtn('Auto')">시스템(자동)<span class ="isChecked" id="autoModeTxt"></span></button>
     </div> <br />
 
     <p class ="settingP">홈 화면 설정</p>
@@ -24,39 +28,44 @@
       <p class ="settingModeP">언젠가<input role ="switch" type="checkbox" class="settingModeToggle" v-model ="settings.isVisibleSomeTask" /></p>
     </div><br />
 
-    <p class="settingP">캘린더 설정</p>
+    <!--<p class="settingP">캘린더 설정</p>
     <button type="button" class="defaultBtn">캘린더에 표시할 항목</button> <br />
 
     <button type="button" class ="defaultBtn">지난 달 통계 확인하기<span class="goRight">&gt;</span></button><br /><br /><br />
 
     <button type="button" class ="defaultBtn2">로그아웃</button><br /><br /><br />
-    <button type="button" class ="defaultBtn2">탈퇴</button><br />
+    <button type="button" class ="defaultBtn2">탈퇴</button><br /> -->
   </div>
 </div>
 </template>
 
 <script>
 import {useRouter} from 'vue-router';
-import { onMounted, ref, watch } from 'vue';
-import axios from 'axios';
+import { onMounted, ref, watch, onUnmounted, nextTick } from 'vue';
+import axios from 'axios'; 
+import CategoryModal from '@/components/Calendar/Category/CategoryModal.vue';
 
 export default {
   name: 'Setting-View',
+  components : {
+    CategoryModal,
+  },
   data() {
     return {};
   },
   setup() {
     const router = useRouter(); 
+    const editModeState = ref(false);
     const settings = ref({
-      isVisibleNotYetTask: false,
-      isVisibleTodayTask: false,
-      isVisibleSomeTask: false,
+      isVisibleNotYetTask: true,
+      isVisibleTodayTask: true,
+      isVisibleSomeTask: true,
     })
 
     const updateSettings = async (key, value) => {
       try {
         const response = await axios.put(`http://34.146.205.159:8000/Setting/home`, settings.value);
-        console.log("설정 업데이트", response.data);
+        console.log("설정 업데이트", response, settings.value);
       }catch(error){
         console.log("업테이트 중 오류 발생", error);
       }
@@ -68,6 +77,7 @@ export default {
 
     onMounted(()=>{
       window.scrollTo(0, 0);
+      
     })
 
     //setting Object가 변경되었을 때에 설정 업데이트. 
@@ -78,21 +88,44 @@ export default {
     var isClickScreenModeBtn = (txt) => {
         if(txt == 'Dark'){
           //다크 모드 동작
-          document.getElementById("test").innerHTML = "변경된 span값";
-          document.getElementById("test").innerHTML = "변경된 span값";
-        }else{
+          //document.getElementById("darkModeTxt").innerHTML="<i class=\"fa-solid fa-check\"></i>";
+          document.getElementById("lightModeTxt").innerHTML="";
+          document.getElementById("autoModeTxt").innerHTML="";
+          alert("구현중..");
+        }else if(txt == 'Light'){
           //라이트 모드 동작
-          document.getElementById("test").innerHTML = "변경된 span값";
-          document.getElementById("test").innerHTML = "변경된 span값";
+          document.getElementById("lightModeTxt").innerHTML="<i class=\"fa-solid fa-check\"></i>";
+          //document.getElementById("darkModeTxt").innerHTML="";
+          document.getElementById("autoModeTxt").innerHTML="";
+        }else{
+          document.getElementById("lightModeTxt").innerHTML="";
+          //document.getElementById("darkModeTxt").innerHTML="";
+          document.getElementById("autoModeTxt").innerHTML="<i class=\"fa-solid fa-check\"></i>";
         }
       }
+
+      const editCategoryBtnClick = () =>{
+        setTimeout(()=>{
+          editModeState.value = !editModeState.value;
+          console.log("카테고리 편집 버튼 클릭"+editModeState.value);
+        },10);
+      };
+
+      const closeEditCategoryModal = () =>{
+        if(editModeState.value == true){
+          editModeState.value = false;
+        }
+      }
+
     return{
       backWards,
       isClickScreenModeBtn,
       onMounted,
       updateSettings,
       settings,
-
+      editCategoryBtnClick,
+      editModeState,
+      closeEditCategoryModal,
     }
   }
 }
@@ -119,6 +152,10 @@ export default {
 .settingHeader{
   position: fixed;
   top:0;
+  background-color: #f5f7fd;
+  width: 31em;
+}
+.settingHeaderDiv{
   background-color: #f5f7fd;
 }
 .settingHeaderBtn{
