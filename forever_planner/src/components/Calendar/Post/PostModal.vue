@@ -15,7 +15,7 @@
                 <div class="flex items-center" :style="getCalendarIconColor()" @click="clickCalendarButton()">
                   <i class="fa-solid fa-calendar-day w-5 h-5"></i>
                 </div>
-                <div class="text-[#00000050]">{{ postMonth }}월 {{ postDate }}일 ({{ dayOfWeek }})</div>
+                <div class="text-[#00000050]">7월 12일 (금)</div>
                 <div class="flex items-center" :style="getContentIconColor()" @click="clickContentButton()">
                   <i class="fa-solid fa-note-sticky w-5 h-5"></i>
                 </div>
@@ -27,7 +27,7 @@
             </div>
         </div>
       </div>
-      <div v-if="isCalendarActive" class="w-full" @click.stop>
+      <div v-if="isCalendarActive" class="w-full">
         <PostCalendar />
       </div>
     </div>
@@ -38,14 +38,10 @@
 import PostCalendar from './PostCalendar.vue';
 import { useModalStore } from '@/stores/modalStore.js';
 import { storeToRefs } from 'pinia';
-import { useStore } from '@/stores/store.js';
-import { onMounted, ref, computed, watch } from 'vue';
-import { getDay } from 'date-fns';
+import { onMounted, ref } from 'vue'
 
 const { handleClickClosePostModal, handleClickPostCategoryModal, handleClickConfirmModal } = useModalStore();
-const { postModalType, categoryColor, postData, modalDate } = storeToRefs(useModalStore());
-const { currentMonth, currentYear, postMonth, postYear, postDate } = storeToRefs(useStore());
-const { updatePost } = useStore();
+const { postModalType, categoryColor, postData } = storeToRefs(useModalStore());
 
 const isCalendarActive = ref(false);
 const isContentActive = ref(false);
@@ -70,7 +66,6 @@ const handleClickCategory = () => {
 };
 
 const submit = () => {
-  updatePost(postData.value.postId, postTitle.value, content.value, postData.value.category.categoryId);
   handleClickClosePostModal();
 };
 
@@ -88,28 +83,12 @@ const getContentIconColor = () => {
   else return { color: '#00000050', transition: 'color 0.1s' };
 };
 
-const daysOfWeek = ['일', '월', '화', '수', '목', '금', '토'];
-
-const dayOfWeek = computed(() => {
-  const date = new Date(postYear.value, postMonth.value - 1, postDate.value);
-  const day = getDay(date);
-  return daysOfWeek[day];
-});
-
-watch([postDate, postMonth, postYear], () => {
-  dayOfWeek.value;
-});
-
 onMounted(() => {
-  postMonth.value = currentMonth.value;
-  postYear.value = currentYear.value;
-  postDate.value = modalDate.value;
   if(postData.value) {
     postTitle.value = postData.value.title;
     content.value = postData.value.content;
     category.value = postData.value.category.categoryTitle;
   };
-  console.log(postData.value)
 });
 </script>
 
