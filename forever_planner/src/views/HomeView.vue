@@ -32,13 +32,13 @@
           </div>
         </div>
 
-      <div v-if="settings.isVisibleNotYetTask">
+      <div v-if="settings.setVisibleNotYetTask">
         <button type="button" class="remainingTodoBtn" @click="remainingTodoClick">
           <span>2개의 남은 할 일</span><span class="goRight">></span>
         </button>
       </div>
 
-        <div class="todaysTodo" v-if="settings.isVisibleTodayTask">
+        <div class="todaysTodo" v-if="settings.setVisibleTodayTask">
           <p>오늘</p>
           <p class="todaysTodoDate">0월 0일</p>
 
@@ -54,7 +54,7 @@
           <button type="button" class="todoEditBtn" @click="handleClickCategoryModal">+ 할 일을 추가하세요</button>
         </div><br />
 
-        <div class="todaysTodo" v-if="settings.isVisibleSomeTask">
+        <div class="todaysTodo" v-if="settings.setVisibleSomeTask">
           <p>언젠가</p>
           
           <div>
@@ -118,19 +118,36 @@ export default {
     const { dateModalState, categoryModalState, postModalState, postCategoryModalState, confirmModalState  } = storeToRefs(useModalStore());
     const { handleClickCategoryModal } = useModalStore();
     const checkTodoTags = ref([]);
-    const settings = ref({
-      isVisibleNotYetTask: true,
-      isVisibleTodayTask: true,
-      isVisibleSomeTask: true,
-    })
-    
-    const handleStopScroll = () => {
-      if(dateModalState.value){
-          document.documentElement.style.overflow = 'hidden';
-        }else{
-          document.documentElement.style.overflow = 'auto';
-        }
+    var settings = ref({
+      setVisibleNotYetTask: true,
+      setVisibleTodayTask: true,
+      setVisibleSomeTask: true,
+    });
+
+    const fetchSettings = async () => {
+      try {
+        const response = await axios.put('http://34.146.205.159:8000/Setting/home?format=json', {
+          isVisibleNotYetTask: true,
+          isVisibleTodayTask: true,
+          isVisibleSomeTask: true,
+        });
+        settings.setVisibleNotYetTask = response.isVisibleNotYetTask;
+        settings.setVisibleTodayTask = response.isVisibleTodayTask;
+        settings.setVisibleSomeTask = response.isVisibleSomeTask;
+        console.log(JSON.stringify(settings) + "확인");
+        console.log(JSON.stringify(response));
+      } catch (error) {
+        console.error("데이터 받아오기 실패", error);
+      }
     };
+    
+    function handleStopScroll() {
+      if (dateModalState.value) {
+        document.documentElement.style.overflow = 'hidden';
+      } else {
+        document.documentElement.style.overflow = 'auto';
+      }
+    }
 
     const getCheckTodoModal = async () =>{
       try{
@@ -145,6 +162,7 @@ export default {
     onMounted(async() => {
       isClicked.value = 'home';
       window.scrollTo(0, 0);
+      await fetchSettings();
       await getCheckTodoModal();
     });
 
@@ -205,6 +223,9 @@ export default {
       checkTodoTags,
       someDayTodoDateClick,
       settings,
+
+      fetchSettings,
+      
       //someDayCategoryModalState,
       //someDayPostModalState,
       //someDayPostCategoryModalState,

@@ -65,7 +65,7 @@ export default {
     const updateSettings = async (key, value) => {
       try {
         const response = await axios.put(`http://34.146.205.159:8000/Setting/home`, settings.value);
-        console.log("설정 업데이트", response, settings.value, beHomeScreenSetting.value);
+        console.log("설정 업데이트", response, settings.value);
       }catch(error){
         console.log("업테이트 중 오류 발생", error);
       }
