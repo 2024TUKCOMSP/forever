@@ -19,7 +19,8 @@
                 <div class="flex items-center" :style="getContentIconColor()" @click="clickContentButton()">
                   <i class="fa-solid fa-note-sticky w-5 h-5"></i>
                 </div>
-                <div class="text-[#00000050]" @click="handleClickCategory()">{{ category }}</div>
+                <div v-if="currentCategory.categoryTitle" class="text-[#00000050]" @click="handleClickCategory()">{{ currentCategory.categoryTitle }}</div>
+                <div v-else class="text-[#00000050]" @click="handleClickCategory()">{{ category }}</div>
               </div>
               <div class="flex items-center icon-color" @click="submit()">
                 <i class="fa-solid fa-paper-plane w-5 h-5"></i>
@@ -43,9 +44,9 @@ import { onMounted, ref, computed, watch } from 'vue';
 import { getDay } from 'date-fns';
 
 const { handleClickClosePostModal, handleClickPostCategoryModal, handleClickConfirmModal } = useModalStore();
-const { postModalType, categoryColor, postData, modalDate } = storeToRefs(useModalStore());
+const { postModalType, categoryColor, postData, modalDate, currentCategory } = storeToRefs(useModalStore());
 const { currentMonth, currentYear, postMonth, postYear, postDate } = storeToRefs(useStore());
-const { updatePost } = useStore();
+const { updatePost, createPost } = useStore();
 
 const isCalendarActive = ref(false);
 const isContentActive = ref(false);
@@ -70,7 +71,8 @@ const handleClickCategory = () => {
 };
 
 const submit = () => {
-  updatePost(postData.value.postId, postTitle.value, content.value, postData.value.category.categoryId);
+  if(postModalType.value === "edit") updatePost(postData.value.postId, postTitle.value, content.value, currentCategory.value.categoryId);
+  else createPost(postTitle.value, content.value, currentCategory.value.categoryId);
   handleClickClosePostModal();
 };
 
@@ -105,11 +107,12 @@ onMounted(() => {
   postYear.value = currentYear.value;
   postDate.value = modalDate.value;
   if(postData.value) {
+    currentCategory.value = [];
     postTitle.value = postData.value.title;
     content.value = postData.value.content;
     category.value = postData.value.category.categoryTitle;
+    currentCategory.value = {categoryId: postData.value.category.categoryId}
   };
-  console.log(postData.value)
 });
 </script>
 

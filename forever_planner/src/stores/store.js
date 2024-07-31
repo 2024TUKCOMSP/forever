@@ -14,6 +14,10 @@ export const useStore = defineStore('store', () => {
   const currentColors = ref([]);
   const usingTheme = ref([]);
   const postDate = ref(0);
+  const categories = ref([]);
+  const currentCategoryId = ref("");
+  const selectedCategory = ref([]);
+  const editCategory = ref([]);
 
   const changeFinishedState = async (state, postId) => {
     const res = await axios.put(`${HOST}calendar/post/finish?format=json`, {
@@ -37,6 +41,7 @@ export const useStore = defineStore('store', () => {
   };
 
   const getAllCalendar = async () => {
+    postDatas.value = [];
     const res = await axios.post(`${HOST}calendar/all?format=json`, {
       calendarMonth: currentMonth.value,
       calendarYear: currentYear.value,
@@ -64,6 +69,54 @@ export const useStore = defineStore('store', () => {
     getAllCalendar();
   };
 
+  const createPost = async (title, content, categoryId) => {
+    const res = await axios.post(`${HOST}calendar/post/create?format=json`, {
+      title: title,
+      content: content,
+      categoryId: categoryId,
+      calendarMonth: postMonth.value,
+      calendarYear: postYear.value,
+      calendarDate: postDate.value,
+    });
+    getAllCalendar();
+  };
+
+  const getCategories = async () => {
+    const res = await axios.get(`${HOST}category/all?format=json`);
+    categories.value = res.data;
+  };
+
+  const createCategory = async (num, title) => {
+    const res = await axios.post(`${HOST}category/create`, {
+      categoryColor: num,
+      categoryTitle: title,
+    });
+    getCategories();
+  };
+
+  const editCurrentCategory = async (id, num, title) => {
+    const res = await axios.put(`${HOST}category/edit?format=json`, {
+      categoryId: id,
+      categoryColor: num,
+      categoryTitle: title,
+    });
+    getCategories();
+  };
+
+  const deleteCategory = async (id) => {
+    const res = await axios.delete(`${HOST}category/${id}?format=json`, {
+      categoryId: id,
+    });
+    getCategories();
+  };
+
+  const deletePost = async (id) => {
+    const res = await axios.delete(`${HOST}calendar/post/${id}?format=json`, {
+      postId: id,
+    });
+    getAllCalendar();
+  }
+
   return {
     isClicked,
     changeFinishedState,
@@ -81,5 +134,15 @@ export const useStore = defineStore('store', () => {
     postYear,
     postDate,
     updatePost,
+    getCategories,
+    categories,
+    createPost,
+    currentCategoryId,
+    selectedCategory,
+    createCategory,
+    editCategory,
+    editCurrentCategory,
+    deleteCategory,
+    deletePost,
   };
 });

@@ -12,6 +12,7 @@ export const useModalStore = defineStore('modalStore', () => {
   const modalDate = ref(0);
   const categoryColor = ref("");
   const postData = ref([]);
+  const currentCategory = ref([]);
 
   const handleClickDateModal = (date, data) => {
     datePostDatas.value = data;
@@ -79,5 +80,6 @@ export const useModalStore = defineStore('modalStore', () => {
     modalDate,
     categoryColor,
     postData,
+    currentCategory,
   };
 });
