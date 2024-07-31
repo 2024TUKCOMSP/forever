@@ -17,7 +17,7 @@
     <p class="settingP">화면 모드</p>
     <div class="settingModeCss">
       <button type="button" class="screenMode" @click="isClickScreenModeBtn('Light')">라이트 모드 <span class="isChecked" id ="lightModeTxt"><i class="fa-solid fa-check"></i></span></button>
-      <button type="button" class="screenMode" @click="isClickScreenModeBtn('Dark')">다크 모드<span class ="isChecked" id="darkModeTxt"></span></button>
+     <!-- <button type="button" class="screenMode" @click="isClickScreenModeBtn('Dark')">다크 모드<span class ="isChecked" id="darkModeTxt"></span></button> -->
       <button type="button" class="screenMode" @click="isClickScreenModeBtn('Auto')">시스템(자동)<span class ="isChecked" id="autoModeTxt"></span></button>
     </div> <br />
 
@@ -28,13 +28,13 @@
       <p class ="settingModeP">언젠가<input role ="switch" type="checkbox" class="settingModeToggle" v-model ="settings.isVisibleSomeTask" /></p>
     </div><br />
 
-    <p class="settingP">캘린더 설정</p>
+    <!--<p class="settingP">캘린더 설정</p>
     <button type="button" class="defaultBtn">캘린더에 표시할 항목</button> <br />
 
     <button type="button" class ="defaultBtn">지난 달 통계 확인하기<span class="goRight">&gt;</span></button><br /><br /><br />
 
     <button type="button" class ="defaultBtn2">로그아웃</button><br /><br /><br />
-    <button type="button" class ="defaultBtn2">탈퇴</button><br />
+    <button type="button" class ="defaultBtn2">탈퇴</button><br /> -->
   </div>
 </div>
 </template>
@@ -65,7 +65,7 @@ export default {
     const updateSettings = async (key, value) => {
       try {
         const response = await axios.put(`http://34.146.205.159:8000/Setting/home`, settings.value);
-        console.log("설정 업데이트", response.data);
+        console.log("설정 업데이트", response, settings.value, beHomeScreenSetting.value);
       }catch(error){
         console.log("업테이트 중 오류 발생", error);
       }
@@ -77,6 +77,7 @@ export default {
 
     onMounted(()=>{
       window.scrollTo(0, 0);
+      
     })
 
     //setting Object가 변경되었을 때에 설정 업데이트. 
@@ -87,18 +88,18 @@ export default {
     var isClickScreenModeBtn = (txt) => {
         if(txt == 'Dark'){
           //다크 모드 동작
-          document.getElementById("darkModeTxt").innerHTML="<i class=\"fa-solid fa-check\"></i>";
+          //document.getElementById("darkModeTxt").innerHTML="<i class=\"fa-solid fa-check\"></i>";
           document.getElementById("lightModeTxt").innerHTML="";
           document.getElementById("autoModeTxt").innerHTML="";
           alert("구현중..");
         }else if(txt == 'Light'){
           //라이트 모드 동작
           document.getElementById("lightModeTxt").innerHTML="<i class=\"fa-solid fa-check\"></i>";
-          document.getElementById("darkModeTxt").innerHTML="";
+          //document.getElementById("darkModeTxt").innerHTML="";
           document.getElementById("autoModeTxt").innerHTML="";
         }else{
           document.getElementById("lightModeTxt").innerHTML="";
-          document.getElementById("darkModeTxt").innerHTML="";
+          //document.getElementById("darkModeTxt").innerHTML="";
           document.getElementById("autoModeTxt").innerHTML="<i class=\"fa-solid fa-check\"></i>";
         }
       }

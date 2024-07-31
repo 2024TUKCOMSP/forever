@@ -31,10 +31,14 @@
             <p class="userName">디폴트이름</p>
           </div>
         </div>
+
+      <div v-if="settings.isVisibleNotYetTask">
         <button type="button" class="remainingTodoBtn" @click="remainingTodoClick">
           <span>2개의 남은 할 일</span><span class="goRight">></span>
         </button>
-        <div class="todaysTodo">
+      </div>
+
+        <div class="todaysTodo" v-if="settings.isVisibleTodayTask">
           <p>오늘</p>
           <p class="todaysTodoDate">0월 0일</p>
 
@@ -50,7 +54,7 @@
           <button type="button" class="todoEditBtn" @click="handleClickCategoryModal">+ 할 일을 추가하세요</button>
         </div><br />
 
-        <div class="todaysTodo">
+        <div class="todaysTodo" v-if="settings.isVisibleSomeTask">
           <p>언젠가</p>
           
           <div>
@@ -88,7 +92,7 @@ import { useModalStore } from '@/stores/modalStore.js';
 //import SomeDayConfirmModal from '@/components/Calendar/SomeDayConfirmModal.vue';
 //import SomeDayPostModal from '@/components/Calendar/Post/SomeDayPostModal.vue';
 //import SomeDayPostCalendar from '@/components/Calendar/Post/SomeDayPostCalendar.vue';
-
+import SettingView from './SettingView.vue';
 
 import axios from 'axios';
 
@@ -113,7 +117,12 @@ export default {
     const router = useRouter(); //useRouter로 Vue Router 주입
     const { dateModalState, categoryModalState, postModalState, postCategoryModalState, confirmModalState  } = storeToRefs(useModalStore());
     const { handleClickCategoryModal } = useModalStore();
-     const checkTodoTags = ref([]);
+    const checkTodoTags = ref([]);
+    const settings = ref({
+      isVisibleNotYetTask: true,
+      isVisibleTodayTask: true,
+      isVisibleSomeTask: true,
+    })
     
     const handleStopScroll = () => {
       if(dateModalState.value){
@@ -160,6 +169,8 @@ export default {
 
     const someDayTodoDateClick = () =>{
       console.log("버튼 눌림");
+      //handleClickCategoryModal처럼 동작
+
     }
 
     return {
@@ -193,6 +204,7 @@ export default {
 
       checkTodoTags,
       someDayTodoDateClick,
+      settings,
       //someDayCategoryModalState,
       //someDayPostModalState,
       //someDayPostCategoryModalState,
