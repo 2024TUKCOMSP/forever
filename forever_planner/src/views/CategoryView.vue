@@ -1,10 +1,11 @@
 <template>
   <div class="w-full h-screen flex flex-col justify-between bg-[#f5f7fd]">
     <div class="w-full p-6 flex flex-col gap-8">
-      <div class="w-full">
+      <div class="w-full flex justify-between items-center">
         <div @click="clickGoBehind()">
          <i class="fa-solid fa-chevron-left h-[30px] w-[30px]"></i>
         </div>
+        <div v-if="editCategory.categoryId" @click="clickDeleteCategory(editCategory.categoryId)" class="text-[#FF0000]">삭제</div>
       </div>
       <input class="w-full h-16 rounded-2xl p-4 text-2xl focus:outline-none" v-model="title" placeholder="카테고리를 입력하세요" maxlength="10"/>
       <div class="bg-white rounded-2xl p-6 flex flex-col items-center">
@@ -44,6 +45,10 @@ const clickGoBehind = () => {
   editCategory.value = [];
 };
 
+const clickDeleteCategory = (id) => {
+  deleteCategory(id);
+  router.go(-1);
+  editCategory.value = [];
 };
 
 const saveCategory = () => {

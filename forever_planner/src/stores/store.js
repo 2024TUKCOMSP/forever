@@ -102,6 +102,14 @@ export const useStore = defineStore('store', () => {
     });
     getCategories();
   };
+
+  const deleteCategory = async (id) => {
+    const res = await axios.delete(`${HOST}category/${id}?format=json`, {
+      categoryId: id,
+    });
+    getCategories();
+  };
+
   return {
     isClicked,
     changeFinishedState,
@@ -127,5 +135,6 @@ export const useStore = defineStore('store', () => {
     createCategory,
     editCategory,
     editCurrentCategory,
+    deleteCategory,
   };
 });
