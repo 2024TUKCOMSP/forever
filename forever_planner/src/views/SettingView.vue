@@ -6,17 +6,19 @@
   </div>
   </header>
   <br />
-  <div class= "settingScreen">
+  <div class= "settingScreen" @click = "closeEditCategoryModal">
+    <CategoryModal v-if ="editModeState == true" ref="categoryModal" />
     <b><h1> 설정</h1></b>
 
-    <button type="button" class="defaultBtn">카테고리 편집 <span class="goRight">&gt;</span></button>
+    <button type="button" class="defaultBtn" @click="editCategoryBtnClick">카테고리 편집 <span class="goRight">&gt;</span></button>
 
     <br /><br />
 
     <p class="settingP">화면 모드</p>
     <div class="settingModeCss">
-      <button type="button" class="screenMode" @click="isClickScreenModeBtn('Light')">라이트 모드 <span class="isChecked" id ="lightModeTxt"></span></button>
+      <button type="button" class="screenMode" @click="isClickScreenModeBtn('Light')">라이트 모드 <span class="isChecked" id ="lightModeTxt"><i class="fa-solid fa-check"></i></span></button>
       <button type="button" class="screenMode" @click="isClickScreenModeBtn('Dark')">다크 모드<span class ="isChecked" id="darkModeTxt"></span></button>
+      <button type="button" class="screenMode" @click="isClickScreenModeBtn('Auto')">시스템(자동)<span class ="isChecked" id="autoModeTxt"></span></button>
     </div> <br />
 
     <p class ="settingP">홈 화면 설정</p>
@@ -39,20 +41,25 @@
 
 <script>
 import {useRouter} from 'vue-router';
-import { onMounted, ref, watch } from 'vue';
+import { onMounted, ref, watch, onUnmounted, nextTick } from 'vue';
 import axios from 'axios'; 
+import CategoryModal from '@/components/Calendar/Category/CategoryModal.vue';
 
 export default {
   name: 'Setting-View',
+  components : {
+    CategoryModal,
+  },
   data() {
     return {};
   },
   setup() {
     const router = useRouter(); 
+    const editModeState = ref(false);
     const settings = ref({
-      isVisibleNotYetTask: false,
-      isVisibleTodayTask: false,
-      isVisibleSomeTask: false,
+      isVisibleNotYetTask: true,
+      isVisibleTodayTask: true,
+      isVisibleSomeTask: true,
     })
 
     const updateSettings = async (key, value) => {
@@ -80,21 +87,44 @@ export default {
     var isClickScreenModeBtn = (txt) => {
         if(txt == 'Dark'){
           //다크 모드 동작
-          document.getElementById("test").innerHTML = "변경된 span값";
-          document.getElementById("test").innerHTML = "변경된 span값";
-        }else{
+          document.getElementById("darkModeTxt").innerHTML="<i class=\"fa-solid fa-check\"></i>";
+          document.getElementById("lightModeTxt").innerHTML="";
+          document.getElementById("autoModeTxt").innerHTML="";
+          alert("구현중..");
+        }else if(txt == 'Light'){
           //라이트 모드 동작
-          document.getElementById("test").innerHTML = "변경된 span값";
-          document.getElementById("test").innerHTML = "변경된 span값";
+          document.getElementById("lightModeTxt").innerHTML="<i class=\"fa-solid fa-check\"></i>";
+          document.getElementById("darkModeTxt").innerHTML="";
+          document.getElementById("autoModeTxt").innerHTML="";
+        }else{
+          document.getElementById("lightModeTxt").innerHTML="";
+          document.getElementById("darkModeTxt").innerHTML="";
+          document.getElementById("autoModeTxt").innerHTML="<i class=\"fa-solid fa-check\"></i>";
         }
       }
+
+      const editCategoryBtnClick = () =>{
+        setTimeout(()=>{
+          editModeState.value = !editModeState.value;
+        console.log("카테고리 편집 버튼 클릭"+editModeState.value);
+        },10);
+      };
+
+      const closeEditCategoryModal = () =>{
+        if(editModeState.value == true){
+          editModeState.value = false;
+        }
+      }
+
     return{
       backWards,
       isClickScreenModeBtn,
       onMounted,
       updateSettings,
       settings,
-
+      editCategoryBtnClick,
+      editModeState,
+      closeEditCategoryModal,
     }
   }
 }
@@ -122,7 +152,7 @@ export default {
   position: fixed;
   top:0;
   background-color: #f5f7fd;
-  width:20em
+  width: 31em;
 }
 .settingHeaderDiv{
   background-color: #f5f7fd;
