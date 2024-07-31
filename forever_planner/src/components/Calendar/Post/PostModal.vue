@@ -19,7 +19,7 @@
                 <div class="flex items-center" :style="getContentIconColor()" @click="clickContentButton()">
                   <i class="fa-solid fa-note-sticky w-5 h-5"></i>
                 </div>
-                <div v-if="currentCategory.length !== 0" class="text-[#00000050]" @click="handleClickCategory()">{{ currentCategory.categoryTitle }}</div>
+                <div v-if="currentCategory.categoryTitle" class="text-[#00000050]" @click="handleClickCategory()">{{ currentCategory.categoryTitle }}</div>
                 <div v-else class="text-[#00000050]" @click="handleClickCategory()">{{ category }}</div>
               </div>
               <div class="flex items-center icon-color" @click="submit()">
@@ -44,8 +44,8 @@ import { onMounted, ref, computed, watch } from 'vue';
 import { getDay } from 'date-fns';
 
 const { handleClickClosePostModal, handleClickPostCategoryModal, handleClickConfirmModal } = useModalStore();
-const { postModalType, categoryColor, postData, modalDate, currentCategory, postCategoryModalState } = storeToRefs(useModalStore());
-const { currentMonth, currentYear, postMonth, postYear, postDate, currentCategoryId } = storeToRefs(useStore());
+const { postModalType, categoryColor, postData, modalDate, currentCategory } = storeToRefs(useModalStore());
+const { currentMonth, currentYear, postMonth, postYear, postDate } = storeToRefs(useStore());
 const { updatePost, createPost } = useStore();
 
 const isCalendarActive = ref(false);
@@ -72,7 +72,7 @@ const handleClickCategory = () => {
 
 const submit = () => {
   if(postModalType.value === "edit") updatePost(postData.value.postId, postTitle.value, content.value, currentCategory.value.categoryId);
-  else createPost(postTitle.value, content.value, currentCategoryId.value);
+  else createPost(postTitle.value, content.value, currentCategory.value.categoryId);
   handleClickClosePostModal();
 };
 
@@ -103,14 +103,15 @@ watch([postDate, postMonth, postYear], () => {
 });
 
 onMounted(() => {
-  currentCategory.value = [];
   postMonth.value = currentMonth.value;
   postYear.value = currentYear.value;
   postDate.value = modalDate.value;
   if(postData.value) {
+    currentCategory.value = [];
     postTitle.value = postData.value.title;
     content.value = postData.value.content;
     category.value = postData.value.category.categoryTitle;
+    currentCategory.value = {categoryId: postData.value.category.categoryId}
   };
 });
 </script>

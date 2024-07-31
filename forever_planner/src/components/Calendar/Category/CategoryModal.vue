@@ -65,6 +65,7 @@ import { useRouter } from 'vue-router';
 const router = useRouter();
 const type = ref("add");
 const { handleClickCloseCategoryModal, handleClickPostModal } = useModalStore();
+const { currentCategory } = storeToRefs(useModalStore());
 const { getCategories } = useStore();
 const { categories, usingTheme, currentCategoryId } = storeToRefs(useStore());
 
@@ -79,7 +80,9 @@ const clickMoveCategory = () => {
 };
 
 const clickMakePost = (category) => {
+  currentCategory.value = category;
   currentCategoryId.value = category.categoryId;
+  handleClickCloseCategoryModal();
   handleClickPostModal(type.value, getColor(category));
 };
 
