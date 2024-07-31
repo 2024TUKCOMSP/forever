@@ -24,7 +24,6 @@ const { getCategories } = useStore();
 const { categories, usingTheme } = storeToRefs(useStore());
 
 const confirm = (category) => {
-  console.log(category.categoryId);
   handleClickClosePostCategoryModal();
 };
 
@@ -34,8 +33,6 @@ const getBackgroundColor = (category) => {
 
 onMounted(async () => {
   await getCategories();
-  console.log(categories.value)
-  console.log(usingTheme.value.colorList)
 });
 </script>
 
