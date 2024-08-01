@@ -1,11 +1,11 @@
 <template>
   <div class="remainingSettingDiv">
    <!-- <div v-if="remainingTodos.length > 0">-->
-    <div v-for="(todo, index) in remainingTodos" :key="index" class="batchRemainingTodo" >
+    <div v-for="(todo, index) in remainingTodos" :key="index" class="batchRemainingTodo"  >
        <b><p class="batchP">D<span class="remainingDate">{{ todo.daycount }}</span></p></b>
         <p class="remainingTodoDate">7월 {{ todo.calendarDate }}일</p>
         <button type="button" class="delayButton">미루기</button>
-        <button type="button" class="todoEditBtn" @click="todaysTodoDateClick">
+        <button type="button" class="todoEditBtn" @click="todaysTodoDateClick" :style="backgroundColor(todo.post.category.categoryColor)">
           <p class="todoTag">{{ todo.post.category.categoryTitle }}</p>
           <p class="todoTxt">{{ todo.post.title }}</p>
           <button type="button" class ="todoCheck" ><i class="fa-regular fa-square"></i></button>
@@ -18,7 +18,15 @@
 
 
 <script setup>
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, computed } from 'vue';
+import { useStore } from '@/stores/store';
+import { storeToRefs } from 'pinia';
+
+const store = useStore();
+const { colors } = storeToRefs(store);
+const { getColors } = store;
+
+const usingTheme = ref(null);
 
 const props = defineProps({
     remainingTodos: {
@@ -27,7 +35,16 @@ const props = defineProps({
     }
 })
 
-onMounted(() => {
+const backgroundColor = (backgroundColor) => {
+  console.log(backgroundColor);
+  console.log(usingTheme.value);
+ // if (usingTheme.value == null) return { backgroundColor: '#ffffff' };
+  return { backgroundColor: usingTheme.value.colorList[backgroundColor].colorCode};
+}
+
+onMounted(async() => {
+  await getColors();
+  usingTheme.value = colors.value.find(theme => theme.is_use);
 });
 
 const todaysTodoDateClick = () => {
@@ -80,7 +97,7 @@ const todaysTodoDateClick = () => {
   border-radius: 8px;
   padding: 15px;
   margin-top: 10px;
-  color: #8F9095;
+  color: #161619;
   font-size: small;
   text-align: left;
   position: relative;
@@ -105,7 +122,7 @@ const todaysTodoDateClick = () => {
     font-size: large;
 }
 .todoTxt{
-  color: #965d5d;
+  color: #241111;
 }
 .todoTag{
   font-size: xx-small;
