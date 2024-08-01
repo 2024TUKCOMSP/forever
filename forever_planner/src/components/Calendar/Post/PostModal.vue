@@ -40,7 +40,7 @@ import PostCalendar from './PostCalendar.vue';
 import { useModalStore } from '@/stores/modalStore.js';
 import { storeToRefs } from 'pinia';
 import { useStore } from '@/stores/store.js';
-import { onMounted, ref, computed, watch } from 'vue';
+import { onMounted, ref, computed, watch, onUnmounted } from 'vue';
 import { getDay } from 'date-fns';
 
 const { handleClickClosePostModal, handleClickPostCategoryModal, handleClickConfirmModal } = useModalStore();
@@ -114,6 +114,10 @@ onMounted(() => {
     category.value = postData.value.category.categoryTitle;
     currentCategory.value = {categoryId: postData.value.category.categoryId}
   };
+});
+
+onUnmounted(() => {
+  isSomeday.value = false;
 });
 </script>
 

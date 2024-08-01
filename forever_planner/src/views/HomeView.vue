@@ -50,9 +50,9 @@
         <div class="todaysTodo" v-if="settings.setVisibleSomeTask">
           <p>언젠가</p>
           <div v-for="post in somedayPost.post" :key="post">
-            <ModalPostVue :post="post" />
+            <ModalPostVue @click="checkSomeday()" :post="post" />
           </div>
-          <button type="button" class="todoEditBtn" @click="handleClickCategoryModal">+ 할 일을 추가하세요</button>
+          <button type="button" class="todoEditBtn" @click="clickCreateSomedayPost()">+ 할 일을 추가하세요</button>
         </div>
       </div>
     </div>
@@ -64,7 +64,7 @@
 <script>
 import FooterVue from '@/components/FooterVue.vue';
 import ModalPostVue from '@/components/Calendar/Post/ModalPostVue.vue';
-import { nextTick, onMounted,  watchEffect, ref, getCurrentInstance, computed, onUnmounted } from 'vue';
+import { nextTick, onMounted,  watchEffect, ref, getCurrentInstance, computed } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useStore } from '@/stores/store.js';
 import { useRouter } from 'vue-router';
@@ -163,9 +163,17 @@ export default {
       }
     }
 
+    const checkSomeday = () => {
+      isSomeday.value = true;
+    };
+
+    const clickCreateSomedayPost = () => {
+      checkSomeday();
+      handleClickCategoryModal();
+    };
+
     onMounted(async() => {
       isClicked.value = 'home';
-      isSomeday.value = true;
       await getTodayPost();
       await getSomedayPost();
       currentMonth.value = month.value;
@@ -175,10 +183,6 @@ export default {
      // await fetchSettings();
       await getCheckTodoModal();
       //console.log(process.env.VUE_APP_ISVISIBLENOTYETTASK);
-    });
-
-    onUnmounted(() => {
-      isSomeday.value = false;
     });
 
     watchEffect(() => {
@@ -203,7 +207,6 @@ export default {
     const someDayTodoDateClick = () =>{
       console.log("버튼 눌림");
       //handleClickCategoryModal처럼 동작
-
     }
 
     return {
@@ -215,6 +218,8 @@ export default {
       todayPost,
       somedayPost,
       isSomeday,
+      checkSomeday,
+      clickCreateSomedayPost,
       userIconClick() {
         alert("프로필 편집으로 이동하기 위한 버튼");
         // 프로필 편집으로 이동하기 위한 버튼
