@@ -7,7 +7,7 @@
   </header>
   <br />
   <div class= "settingScreen" @click = "closeEditCategoryModal">
-    <CategoryModal v-if ="editModeState == true" ref="categoryModal" />
+    <CategoryModal :editMode="true" v-if ="editModeState == true" ref="categoryModal"  />
     <b><h1> 설정</h1></b>
 
     <button type="button" class="defaultBtn" @click="editCategoryBtnClick">카테고리 편집 <span class="goRight">&gt;</span></button>
@@ -46,12 +46,15 @@ import axios from 'axios';
 import CategoryModal from '@/components/Calendar/Category/CategoryModal.vue';
 
 export default {
+  //props: ['editMode'],
   name: 'Setting-View',
   components : {
     CategoryModal,
   },
   data() {
-    return{};
+    return{
+      editMode: true,
+    };
   },
   setup() {
     const router = useRouter(); 
@@ -121,10 +124,14 @@ export default {
       }
 
       const editCategoryBtnClick = () =>{
-        setTimeout(()=>{
+        try {
+          setTimeout(()=>{
           editModeState.value = !editModeState.value;
           //console.log("카테고리 편집 버튼 클릭"+editModeState.value);
-        },10);
+        },100);
+        } catch ( error ) {
+          console.log(error);
+        }
       };
 
       const closeEditCategoryModal = () =>{

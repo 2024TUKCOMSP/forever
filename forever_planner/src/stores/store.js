@@ -24,7 +24,7 @@ export const useStore = defineStore('store', () => {
       postId: postId,
       isFinished: !state,
     });
-    getAllCalendar();
+    await getAllCalendar();
   };
 
   const getColors = async () => {
@@ -83,7 +83,9 @@ export const useStore = defineStore('store', () => {
 
   const getCategories = async () => {
     const res = await axios.get(`${HOST}category/all?format=json`);
-    categories.value = res.data;
+    console.log(res.data);
+   categories.value = res.data;  //오류 발생 부분
+      console.log(categories.value);
   };
 
   const createCategory = async (num, title) => {
@@ -91,7 +93,7 @@ export const useStore = defineStore('store', () => {
       categoryColor: num,
       categoryTitle: title,
     });
-    getCategories();
+    await getCategories();
   };
 
   const editCurrentCategory = async (id, num, title) => {
@@ -100,21 +102,21 @@ export const useStore = defineStore('store', () => {
       categoryColor: num,
       categoryTitle: title,
     });
-    getCategories();
+    await getCategories();
   };
 
   const deleteCategory = async (id) => {
     const res = await axios.delete(`${HOST}category/${id}?format=json`, {
       categoryId: id,
     });
-    getCategories();
+    await getCategories();
   };
 
   const deletePost = async (id) => {
     const res = await axios.delete(`${HOST}calendar/post/${id}?format=json`, {
       postId: id,
     });
-    getAllCalendar();
+    await getAllCalendar();
   }
 
   return {
