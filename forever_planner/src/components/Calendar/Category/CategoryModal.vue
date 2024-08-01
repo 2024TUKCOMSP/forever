@@ -1,12 +1,11 @@
 <template>
   <div class="max-w-[500px] w-full h-full fixed top-0 bg-opacity-40 bg-black z-50 flex justify-center items-end p-4" @click="handleClickCloseCategoryModal()">
-    <div class="w-full h-auto bg-white rounded-2xl flex flex-col items-center select-none p-5 justify-between" >
+    <div class="w-full h-auto bg-white rounded-2xl flex flex-col items-center select-none p-5 justify-between" @click = "clickCloseFunc()">
       <div class="flex justify-between w-full p-2 text-lg" >
         <div>카테고리 선택</div>
         <div v-if="!editMode" @click="clickEditMode" class="text-[#5f7ee3]">편집</div>
         <div v-else @click="clickEditMode" class="text-[#5f7ee3]">완료</div>
       </div>
-      <div class="flex justify-between w-full p-2 text-lg" @click.stop>
       <div v-if="!editMode" class="flex flex-col w-full gap-2">
         <div v-for="(row, rowIndex) in chunkedCategories" :key="rowIndex" class="flex w-full gap-2">
           <div v-for="categories in row" :key="categories.categoryId" class="flex-1">
@@ -49,7 +48,6 @@
             <div class="w-full aspect-square bg-transparent"></div>
           </div>
         </div>
-        </div>
       </div>
     </div>
   </div>
@@ -75,6 +73,15 @@ const { categories, usingTheme, currentCategoryId, editCategory, isSomeday } = s
 const editMode = ref(false);
 const props = defineProps(['editMode']);
 
+const clickCloseFunc = () => {
+  if(props.editMode != null && editMode.value == false){
+    //console.log(props.editMode + "" + editMode.value );
+    clickEditMode();
+  }else{
+    //console.log(props.editMode + "" + editMode.value );
+    event.stopPropagation();
+  }
+}
 
 const clickEditMode = () => {
   if(props.editMode != null){
