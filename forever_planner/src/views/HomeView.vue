@@ -34,7 +34,7 @@
 
       <div v-if="settings.setVisibleNotYetTask">
         <button type="button" class="remainingTodoBtn" @click="remainingTodoClick">
-          <span><span class="remainingArray">0</span>개의 남은 할 일</span><span class="goRight">></span>
+          <span><span class="remainingArray">{{ arrayLength_length }}</span>개의 남은 할 일</span><span class="goRight">></span>
         </button>
       </div>
 
@@ -125,7 +125,7 @@ export default {
       setVisibleSomeTask: Boolean($isVisibleSomeTask),
     })
     const arrayLength = ref([]);
-    var arrayLength_length = ref(0);
+    const arrayLength_length = ref(0);
     
 
 
@@ -150,9 +150,8 @@ export default {
     const getRemainingTodoArray = async () => {
       try{
         const res = await axios.get(`http://34.146.205.159:8000/home/all?format=json`);
-        arrayLength.value = res.data;
-        arrayLength_length.value = Object.keys(arrayLength).length;
-        console.log(`데이터 받아옴 ${arrayLength_length.value}`);
+        arrayLength_length.value = Object.keys(res.data).length;
+        //console.log(`데이터 받아옴 ${arrayLength_length.value}`);
       }catch{
         console.log("데이터 받아오기 실패", error);
       }
