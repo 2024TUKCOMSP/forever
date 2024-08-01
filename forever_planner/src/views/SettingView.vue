@@ -7,7 +7,7 @@
   </header>
   <br />
   <div class= "settingScreen" @click = "closeEditCategoryModal">
-    <CategoryModal v-if ="editModeState == true" ref="categoryModal" />
+    <CategoryModal :editMode="true" v-if ="editModeState == true" ref="categoryModal"  />
     <b><h1> 설정</h1></b>
 
     <button type="button" class="defaultBtn" @click="editCategoryBtnClick">카테고리 편집 <span class="goRight">&gt;</span></button>
@@ -16,7 +16,7 @@
 
     <p class="settingP">화면 모드</p>
     <div class="settingModeCss">
-      <button type="button" class="screenMode" @click="isClickScreenModeBtn('Light')">라이트 모드 <span class="isChecked" id ="lightModeTxt"><i class="fa-solid fa-check"></i></span></button>
+      <button type="button" class="screenMode" @click="isClickScreenModeBtn('Light')">라이트 모드 <span class="isChecked" id ="lightModeTxt"></span></button>
      <!-- <button type="button" class="screenMode" @click="isClickScreenModeBtn('Dark')">다크 모드<span class ="isChecked" id="darkModeTxt"></span></button> -->
       <button type="button" class="screenMode" @click="isClickScreenModeBtn('Auto')">시스템(자동)<span class ="isChecked" id="autoModeTxt"></span></button>
     </div> <br />
@@ -44,25 +44,17 @@ import {useRouter} from 'vue-router';
 import { onMounted, ref, watch, onUnmounted, nextTick, computed, getCurrentInstance } from 'vue';
 import axios from 'axios'; 
 import CategoryModal from '@/components/Calendar/Category/CategoryModal.vue';
-//import { useStore } from 'vuex';
-//import { eventBus } from '@/stores/eventBus';
 
 export default {
-  //props:['isVisibleNotYetTask', 'isVisibleTodayTask', 'isVisibleSomeTask'],
-  //부모에게 받은 값을 바로 가공하면 에러 발생. 가공 필요
- /* created(){
-    this.setting.isVisibleNotYetTask = this.isVisibleNotYetTask,
-    this.setting.isVisibleSomeTask = this.isVisibleSomeTask,
-    this.setting.isVisibleTodayTask = this.isVisibleTodayTask
-  },*/
+  //props: ['editMode'],
   name: 'Setting-View',
   components : {
     CategoryModal,
   },
   data() {
-    //isVisibleSet:{} //1. 새로운 객체에 props로 받은 값들 넣기
-    //setting: {}
-    return{};
+    return{
+      editMode: true,
+    };
   },
   setup() {
     const router = useRouter(); 
@@ -71,16 +63,13 @@ export default {
     const $isVisibleNotYetTask = instance.appContext.config.globalProperties.$isVisibleNotYetTask;
     const $isVisibleTodayTask = instance.appContext.config.globalProperties.$isVisibleTodayTask;
     const $isVisibleSomeTask = instance.appContext.config.globalProperties.$isVisibleSomeTask;
+    const $postScreenMode = instance.appContext.config.globalProperties.$postScreenMode;
     const settings = ref({
       isVisibleNotYetTask: Boolean($isVisibleNotYetTask),
       isVisibleTodayTask: Boolean($isVisibleTodayTask),
       isVisibleSomeTask: Boolean($isVisibleSomeTask),
     })
 
-
-    //const props = defineProps()
-
-    //const settings = computed(() => store.state.settings);
 
     const updateSettings = async (key, value) => {
       try {
@@ -101,7 +90,7 @@ export default {
 
     onMounted(()=>{
       window.scrollTo(0, 0);
-      //console.log("코드 확인"+ $isVisibleNotYetTask);
+      isClickScreenModeBtn($postScreenMode);
     })
 
     //setting Object가 변경되었을 때에 설정 업데이트. 
@@ -118,24 +107,31 @@ export default {
           //document.getElementById("darkModeTxt").innerHTML="<i class=\"fa-solid fa-check\"></i>";
           document.getElementById("lightModeTxt").innerHTML="";
           document.getElementById("autoModeTxt").innerHTML="";
+          instance.appContext.config.globalProperties.$postScreenMode = 'Dark';
           alert("구현중..");
         }else if(txt == 'Light'){
           //라이트 모드 동작
           document.getElementById("lightModeTxt").innerHTML="<i class=\"fa-solid fa-check\"></i>";
           //document.getElementById("darkModeTxt").innerHTML="";
           document.getElementById("autoModeTxt").innerHTML="";
+          instance.appContext.config.globalProperties.$postScreenMode = 'Light';
         }else{
           document.getElementById("lightModeTxt").innerHTML="";
           //document.getElementById("darkModeTxt").innerHTML="";
           document.getElementById("autoModeTxt").innerHTML="<i class=\"fa-solid fa-check\"></i>";
+          instance.appContext.config.globalProperties.$postScreenMode = 'Auto';
         }
       }
 
       const editCategoryBtnClick = () =>{
-        setTimeout(()=>{
+        try {
+          setTimeout(()=>{
           editModeState.value = !editModeState.value;
           //console.log("카테고리 편집 버튼 클릭"+editModeState.value);
-        },10);
+        },100);
+        } catch ( error ) {
+          console.log(error);
+        }
       };
 
       const closeEditCategoryModal = () =>{

@@ -34,7 +34,7 @@
 
       <div v-if="settings.setVisibleNotYetTask">
         <button type="button" class="remainingTodoBtn" @click="remainingTodoClick">
-          <span>2개의 남은 할 일</span><span class="goRight">></span>
+          <span><span class="remainingArray">{{ arrayLength_length }}</span>개의 남은 할 일</span><span class="goRight">></span>
         </button>
       </div>
 
@@ -89,10 +89,7 @@ import PostCategoryModal from '@/components/Calendar/Category/PostCategoryModal.
 import ConfirmModal from '@/components/Calendar/ConfirmModal.vue';
 import { useModalStore } from '@/stores/modalStore.js';
 //dddd
-//import SomeDayConfirmModal from '@/components/Calendar/SomeDayConfirmModal.vue';
-//import SomeDayPostModal from '@/components/Calendar/Post/SomeDayPostModal.vue';
-//import SomeDayPostCalendar from '@/components/Calendar/Post/SomeDayPostCalendar.vue';
-//import SettingView from './SettingView.vue';
+
 
 import axios from 'axios';
 
@@ -127,27 +124,10 @@ export default {
       setVisibleTodayTask: Boolean($isVisibleTodayTask),
       setVisibleSomeTask: Boolean($isVisibleSomeTask),
     })
+    const arrayLength_length = ref(0);
+    
 
-    /*
-   const fetchSettings = async () => {
-      try {
-       const response = await axios.put('http://34.146.205.159:8000/Setting/home?format=json', {
-          isVisibleNotYetTask: VUE_APP_ISVISIBLENOTYETTASK, //원래 다른 변수명으로 받았으나. 제대로 돌아가지 않고
-          isVisibleTodayTask: VUE_APP_ISVISIBLETODAYTASK,  //다른 걸 먼저 해치우는 게 낫겠다 싶어 true로 put하게 둠
-          isVisibleSomeTask: VUE_APP_ISVISIBLESOMETASK,
-        });
-        settings.setVisibleNotYetTask = response.isVisibleNotYetTask;
-        settings.setVisibleTodayTask = response.isVisibleTodayTask;
-        settings.setVisibleSomeTask = response.isVisibleSomeTask;
-        console.log(JSON.stringify(settings) + "확인");
-        //console.log(JSON.stringify(response));
-      } catch (error) {
-        console.error("데이터 받아오기 실패", error);
-      }
-    };
-*/
-    
-    
+
     function handleStopScroll() {
       if (dateModalState.value) {
         document.documentElement.style.overflow = 'hidden';
@@ -160,7 +140,17 @@ export default {
       try{
         const res = await axios.get(`http://34.146.205.159:8000/category/all?format=json`);
         checkTodoTags.value = res.data;
-        console.log(`데이터 받아옴 ${JSON.stringify(checkTodoTags.value)}`);
+        //console.log(`데이터 받아옴 ${JSON.stringify(checkTodoTags.value)}`);
+      }catch{
+        console.log("데이터 받아오기 실패", error);
+      }
+    }
+
+    const getRemainingTodoArray = async () => {
+      try{
+        const res = await axios.get(`http://34.146.205.159:8000/home/all?format=json`);
+        arrayLength_length.value = Object.keys(res.data).length;
+        //console.log(`데이터 받아옴 ${arrayLength_length.value}`);
       }catch{
         console.log("데이터 받아오기 실패", error);
       }
@@ -169,13 +159,16 @@ export default {
     onMounted(async() => {
       isClicked.value = 'home';
       window.scrollTo(0, 0);
-     // await fetchSettings();
       await getCheckTodoModal();
-      //console.log(process.env.VUE_APP_ISVISIBLENOTYETTASK);
+      await getRemainingTodoArray();
     });
 
     watchEffect(() => {
-      handleStopScroll();   //task: 어떤 기능인지 여쭤보기 
+      handleStopScroll();  
+      const remainingArrayElement = document.querySelector(".remainingArray");
+      if (remainingArrayElement) {
+      remainingArrayElement.innerHTML = arrayLength_length.value;
+      }
     });
 
     const planetBtnClick = async() => {
@@ -187,6 +180,7 @@ export default {
       });
       isModalVisible.value = true;
     };
+
 
     const checkTodoTagClick = (value) =>{
       console.log(value);
@@ -232,12 +226,8 @@ export default {
       someDayTodoDateClick,
       settings,
 
-      //fetchSettings,
-      
-      //someDayCategoryModalState,
-      //someDayPostModalState,
-      //someDayPostCategoryModalState,
-      //someDayConfirmModalState, 
+      getRemainingTodoArray,
+      arrayLength_length,
     }
   }
 }
