@@ -6,7 +6,7 @@
         <p class="remainingTodoDate">7월 {{ todo.calendarDate }}일</p>
         <button type="button" class="delayButton">미루기</button>
         <button type="button" class="todoEditBtn" @click="todaysTodoDateClick">
-          <p class="todoTag">{{ todo.post.categoryTitle }}</p>
+          <p class="todoTag">{{ todo.post.category.categoryTitle }}</p>
           <p class="todoTxt">{{ todo.post.title }}</p>
           <button type="button" class ="todoCheck" ><i class="fa-regular fa-square"></i></button>
           </button>
