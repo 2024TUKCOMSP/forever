@@ -124,7 +124,6 @@ export default {
       setVisibleTodayTask: Boolean($isVisibleTodayTask),
       setVisibleSomeTask: Boolean($isVisibleSomeTask),
     })
-    const arrayLength = ref([]);
     const arrayLength_length = ref(0);
     
 
