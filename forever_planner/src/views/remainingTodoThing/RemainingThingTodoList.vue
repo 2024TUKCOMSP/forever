@@ -2,15 +2,18 @@
   <div class="remainingSettingDiv">
    <!-- <div v-if="remainingTodos.length > 0">-->
     <div v-for="(todo, index) in remainingTodos" :key="index" class="batchRemainingTodo"  >
-       <b><p class="batchP">D<span class="remainingDate">{{ todo.daycount }}</span></p></b>
+    <div v-if = "!todo.post.isFinished.value" class="todoItem"> 
+      <b><p class="batchP">D<span class="remainingDate">{{ fixDaycount(todo.daycount) }}</span></p></b>
         <p class="remainingTodoDate">7월 {{ todo.calendarDate }}일</p>
-        <button type="button" class="delayButton">미루기</button>
-        <button type="button" class="todoEditBtn" @click="todaysTodoDateClick" :style="backgroundColor(todo.post.category.categoryColor)">
+        <button type="button" class="todoEditBtn" @click="todaysTodoDateClick" :style="borderColor(todo.post.category.categoryColor)">
           <p class="todoTag">{{ todo.post.category.categoryTitle }}</p>
           <p class="todoTxt">{{ todo.post.title }}</p>
-          <button type="button" class ="todoCheck" ><i class="fa-regular fa-square"></i></button>
+          <button type="button" class ="todoCheck"  @click="changeIsFinishedThing(todo.post.isFinished, todo.post.postId)" >
+            <i class="fa-regular fa-square"></i>
+          </button>
           </button>
           <div>
+        </div>
         </div>
     </div>
 </div>
@@ -21,10 +24,13 @@
 import { onMounted, ref, computed } from 'vue';
 import { useStore } from '@/stores/store';
 import { storeToRefs } from 'pinia';
+import { useModalStore } from '@/stores/modalStore';
+import axios from 'axios';
 
 const store = useStore();
 const { colors } = storeToRefs(store);
 const { getColors } = store;
+const { changeFinishedState } = store;
 
 const usingTheme = ref(null);
 
@@ -35,9 +41,13 @@ const props = defineProps({
     }
 })
 
+const fixDaycount = (daycount) => {
+  return daycount.replace(/\+\-/g, '-');
+}
+
 const backgroundColor = (backgroundColor) => {
-  console.log(backgroundColor);
-  console.log(usingTheme.value);
+ // console.log(backgroundColor);
+  //console.log(usingTheme.value);
  // if (usingTheme.value == null) return { backgroundColor: '#ffffff' };
   return { backgroundColor: usingTheme.value.colorList[backgroundColor].colorCode};
 }
@@ -50,6 +60,21 @@ onMounted(async() => {
 const todaysTodoDateClick = () => {
     console.log("Todo clicked");
 }
+
+
+const changeIsFinishedThing = async(state, postId) => {
+     const res = await axios.put(`http://34.146.205.159:8000/calendar/post/finish?format=json`, {
+      postId: postId,
+      isFinished: !state,
+    });
+    document.querySelector(".todoCheck").innerHTML = "<i class=\"fa-solid fa-check\"></i>"
+}
+
+const borderColor = (categoryColor) => {
+  return { borderColor: usingTheme.value.colorList[categoryColor].colorCode, 
+      backgroundColor: `${usingTheme.value.colorList[categoryColor].colorCode}99`
+   }; // 서버에서 받은 categoryColor를 사용하여 border-color 설정
+};
 
 </script>
 <style scoped>
@@ -101,6 +126,8 @@ const todaysTodoDateClick = () => {
   font-size: small;
   text-align: left;
   position: relative;
+  border-color: #452927;
+  border-width:  0px 0px 0px 7px;
 }
 .todoEditBtn:hover{
   animation-name: touchBtn;
