@@ -18,13 +18,18 @@ export const useStore = defineStore('store', () => {
   const currentCategoryId = ref("");
   const selectedCategory = ref([]);
   const editCategory = ref([]);
+  const todayPost = ref([]);
+  const somedayPost = ref([]);
+  const isSomeday = ref(false);
 
   const changeFinishedState = async (state, postId) => {
     const res = await axios.put(`${HOST}calendar/post/finish?format=json`, {
       postId: postId,
       isFinished: !state,
     });
-    await getAllCalendar();
+    getAllCalendar();
+    getTodayPost();
+    getSomedayPost();
   };
 
   const getColors = async () => {
@@ -67,6 +72,7 @@ export const useStore = defineStore('store', () => {
       calendarDate: postDate.value,
     });
     getAllCalendar();
+    getTodayPost();
   };
 
   const createPost = async (title, content, categoryId) => {
@@ -79,6 +85,7 @@ export const useStore = defineStore('store', () => {
       calendarDate: postDate.value,
     });
     getAllCalendar();
+    getTodayPost();
   };
 
   const getCategories = async () => {
@@ -116,8 +123,29 @@ export const useStore = defineStore('store', () => {
     const res = await axios.delete(`${HOST}calendar/post/${id}?format=json`, {
       postId: id,
     });
-    await getAllCalendar();
-  }
+    getAllCalendar();
+    getTodayPost();
+    getSomedayPost();
+  };
+
+  const getTodayPost = async () => {
+    const res = await axios.get(`${HOST}home/today?format=json`);
+    todayPost.value = res.data;
+  };
+
+  const getSomedayPost = async () => {
+    const res = await axios.get(`${HOST}home/last?format=json`);
+    somedayPost.value = res.data;
+  };
+
+  const createSomedayPost = async (title, content, id) => {
+    const res = await axios.post(`${HOST}home/last_create?format=json`, {
+      title: title,
+      content: content,
+      categoryId: id,
+    });
+    getSomedayPost();
+  };
 
   return {
     isClicked,
@@ -146,5 +174,11 @@ export const useStore = defineStore('store', () => {
     editCurrentCategory,
     deleteCategory,
     deletePost,
+    getTodayPost,
+    todayPost,
+    getSomedayPost,
+    somedayPost,
+    createSomedayPost,
+    isSomeday,
   };
 });

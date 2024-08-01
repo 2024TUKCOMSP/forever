@@ -40,34 +40,19 @@
 
         <div class="todaysTodo" v-if="settings.setVisibleTodayTask">
           <p>오늘</p>
-          <p class="todaysTodoDate">0월 0일</p>
-
-          <div>
-             <!--임시로 하나 추가-->
-            <div class="unCompTodo">
-              <p class="date">2024.07.18</p>
-              <span class="unCompTodoTxt">아무말</span>
-              <button type="button" class ="unCompTodoCheck" ><i class="fa-regular fa-square"></i></button>
-            </div>
+          <p class="todaysTodoDate">{{ month }}월 {{ todayPost.calendarDate }}일 ({{ currentDayOfWeek }})</p>
+          <div v-for="post in todayPost.post" :key="post">
+            <ModalPostVue :post="post" />
           </div>
-
           <button type="button" class="todoEditBtn" @click="handleClickCategoryModal">+ 할 일을 추가하세요</button>
         </div><br />
 
         <div class="todaysTodo" v-if="settings.setVisibleSomeTask">
           <p>언젠가</p>
-          
-          <div>
-            <!--임시로 하나 추가-->
-            <div class="unCompTodo">
-              <p class="date">클래스명은같은데들어갈내용이다름</p>
-              <span class="unCompTodoTxt">아무말</span>
-              <button type="button" class ="unCompTodoCheck" ><i class="fa-regular fa-square"></i></button>
-            </div>
+          <div v-for="post in somedayPost.post" :key="post">
+            <ModalPostVue @click="checkSomeday()" :post="post" />
           </div>
-          
-          
-          <button type="button" class="todoEditBtn" @click="someDayTodoDateClick">+ 할 일을 추가하세요</button>
+          <button type="button" class="todoEditBtn" @click="clickCreateSomedayPost()">+ 할 일을 추가하세요</button>
         </div>
       </div>
     </div>
@@ -78,7 +63,8 @@
 
 <script>
 import FooterVue from '@/components/FooterVue.vue';
-import {nextTick, onMounted,  watchEffect, ref, computed, getCurrentInstance } from 'vue';
+import ModalPostVue from '@/components/Calendar/Post/ModalPostVue.vue';
+import { nextTick, onMounted,  watchEffect, ref, getCurrentInstance, computed } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useStore } from '@/stores/store.js';
 import { useRouter } from 'vue-router';
@@ -88,8 +74,10 @@ import PostModal from '@/components/Calendar/Post/PostModal.vue';
 import PostCategoryModal from '@/components/Calendar/Category/PostCategoryModal.vue';
 import ConfirmModal from '@/components/Calendar/ConfirmModal.vue';
 import { useModalStore } from '@/stores/modalStore.js';
-//dddd
-
+//import SomeDayConfirmModal from '@/components/Calendar/SomeDayConfirmModal.vue';
+//import SomeDayPostModal from '@/components/Calendar/Post/SomeDayPostModal.vue';
+//import SomeDayPostCalendar from '@/components/Calendar/Post/SomeDayPostCalendar.vue';
+//import SettingView from './SettingView.vue';
 
 import axios from 'axios';
 
@@ -102,17 +90,18 @@ export default {
     PostModal,
     PostCategoryModal,
     ConfirmModal,
-
+    ModalPostVue,
   },
    data() {
     return {};
   },
   setup() {
     const store = useStore();
-    const { isClicked } = storeToRefs(store);
+    const { isClicked, todayPost, currentMonth, currentYear, somedayPost, isSomeday } = storeToRefs(store);
+    const { getTodayPost, getSomedayPost } = store;
     const isModalVisible = ref(false); 
     const router = useRouter(); //useRouter로 Vue Router 주입
-    const { dateModalState, categoryModalState, postModalState, postCategoryModalState, confirmModalState  } = storeToRefs(useModalStore());
+    const { dateModalState, categoryModalState, postModalState, postCategoryModalState, confirmModalState, modalDate  } = storeToRefs(useModalStore());
     const { handleClickCategoryModal } = useModalStore();
     const checkTodoTags = ref([]);
     const instance = getCurrentInstance(); // 현재 인스턴스 가져오기
@@ -123,10 +112,22 @@ export default {
       setVisibleNotYetTask: Boolean($isVisibleNotYetTask),
       setVisibleTodayTask: Boolean($isVisibleTodayTask),
       setVisibleSomeTask: Boolean($isVisibleSomeTask),
-    })
-    const arrayLength_length = ref(0);
+    });
     
+    const month = computed(() => {
+      return new Date().getMonth() + 1;
+    });
 
+    const year = computed(() => {
+      return new Date().getFullYear();
+    });
+
+    const daysOfWeek = ['일', '월', '화', '수', '목', '금', '토'];
+    const currentDayOfWeek = computed(() => {
+      return daysOfWeek[new Date().getDay()];
+    });
+
+    const arrayLength_length = ref(0);
 
     function handleStopScroll() {
       if (dateModalState.value) {
@@ -156,8 +157,22 @@ export default {
       }
     }
 
+    const checkSomeday = () => {
+      isSomeday.value = true;
+    };
+
+    const clickCreateSomedayPost = () => {
+      checkSomeday();
+      handleClickCategoryModal();
+    };
+
     onMounted(async() => {
       isClicked.value = 'home';
+      await getTodayPost();
+      await getSomedayPost();
+      currentMonth.value = month.value;
+      modalDate.value = todayPost.value.calendarDate;
+      currentYear.value = year.value;
       window.scrollTo(0, 0);
       await getCheckTodoModal();
       await getRemainingTodoArray();
@@ -190,7 +205,6 @@ export default {
     const someDayTodoDateClick = () =>{
       console.log("버튼 눌림");
       //handleClickCategoryModal처럼 동작
-
     }
 
     return {
@@ -199,6 +213,11 @@ export default {
       watchEffect,
       planetBtnClick,
       checkTodoTagClick,
+      todayPost,
+      somedayPost,
+      isSomeday,
+      checkSomeday,
+      clickCreateSomedayPost,
       userIconClick() {
         alert("프로필 편집으로 이동하기 위한 버튼");
         // 프로필 편집으로 이동하기 위한 버튼
@@ -221,11 +240,11 @@ export default {
       postModalState,
       postCategoryModalState,
       confirmModalState, 
-
       checkTodoTags,
       someDayTodoDateClick,
       settings,
-
+      month,
+      currentDayOfWeek,
       getRemainingTodoArray,
       arrayLength_length,
     }

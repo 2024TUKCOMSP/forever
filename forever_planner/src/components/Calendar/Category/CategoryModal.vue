@@ -68,7 +68,7 @@ const type = ref("add");
 const { handleClickCloseCategoryModal, handleClickPostModal } = useModalStore();
 const { currentCategory } = storeToRefs(useModalStore());
 const { getCategories } = useStore();
-const { categories, usingTheme, currentCategoryId, editCategory } = storeToRefs(useStore());
+const { categories, usingTheme, currentCategoryId, editCategory, isSomeday } = storeToRefs(useStore());
 
 const editMode = ref(false);
 const props = defineProps(['editMode']);
