@@ -6,7 +6,7 @@
 
   <div class="h-screen flex flex-col">
     <div class="planetTxtBar">
-      <button type="button" @click="planetBtnClick" class="planetTxtBtn">Planet v</button>
+      <button type="button" class="planetTxtBtn">Planet v</button>
       <button type="button" @click="goSettingBtnClick" class="goSettingBtn"><i class="fa-solid fa-gear"></i></button>
 
       <div class="checkTodoTagModal" tabindex="-1" v-if="isModalVisible" ref="checkTodoTagModal" @blur="closeModal">
@@ -26,10 +26,10 @@
     <div class="flex-grow w-full bg-[#f5f7fd] p-2">
       <div class="w-full flex flex-col">
         <div class="userBar">
-          <div class="userIcon">
+          <!--<div class="userIcon">
             <button type="button" @click="userIconClick" class="userIconBtn">클릭</button>
             <p class="userName">디폴트이름</p>
-          </div>
+          </div>-->
         </div>
 
       <div v-if="settings.setVisibleNotYetTask">
@@ -283,11 +283,6 @@ export default {
   padding-left: 10px;
   padding-right: 10px;
   border-radius: 10px;
-}
-.planetTxtBtn:hover {
-  animation-name: touchBtn;
-  animation-duration: 0.1s;
-  animation-fill-mode: forwards;
 }
 .background {
   background-color: #f5f7fd;
