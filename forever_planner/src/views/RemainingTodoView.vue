@@ -21,7 +21,6 @@
   import { storeToRefs } from 'pinia';
   import { useRouter } from 'vue-router';
   import RemainingTodoThingDiv from '@/views/remainingTodoThing/RemainingTodoThingDiv.vue'
-  import axios from 'axios';
 
   export default{
     name: 'RemainingTodo-View',
@@ -34,32 +33,19 @@
     }, 
     setup(){
       const store = useStore();
-      const { isClicked } = storeToRefs(store);
+      const { isClicked, arrayLength_length } = storeToRefs(store);
       const router = useRouter(); //useRouter로 Vue Router 주입
-      const arrayLength_length = ref(0);
-
-
 
       onMounted(async () => {
         isClicked.value = 'remainingTodo';
        // getRemainingTodo();
         window.scrollTo(0, 0);
-        await getRemainingTodoArray();
       });
 
       const backWards = () =>{
         router.push({name: 'home'});
       };
-
-      
-
-
-      const allTodoSetComplete = () => { 
-
-      }
-
       return{
-        getRemainingTodoArray,
         onMounted,
         backWards,
         arrayLength_length,
