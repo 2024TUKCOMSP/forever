@@ -18,6 +18,7 @@ export const useStore = defineStore('store', () => {
   const currentCategoryId = ref("");
   const selectedCategory = ref([]);
   const editCategory = ref([]);
+  const todayPost = ref([]);
 
   const changeFinishedState = async (state, postId) => {
     const res = await axios.put(`${HOST}calendar/post/finish?format=json`, {
@@ -25,6 +26,7 @@ export const useStore = defineStore('store', () => {
       isFinished: !state,
     });
     getAllCalendar();
+    getTodayPost();
   };
 
   const getColors = async () => {
@@ -67,6 +69,7 @@ export const useStore = defineStore('store', () => {
       calendarDate: postDate.value,
     });
     getAllCalendar();
+    getTodayPost();
   };
 
   const createPost = async (title, content, categoryId) => {
@@ -79,6 +82,7 @@ export const useStore = defineStore('store', () => {
       calendarDate: postDate.value,
     });
     getAllCalendar();
+    getTodayPost();
   };
 
   const getCategories = async () => {
@@ -115,7 +119,13 @@ export const useStore = defineStore('store', () => {
       postId: id,
     });
     getAllCalendar();
-  }
+    getTodayPost();
+  };
+
+  const getTodayPost = async () => {
+    const res = await axios.get(`${HOST}home/today?format=json`);
+    todayPost.value = res.data;
+  };
 
   return {
     isClicked,
@@ -144,5 +154,7 @@ export const useStore = defineStore('store', () => {
     editCurrentCategory,
     deleteCategory,
     deletePost,
+    getTodayPost,
+    todayPost,
   };
 });

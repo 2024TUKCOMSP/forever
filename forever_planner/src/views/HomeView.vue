@@ -40,17 +40,10 @@
 
         <div class="todaysTodo" v-if="settings.setVisibleTodayTask">
           <p>오늘</p>
-          <p class="todaysTodoDate">0월 0일</p>
-
-          <div>
-             <!--임시로 하나 추가-->
-            <div class="unCompTodo">
-              <p class="date">2024.07.18</p>
-              <span class="unCompTodoTxt">아무말</span>
-              <button type="button" class ="unCompTodoCheck" ><i class="fa-regular fa-square"></i></button>
-            </div>
+          <p class="todaysTodoDate">{{ month }}월 {{ todayPost.calendarDate }}일 ({{ currentDayOfWeek }})</p>
+          <div v-for="post in todayPost.post" :key="post">
+            <ModalPostVue :post="post" />
           </div>
-
           <button type="button" class="todoEditBtn" @click="handleClickCategoryModal">+ 할 일을 추가하세요</button>
         </div><br />
 
@@ -78,7 +71,8 @@
 
 <script>
 import FooterVue from '@/components/FooterVue.vue';
-import {nextTick, onMounted,  watchEffect, ref, computed, getCurrentInstance } from 'vue';
+import ModalPostVue from '@/components/Calendar/Post/ModalPostVue.vue';
+import { nextTick, onMounted,  watchEffect, ref, getCurrentInstance, computed } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useStore } from '@/stores/store.js';
 import { useRouter } from 'vue-router';
@@ -88,7 +82,6 @@ import PostModal from '@/components/Calendar/Post/PostModal.vue';
 import PostCategoryModal from '@/components/Calendar/Category/PostCategoryModal.vue';
 import ConfirmModal from '@/components/Calendar/ConfirmModal.vue';
 import { useModalStore } from '@/stores/modalStore.js';
-//dddd
 //import SomeDayConfirmModal from '@/components/Calendar/SomeDayConfirmModal.vue';
 //import SomeDayPostModal from '@/components/Calendar/Post/SomeDayPostModal.vue';
 //import SomeDayPostCalendar from '@/components/Calendar/Post/SomeDayPostCalendar.vue';
@@ -105,17 +98,18 @@ export default {
     PostModal,
     PostCategoryModal,
     ConfirmModal,
-
+    ModalPostVue,
   },
    data() {
     return {};
   },
   setup() {
     const store = useStore();
-    const { isClicked } = storeToRefs(store);
+    const { isClicked, todayPost, currentMonth, currentYear } = storeToRefs(store);
+    const { getTodayPost } = store;
     const isModalVisible = ref(false); 
     const router = useRouter(); //useRouter로 Vue Router 주입
-    const { dateModalState, categoryModalState, postModalState, postCategoryModalState, confirmModalState  } = storeToRefs(useModalStore());
+    const { dateModalState, categoryModalState, postModalState, postCategoryModalState, confirmModalState, modalDate  } = storeToRefs(useModalStore());
     const { handleClickCategoryModal } = useModalStore();
     const checkTodoTags = ref([]);
     const instance = getCurrentInstance(); // 현재 인스턴스 가져오기
@@ -146,8 +140,19 @@ export default {
       }
     };
 */
-    
-    
+    const month = computed(() => {
+      return new Date().getMonth() + 1;
+    });
+
+    const year = computed(() => {
+      return new Date().getFullYear();
+    });
+
+    const daysOfWeek = ['일', '월', '화', '수', '목', '금', '토'];
+    const currentDayOfWeek = computed(() => {
+      return daysOfWeek[new Date().getDay()];
+    });
+
     function handleStopScroll() {
       if (dateModalState.value) {
         document.documentElement.style.overflow = 'hidden';
@@ -168,6 +173,10 @@ export default {
 
     onMounted(async() => {
       isClicked.value = 'home';
+      await getTodayPost();
+      currentMonth.value = month.value;
+      modalDate.value = todayPost.value.calendarDate;
+      currentYear.value = year.value;
       window.scrollTo(0, 0);
      // await fetchSettings();
       await getCheckTodoModal();
@@ -205,6 +214,7 @@ export default {
       watchEffect,
       planetBtnClick,
       checkTodoTagClick,
+      todayPost,
       userIconClick() {
         alert("프로필 편집으로 이동하기 위한 버튼");
         // 프로필 편집으로 이동하기 위한 버튼
@@ -227,11 +237,11 @@ export default {
       postModalState,
       postCategoryModalState,
       confirmModalState, 
-
       checkTodoTags,
       someDayTodoDateClick,
       settings,
-
+      month,
+      currentDayOfWeek,
       //fetchSettings,
       
       //someDayCategoryModalState,
