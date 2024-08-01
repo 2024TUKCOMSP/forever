@@ -286,15 +286,16 @@ def today_tasks(request):
     }
     
     for post in posts:
-        category_serializer = CategorySerializer(post.category)
         post_data = {
             'postId': post.postId,
             'title': post.title,
             'content': post.content,
             'isFinished': post.isFinished,
-            'categoryColor': post.category.categoryColor,
-            'categoryTitle': category_serializer.data['categoryTitle'],
-            'categoryId': post.category.categoryId
+            'category': {
+                'categoryId': post.category.categoryId,
+                'categoryTitle': post.category.categoryTitle,
+                'categoryColor': post.category.categoryColor
+            }
         }
         response_data['post'].append(post_data)
 
@@ -324,9 +325,11 @@ def all_tasks(request):
                 'title': post.title,
                 'content': post.content,
                 'isFinished': post.isFinished,
-                'categoryColor': post.category.categoryColor,
-                'categoryTitle': post.category.categoryTitle,
-                'categoryId': post.category.categoryId
+                'category': {
+                    'categoryId': post.category.categoryId,
+                    'categoryTitle': post.category.categoryTitle,
+                    'categoryColor': post.category.categoryColor
+                }
             }
         }
         response_data.append(post_data)
@@ -377,19 +380,21 @@ def last_tasks(request):
     response_data = []
 
     for post in posts:
-        category_serializer = CategorySerializer(post.category)
         post_data = {
             'postId': post.postId,
             'title': post.title,
             'content': post.content,
             'isFinished': post.isFinished,
-            'categoryId': post.category.categoryId,
-            'categoryColor': post.category.categoryColor,
-            'categoryTitle': category_serializer.data['categoryTitle']
+            'category': {
+                'categoryId': post.category.categoryId,
+                'categoryTitle': post.category.categoryTitle,
+                'categoryColor': post.category.categoryColor
+            }
         }
         response_data.append(post_data)
 
     return Response({'post': response_data}, status=status.HTTP_200_OK)
+
 @api_view(['PUT'])
 def home_task(request):
     is_visible_not_yet_task = request.data.get('isVisibleNotYetTask')
