@@ -61,7 +61,7 @@ const todaysTodoDateClick = () => {
 
 const borderColor = (categoryColor) => {
   return { borderColor: usingTheme.value.colorList[categoryColor].colorCode, 
-      backgroundColor: `${usingTheme.value.colorList[categoryColor].colorCode}99`
+      backgroundColor: `${usingTheme.value.colorList[categoryColor].colorCode}44`
    }; // 서버에서 받은 categoryColor를 사용하여 border-color 설정
 };
 
