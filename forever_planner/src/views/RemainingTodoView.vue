@@ -38,15 +38,7 @@
       const router = useRouter(); //useRouter로 Vue Router 주입
       const arrayLength_length = ref(0);
 
-      const getRemainingTodoArray = async () => {
-        try{
-          const res = await axios.get(`http://34.146.205.159:8000/home/all?format=json`);
-          arrayLength_length.value = Object.keys(res.data).length;
-          console.log(`데이터 받아옴 ${arrayLength_length.value}`);
-        }catch (error) {
-          console.log("데이터 받아오기 실패", error);
-        }
-      }
+
 
       onMounted(async () => {
         isClicked.value = 'remainingTodo';

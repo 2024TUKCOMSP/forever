@@ -21,6 +21,8 @@ export const useStore = defineStore('store', () => {
   const todayPost = ref([]);
   const somedayPost = ref([]);
   const isSomeday = ref(false);
+  const remainingTodo = ref([]);
+  const arrayLength_length = ref(0);
 
   const changeFinishedState = async (state, postId) => {
     const res = await axios.put(`${HOST}calendar/post/finish?format=json`, {
@@ -30,6 +32,8 @@ export const useStore = defineStore('store', () => {
     getAllCalendar();
     getTodayPost();
     getSomedayPost();
+    getRemainingTodo();
+    getRemainingTodoArray();
   };
 
   const getColors = async () => {
@@ -90,9 +94,7 @@ export const useStore = defineStore('store', () => {
 
   const getCategories = async () => {
     const res = await axios.get(`${HOST}category/all?format=json`);
-    console.log(res.data);
-   categories.value = res.data;  //오류 발생 부분
-      console.log(categories.value);
+    categories.value = res.data;
   };
 
   const createCategory = async (num, title) => {
@@ -147,6 +149,16 @@ export const useStore = defineStore('store', () => {
     getSomedayPost();
   };
 
+  const getRemainingTodo = async () => {
+    const res = await axios.get(`${HOST}home/all?format=json`);
+    remainingTodo.value = res.data;
+  };
+
+  const getRemainingTodoArray = async () => {
+    const res = await axios.get(`${HOST}home/all?format=json`);
+    arrayLength_length.value = Object.keys(res.data).length;
+  };
+
   return {
     isClicked,
     changeFinishedState,
@@ -180,5 +192,9 @@ export const useStore = defineStore('store', () => {
     somedayPost,
     createSomedayPost,
     isSomeday,
+    getRemainingTodo,
+    remainingTodo,
+    getRemainingTodoArray,
+    arrayLength_length,
   };
 });

@@ -6,6 +6,8 @@
 import RemainingTodoList from '@/views/remainingTodoThing/RemainingThingTodoList.vue'
 import { onMounted, ref } from 'vue';
 import axios from 'axios';
+import { storeToRefs } from 'pinia';
+import { useStore } from '@/stores/store';
 
 //const isFinished = ref([false, true]);
 
@@ -18,15 +20,9 @@ export default{
         return {};
     },
     setup(){
-        const remainingTodo = ref([]);
-
-        const getRemainingTodo = async() =>{
-            try{const res = await axios.get(`http://34.146.205.159:8000/home/all?format=json`);
-            remainingTodo.value = res.data;
-            }catch(error){
-                console.error('연결 실패');
-            }
-        }
+      const store = useStore();
+      const { remainingTodo } = storeToRefs(store);
+      const { getRemainingTodo } = store;
 
         onMounted(async() => {
             await getRemainingTodo();

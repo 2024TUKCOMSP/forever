@@ -8,7 +8,7 @@
         <button type="button" class="todoEditBtn" @click="todaysTodoDateClick" :style="borderColor(todo.post.category.categoryColor)">
           <p class="todoTag">{{ todo.post.category.categoryTitle }}</p>
           <p class="todoTxt">{{ todo.post.title }}</p>
-          <button type="button" class ="todoCheck"  @click="changeIsFinishedThing(todo.post.isFinished, todo.post.postId)" >
+          <button type="button" class ="todoCheck"  @click="changeFinishedState(todo.post.isFinished, todo.post.postId)" >
             <i class="fa-regular fa-square"></i>
           </button>
           </button>
@@ -21,11 +21,9 @@
 
 
 <script setup>
-import { onMounted, ref, computed } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useStore } from '@/stores/store';
 import { storeToRefs } from 'pinia';
-import { useModalStore } from '@/stores/modalStore';
-import axios from 'axios';
 
 const store = useStore();
 const { colors } = storeToRefs(store);
@@ -59,15 +57,6 @@ onMounted(async() => {
 
 const todaysTodoDateClick = () => {
     console.log("Todo clicked");
-}
-
-
-const changeIsFinishedThing = async(state, postId) => {
-     const res = await axios.put(`http://34.146.205.159:8000/calendar/post/finish?format=json`, {
-      postId: postId,
-      isFinished: !state,
-    });
-    document.querySelector(".todoCheck").innerHTML = "<i class=\"fa-solid fa-check\"></i>"
 }
 
 const borderColor = (categoryColor) => {

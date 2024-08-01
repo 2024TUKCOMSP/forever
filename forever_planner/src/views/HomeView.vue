@@ -97,8 +97,8 @@ export default {
   },
   setup() {
     const store = useStore();
-    const { isClicked, todayPost, currentMonth, currentYear, somedayPost, isSomeday } = storeToRefs(store);
-    const { getTodayPost, getSomedayPost } = store;
+    const { arrayLength_length, isClicked, todayPost, currentMonth, currentYear, somedayPost, isSomeday } = storeToRefs(store);
+    const { getTodayPost, getSomedayPost, getRemainingTodoArray } = store;
     const isModalVisible = ref(false); 
     const router = useRouter(); //useRouter로 Vue Router 주입
     const { dateModalState, categoryModalState, postModalState, postCategoryModalState, confirmModalState, modalDate  } = storeToRefs(useModalStore());
@@ -127,8 +127,6 @@ export default {
       return daysOfWeek[new Date().getDay()];
     });
 
-    const arrayLength_length = ref(0);
-
     function handleStopScroll() {
       if (dateModalState.value) {
         document.documentElement.style.overflow = 'hidden';
@@ -146,17 +144,7 @@ export default {
         console.log("데이터 받아오기 실패", error);
       }
     }
-
-    const getRemainingTodoArray = async () => {
-      try{
-        const res = await axios.get(`http://34.146.205.159:8000/home/all?format=json`);
-        arrayLength_length.value = Object.keys(res.data).length;
-        //console.log(`데이터 받아옴 ${arrayLength_length.value}`);
-      }catch{
-        console.log("데이터 받아오기 실패", error);
-      }
-    }
-
+    
     const checkSomeday = () => {
       isSomeday.value = true;
     };
