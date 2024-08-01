@@ -1,7 +1,7 @@
 <template>
   <div class="max-w-[500px] w-full h-full fixed top-0 bg-opacity-40 bg-black z-50 flex justify-center items-end p-4" @click="handleClickCloseCategoryModal()">
-    <div class="w-full h-auto bg-white rounded-2xl flex flex-col items-center select-none p-5 justify-between" @click.stop>
-      <div class="flex justify-between w-full p-2 text-lg">
+    <div class="w-full h-auto bg-white rounded-2xl flex flex-col items-center select-none p-5 justify-between" @click = "clickCloseFunc()">
+      <div class="flex justify-between w-full p-2 text-lg" >
         <div>카테고리 선택</div>
         <div v-if="!editMode" @click="clickEditMode" class="text-[#5f7ee3]">편집</div>
         <div v-else @click="clickEditMode" class="text-[#5f7ee3]">완료</div>
@@ -73,9 +73,20 @@ const { categories, usingTheme, currentCategoryId, editCategory, isSomeday } = s
 const editMode = ref(false);
 const props = defineProps(['editMode']);
 
+const clickCloseFunc = () => {
+  if(props.editMode != null && editMode.value == false){
+    //console.log(props.editMode + "" + editMode.value );
+    clickEditMode();
+  }else{
+    //console.log(props.editMode + "" + editMode.value );
+    event.stopPropagation();
+  }
+}
 
 const clickEditMode = () => {
   if(props.editMode != null){
+    router.push({name: 'setting'});
+    //console.log("왜안됨");
     //handleClickCloseCategoryModal();
     //완료를 누를 때 모달이 닫히도록 수정하고 싶다면 이 곳에 코드를 추가하면 됨
     //이 곳은 settingView.vue에서 연 게 아니라면 열리지 않음을 확인함 
