@@ -25,7 +25,7 @@ export const useModalStore = defineStore('modalStore', () => {
   };
 
   const handleClickCategoryModal = () => {
-    categoryModalState.value = true;
+    categoryModalState.value = true;  //여기서 오류 나는 건 아님
   };
 
   const handleClickCloseCategoryModal = () => {

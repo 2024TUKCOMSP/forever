@@ -6,33 +6,22 @@
         <button type="button" class = "allCompleteBtn" @click = "allTodoSetComplete"><b>모두 완료</b></button>
       </header>
       <b><p class ="remainingTxt">완료하지 않은 할 일이<br />
-        <span class="remainingTodoNum">0</span>개 있습니다.</p></b>
+        <span class="remainingTodoNum">{{ arrayLength_length }}</span>개 있습니다.</p></b>
 
 
         <RemainingTodoThingDiv />
-       <!-- <div class="remainingSettingDiv">
-        <div class="batchRemainingTodo">
-          <p class="batchP">D+<span class="remainingDate">0</span></p>
-          <p class="remainingTodoDate">0월 0일</p>
-          <button type="button" class="delayButton">미루기</button>
-          <button type="button" class="todoEditBtn" @click="todaysTodoDateClick">
-            <p class="todoTag">중요</p>
-            <p class="todoTxt">ㅊㄹㄹㄹ</p>
-            <button type="button" class ="todoCheck" ><i class="fa-regular fa-square"></i></button>
-          </button>
-        </div>
-      </div>  -->
     </div>
     <FooterVue />
   </div>
 </template>
 <script>
   import FooterVue from '@/components/FooterVue.vue';
-  import { onMounted } from 'vue';
+  import { onMounted, ref } from 'vue';
   import { useStore } from '@/stores/store.js';
   import { storeToRefs } from 'pinia';
   import { useRouter } from 'vue-router';
   import RemainingTodoThingDiv from '@/views/remainingTodoThing/RemainingTodoThingDiv.vue'
+  import axios from 'axios';
 
   export default{
     name: 'RemainingTodo-View',
@@ -47,23 +36,41 @@
       const store = useStore();
       const { isClicked } = storeToRefs(store);
       const router = useRouter(); //useRouter로 Vue Router 주입
+      const arrayLength_length = ref(0);
 
-      onMounted(() => {
+      const getRemainingTodoArray = async () => {
+        try{
+          const res = await axios.get(`http://34.146.205.159:8000/home/all?format=json`);
+          arrayLength_length.value = Object.keys(res.data).length;
+          console.log(`데이터 받아옴 ${arrayLength_length.value}`);
+        }catch (error) {
+          console.log("데이터 받아오기 실패", error);
+        }
+      }
+
+      onMounted(async () => {
         isClicked.value = 'remainingTodo';
+       // getRemainingTodo();
         window.scrollTo(0, 0);
+        await getRemainingTodoArray();
       });
 
       const backWards = () =>{
         router.push({name: 'home'});
       };
 
+      
+
+
       const allTodoSetComplete = () => { 
-        
+
       }
 
       return{
+        getRemainingTodoArray,
         onMounted,
         backWards,
+        arrayLength_length,
       }
     }
   }

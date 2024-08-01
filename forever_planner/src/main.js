@@ -14,6 +14,8 @@ app.config.globalProperties.$isVisibleNotYetTask = true;
 app.config.globalProperties.$isVisibleTodayTask = true;
 app.config.globalProperties.$isVisibleSomeTask = true;
 
+app.config.globalProperties.$postScreenMode = "Light";
+
 app.use(createPinia());
 app.use(router);
 

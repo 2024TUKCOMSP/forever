@@ -61,6 +61,7 @@ import { useModalStore } from '@/stores/modalStore.js';
 import { useStore } from '@/stores/store';
 import { storeToRefs } from 'pinia';
 import { useRouter } from 'vue-router';
+import { defineProps } from 'vue';
 
 const router = useRouter();
 const type = ref("add");
@@ -70,9 +71,17 @@ const { getCategories } = useStore();
 const { categories, usingTheme, currentCategoryId, editCategory, isSomeday } = storeToRefs(useStore());
 
 const editMode = ref(false);
+const props = defineProps(['editMode']);
+
 
 const clickEditMode = () => {
-  editMode.value = !editMode.value;
+  if(props.editMode != null){
+    //handleClickCloseCategoryModal();
+    //완료를 누를 때 모달이 닫히도록 수정하고 싶다면 이 곳에 코드를 추가하면 됨
+    //이 곳은 settingView.vue에서 연 게 아니라면 열리지 않음을 확인함 
+    //코드 중 어떤 function이 모달을 지우는 지 알지 못하겠음.. 
+  }
+    editMode.value = !editMode.value;
 };
 
 const clickMoveCategory = () => {
@@ -108,6 +117,7 @@ const chunkedEditCategories = computed(() => {
 });
 
 const getBackgroundColor = (category) => {
+  //console.log(usingTheme.value.colorList[category.categoryColor].colorCode);
   return { backgroundColor : usingTheme.value.colorList[category.categoryColor].colorCode };
 };
 
@@ -119,13 +129,18 @@ const getColor = (category) => {
   return usingTheme.value.colorList[category.categoryColor].colorCode;
 };
 
-const clickEditCategory = (category) => {
+const clickEditCategory = async (category) => {
   editCategory.value = category;
-  clickMoveCategory();
+  await clickMoveCategory();
 };
 
 onMounted(() => {
   getCategories();
+  if( props != null ){
+    //console.log("edit mode: "+ props.editMode);
+    editMode.value = props.editMode;
+  }
+ // console.log(props);
 });
 </script>
 
