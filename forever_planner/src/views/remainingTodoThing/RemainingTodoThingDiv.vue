@@ -4,13 +4,9 @@
 
 <script>
 import RemainingTodoList from '@/views/remainingTodoThing/RemainingThingTodoList.vue'
-import { onMounted, ref } from 'vue';
-import axios from 'axios';
+import { onMounted } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useStore } from '@/stores/store';
-
-//const isFinished = ref([false, true]);
-
 
 export default{
     components: {
