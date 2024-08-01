@@ -19,6 +19,8 @@ export const useStore = defineStore('store', () => {
   const selectedCategory = ref([]);
   const editCategory = ref([]);
   const todayPost = ref([]);
+  const somedayPost = ref([]);
+  const isSomeday = ref(false);
 
   const changeFinishedState = async (state, postId) => {
     const res = await axios.put(`${HOST}calendar/post/finish?format=json`, {
@@ -27,6 +29,7 @@ export const useStore = defineStore('store', () => {
     });
     getAllCalendar();
     getTodayPost();
+    getSomedayPost();
   };
 
   const getColors = async () => {
@@ -120,11 +123,26 @@ export const useStore = defineStore('store', () => {
     });
     getAllCalendar();
     getTodayPost();
+    getSomedayPost();
   };
 
   const getTodayPost = async () => {
     const res = await axios.get(`${HOST}home/today?format=json`);
     todayPost.value = res.data;
+  };
+
+  const getSomedayPost = async () => {
+    const res = await axios.get(`${HOST}home/last?format=json`);
+    somedayPost.value = res.data;
+  };
+
+  const createSomedayPost = async (title, content, id) => {
+    const res = await axios.post(`${HOST}home/last_create?format=json`, {
+      title: title,
+      content: content,
+      categoryId: id,
+    });
+    getSomedayPost();
   };
 
   return {
@@ -156,5 +174,9 @@ export const useStore = defineStore('store', () => {
     deletePost,
     getTodayPost,
     todayPost,
+    getSomedayPost,
+    somedayPost,
+    createSomedayPost,
+    isSomeday,
   };
 });

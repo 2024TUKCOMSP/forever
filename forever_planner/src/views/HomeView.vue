@@ -49,18 +49,10 @@
 
         <div class="todaysTodo" v-if="settings.setVisibleSomeTask">
           <p>언젠가</p>
-          
-          <div>
-            <!--임시로 하나 추가-->
-            <div class="unCompTodo">
-              <p class="date">클래스명은같은데들어갈내용이다름</p>
-              <span class="unCompTodoTxt">아무말</span>
-              <button type="button" class ="unCompTodoCheck" ><i class="fa-regular fa-square"></i></button>
-            </div>
+          <div v-for="post in somedayPost.post" :key="post">
+            <ModalPostVue :post="post" />
           </div>
-          
-          
-          <button type="button" class="todoEditBtn" @click="someDayTodoDateClick">+ 할 일을 추가하세요</button>
+          <button type="button" class="todoEditBtn" @click="handleClickCategoryModal">+ 할 일을 추가하세요</button>
         </div>
       </div>
     </div>
@@ -72,7 +64,7 @@
 <script>
 import FooterVue from '@/components/FooterVue.vue';
 import ModalPostVue from '@/components/Calendar/Post/ModalPostVue.vue';
-import { nextTick, onMounted,  watchEffect, ref, getCurrentInstance, computed } from 'vue';
+import { nextTick, onMounted,  watchEffect, ref, getCurrentInstance, computed, onUnmounted } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useStore } from '@/stores/store.js';
 import { useRouter } from 'vue-router';
@@ -105,8 +97,8 @@ export default {
   },
   setup() {
     const store = useStore();
-    const { isClicked, todayPost, currentMonth, currentYear } = storeToRefs(store);
-    const { getTodayPost } = store;
+    const { isClicked, todayPost, currentMonth, currentYear, somedayPost, isSomeday } = storeToRefs(store);
+    const { getTodayPost, getSomedayPost } = store;
     const isModalVisible = ref(false); 
     const router = useRouter(); //useRouter로 Vue Router 주입
     const { dateModalState, categoryModalState, postModalState, postCategoryModalState, confirmModalState, modalDate  } = storeToRefs(useModalStore());
@@ -173,7 +165,9 @@ export default {
 
     onMounted(async() => {
       isClicked.value = 'home';
+      isSomeday.value = true;
       await getTodayPost();
+      await getSomedayPost();
       currentMonth.value = month.value;
       modalDate.value = todayPost.value.calendarDate;
       currentYear.value = year.value;
@@ -181,6 +175,10 @@ export default {
      // await fetchSettings();
       await getCheckTodoModal();
       //console.log(process.env.VUE_APP_ISVISIBLENOTYETTASK);
+    });
+
+    onUnmounted(() => {
+      isSomeday.value = false;
     });
 
     watchEffect(() => {
@@ -215,6 +213,8 @@ export default {
       planetBtnClick,
       checkTodoTagClick,
       todayPost,
+      somedayPost,
+      isSomeday,
       userIconClick() {
         alert("프로필 편집으로 이동하기 위한 버튼");
         // 프로필 편집으로 이동하기 위한 버튼

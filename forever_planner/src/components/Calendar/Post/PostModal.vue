@@ -12,10 +12,10 @@
             <textarea v-if="isContentActive" placeholder="메모를 입력하세요" v-model="content" class="w-full bg-[#FFFFFF00] focus:outline-none resize-none" maxlength="70"></textarea>
             <div class="flex justify-between w-full pt-2">
               <div class="flex gap-4 items-center">
-                <div class="flex items-center" :style="getCalendarIconColor()" @click="clickCalendarButton()">
+                <div v-if="!isSomeday" class="flex items-center" :style="getCalendarIconColor()" @click="clickCalendarButton()">
                   <i class="fa-solid fa-calendar-day w-5 h-5"></i>
                 </div>
-                <div class="text-[#00000050]">{{ postMonth }}월 {{ postDate }}일 ({{ dayOfWeek }})</div>
+                <div v-if="!isSomeday" class="text-[#00000050]">{{ postMonth }}월 {{ postDate }}일 ({{ dayOfWeek }})</div>
                 <div class="flex items-center" :style="getContentIconColor()" @click="clickContentButton()">
                   <i class="fa-solid fa-note-sticky w-5 h-5"></i>
                 </div>
@@ -45,8 +45,8 @@ import { getDay } from 'date-fns';
 
 const { handleClickClosePostModal, handleClickPostCategoryModal, handleClickConfirmModal } = useModalStore();
 const { postModalType, categoryColor, postData, modalDate, currentCategory } = storeToRefs(useModalStore());
-const { currentMonth, currentYear, postMonth, postYear, postDate } = storeToRefs(useStore());
-const { updatePost, createPost } = useStore();
+const { currentMonth, currentYear, postMonth, postYear, postDate, isSomeday } = storeToRefs(useStore());
+const { updatePost, createPost, createSomedayPost } = useStore();
 
 const isCalendarActive = ref(false);
 const isContentActive = ref(false);
@@ -72,6 +72,7 @@ const handleClickCategory = () => {
 
 const submit = () => {
   if(postModalType.value === "edit") updatePost(postData.value.postId, postTitle.value, content.value, currentCategory.value.categoryId);
+  else if(isSomeday.value) createSomedayPost(postTitle.value, content.value, currentCategory.value.categoryId);
   else createPost(postTitle.value, content.value, currentCategory.value.categoryId);
   handleClickClosePostModal();
 };
