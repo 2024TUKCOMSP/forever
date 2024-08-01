@@ -2,12 +2,12 @@
   <div class="remainingSettingDiv">
    <!-- <div v-if="remainingTodos.length > 0">-->
     <div v-for="(todo, index) in remainingTodos" :key="index" class="batchRemainingTodo" >
-        <p class="batchP">D<span class="remainingDate">{{ todo.daycount }}</span></p>
+       <b><p class="batchP">D<span class="remainingDate">{{ todo.daycount }}</span></p></b>
         <p class="remainingTodoDate">7월 {{ todo.calendarDate }}일</p>
         <button type="button" class="delayButton">미루기</button>
         <button type="button" class="todoEditBtn" @click="todaysTodoDateClick">
-          <p class="todoTag">{{ todo.post.title }}</p>
-          <p class="todoTxt">{{ todo.post.content }}</p>
+          <p class="todoTag">{{ todo.post.categoryTitle }}</p>
+          <p class="todoTxt">{{ todo.post.title }}</p>
           <button type="button" class ="todoCheck" ><i class="fa-regular fa-square"></i></button>
           </button>
           <div>
@@ -61,6 +61,7 @@ const todaysTodoDateClick = () => {
 .batchP{
     font-size:medium;
     padding-bottom: 2px;
+    color:#b10808;
 }
 .remainingTodoDate{
     font-size:smaller;

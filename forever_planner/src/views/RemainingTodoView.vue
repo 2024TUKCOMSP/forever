@@ -10,18 +10,6 @@
 
 
         <RemainingTodoThingDiv />
-       <!-- <div class="remainingSettingDiv">
-        <div class="batchRemainingTodo">
-          <p class="batchP">D+<span class="remainingDate">0</span></p>
-          <p class="remainingTodoDate">0월 0일</p>
-          <button type="button" class="delayButton">미루기</button>
-          <button type="button" class="todoEditBtn" @click="todaysTodoDateClick">
-            <p class="todoTag">중요</p>
-            <p class="todoTxt">ㅊㄹㄹㄹ</p>
-            <button type="button" class ="todoCheck" ><i class="fa-regular fa-square"></i></button>
-          </button>
-        </div>
-      </div>  -->
     </div>
     <FooterVue />
   </div>
@@ -50,6 +38,7 @@
 
       onMounted(() => {
         isClicked.value = 'remainingTodo';
+       // getRemainingTodo();
         window.scrollTo(0, 0);
       });
 
@@ -57,11 +46,15 @@
         router.push({name: 'home'});
       };
 
+      
+
+
       const allTodoSetComplete = () => { 
-        
+
       }
 
       return{
+        //getRemainingTodo,
         onMounted,
         backWards,
       }
