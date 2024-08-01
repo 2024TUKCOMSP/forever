@@ -3,7 +3,7 @@
     <div class="w-full h-full bg-[#f5f7fd] p-2 flex flex-col">
       <header class="header">
         <button type="button" @click = "backWards" class="headerBtn"><i class="fa-solid fa-chevron-left w-[20px] h-[20px]" id="backDrawThing"></i></button>
-        <button type="button" class = "allCompleteBtn"><b>모두 완료</b></button>
+        <button type="button" class = "allCompleteBtn" @click = "allTodoSetComplete"><b>모두 완료</b></button>
       </header>
       <b><p class ="remainingTxt">완료하지 않은 할 일이<br />
         <span class="remainingTodoNum">0</span>개 있습니다.</p></b>
@@ -56,6 +56,10 @@
       const backWards = () =>{
         router.push({name: 'home'});
       };
+
+      const allTodoSetComplete = () => { 
+        
+      }
 
       return{
         onMounted,
