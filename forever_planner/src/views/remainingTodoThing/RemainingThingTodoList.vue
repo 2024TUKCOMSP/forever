@@ -4,7 +4,7 @@
     <div v-for="(todo, index) in remainingTodos" :key="index" class="batchRemainingTodo"  >
     <div v-if = "!todo.post.isFinished.value" class="todoItem"> 
       <b><p class="batchP">D<span class="remainingDate">{{ fixDaycount(todo.daycount) }}</span></p></b>
-        <p class="remainingTodoDate">7월 {{ todo.calendarDate }}일</p>
+        <p class="remainingTodoDate">{{ checkMonth(currentMonth, fixDaycount(todo.daycount) ) }}월 {{ todo.calendarDate }}일</p>
         <button type="button" class="todoEditBtn" @click="todaysTodoDateClick" :style="borderColor(todo.post.category.categoryColor)">
           <p class="todoTag">{{ todo.post.category.categoryTitle }}</p>
           <p class="todoTxt">{{ todo.post.title }}</p>
@@ -29,6 +29,8 @@ const store = useStore();
 const { colors } = storeToRefs(store);
 const { getColors } = store;
 const { changeFinishedState } = store;
+const { currentMonth } = storeToRefs(useStore());
+const currentDate = ref(new Date().getDate() );
 
 const usingTheme = ref(null);
 
@@ -39,16 +41,34 @@ const props = defineProps({
     }
 })
 
+const checkMonth = ( currentMonth, dayCount ) => {
+  const targetDate = (currentDate.value+parseInt(dayCount))*(-1);
+  console.log(targetDate);
+
+  var date = new Date();
+  var lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+
+  if( targetDate <= (lastDay-currentDate.value) && targetDate >= 1){
+    return currentMonth;
+  }else if( targetDate > lastDay) {
+    if(currentMonth == 12){
+      return 1;
+    }else{
+      return currentMonth+1;
+    }
+  }else if ( targetDate < 1){
+    if(currentMonth == 12){
+      return 11;
+    }else{
+      return currentMonth-1;
+    }
+  }
+}
+
 const fixDaycount = (daycount) => {
   return daycount.replace(/\+\-/g, '-');
 }
 
-const backgroundColor = (backgroundColor) => {
- // console.log(backgroundColor);
-  //console.log(usingTheme.value);
- // if (usingTheme.value == null) return { backgroundColor: '#ffffff' };
-  return { backgroundColor: usingTheme.value.colorList[backgroundColor].colorCode};
-}
 
 onMounted(async() => {
   await getColors();
