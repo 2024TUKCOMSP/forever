@@ -100,7 +100,6 @@ GitHub 등 다양한 개발 플랫폼을 학습하기 위해 진행된 프로젝
 | 임정윤 | Frontend | [GitHub](https://github.com/jzongyun) |
 
 ## 👁‍🗨 데모 영상
-| :--------------------: |
 https://github.com/user-attachments/assets/5c54a2aa-58bf-415e-bf79-e3db8acba670
 
 
