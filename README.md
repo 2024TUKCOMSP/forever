@@ -99,6 +99,10 @@ GitHub 등 다양한 개발 플랫폼을 학습하기 위해 진행된 프로젝
 | 석민정 | Backend | [GitHub](https://github.com/minjaon) |
 | 임정윤 | Frontend | [GitHub](https://github.com/jzongyun) |
 
+## 👁‍🗨 데모 영상
+https://github.com/user-attachments/assets/d2eccd65-8e60-4e68-a836-8d1e4acd5c96
+
+
 
 ## 📌 정기 회의
 * #### 매주 화요일 오후 2시
